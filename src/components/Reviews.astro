@@ -1,0 +1,40 @@
+---
+const reviews = [
+  { name: "Aniket Jondhale", text: "Tried simple butter dabeli and it was mast! The stuffing has great taste — usually dabelis are either too tangy or too sweet, but here the balance is spot on." },
+  { name: "Gopi Gadakh", text: "Best place for dabeli lovers. Chutney was fresh, butter quantity generous, shev crispy. Fafda is great too, and rates are reasonable. Suggested." },
+  { name: "Jayesh Khaire", text: "Since I was an infant I used to have Raju uncle's dabeli. Came to know his son has started this joint with the exact same essence — a full circle moment." },
+  { name: "Valay Patel", text: "One of the best places for Kutchi Dabeli, Kutchi Kadak and Fafda in Nasik. Ask for the Cheese Mayo Dabeli and thank me later — the real taste of Kutch." },
+  { name: "Beast Gaming", text: "Really nice customer service, tried all the items — the speciality dabeli is super amazing, flavours absolutely perfect. Must try." },
+  { name: "Pranita Thorat", text: "One of the most delicious Dabeli I have ever eaten! Perfect for friends, staff is very welcoming and friendly too. #hiddengem" },
+];
+const REVIEWS_URL = "https://maps.app.goo.gl/tYZ99UTRadycaDyy8";
+---
+<section class="section" id="reviews" style="padding-bottom:80px;">
+  <div class="container">
+    <div class="reviews-head">
+      <div>
+        <div class="tag"><span class="idx">05</span>Reviews</div>
+        <h2 class="section-title">What Nashik <em>is saying</em></h2>
+        <p class="section-sub" style="margin-bottom:24px;">Real words from the people who keep coming back for more.</p>
+      </div>
+      <div class="reviews-nav">
+        <button class="r-nav-btn" id="revPrev" aria-label="Previous reviews"><svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></button>
+        <button class="r-nav-btn next" id="revNext" aria-label="Next reviews"><svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></button>
+      </div>
+    </div>
+  </div>
+  <div class="container" style="max-width:1400px;">
+    <div class="reviews-track" id="reviewsTrack">
+      {reviews.map((r) => (
+        <div class="r-card">
+          <svg class="icon quote-mark" aria-hidden="true"><use href="#i-quote"/></svg>
+          <p>&quot;{r.text}&quot;</p>
+          <div class="r-foot"><span class="r-name">{r.name}</span><span class="r-stars">★★★★★</span></div>
+        </div>
+      ))}
+    </div>
+  </div>
+  <div class="container reviews-cta">
+    <a href={REVIEWS_URL} class="btn btn-outline" target="_blank" rel="noopener">Read More On Google</a>
+  </div>
+</section>

@@ -1,0 +1,38 @@
+---
+const ORDER_URL = "https://rajubhaidabeliwale.com/onlineorder/";
+const items = [
+  "Amul Butter Dabeli",
+  "Amul Cheese Dabeli",
+  "Kutchi Kadak",
+  "Kathiyawadi Fafda",
+  "Veg Club Sandwich",
+  "Cheese Pakoda Sandwich",
+  "Chilly Garlic Cheese Burst",
+  "Tandoori Garlic Paneer Pizza",
+  "Tandoori Tikki Burger",
+  "Dahi Puri",
+];
+---
+<section class="section menu-section" id="menu">
+  <div class="container">
+    <div class="tag on-dark center" style="justify-content:center;"><span class="idx">03</span>Today's Specials</div>
+    <h2 class="section-title center">Off the <em>menu board</em></h2>
+    <p class="section-sub center" style="margin:0 auto 52px;">A taste of Kutch, made with love — ten dishes our regulars keep coming back for.</p>
+    <div class="receipt" data-reveal>
+      <div class="receipt-head"><h3>Rajubhai Dabeliwale</h3><span>Menu No. 01</span></div>
+      <div class="menu-list">
+        {items.map((name, i) => (
+          <div class="menu-row">
+            <span class="menu-idx">{String(i + 1).padStart(2, "0")}</span>
+            <span class="menu-name">{name}</span>
+            <span class="menu-dots"></span>
+            <span class="menu-rating">★★★★★</span>
+          </div>
+        ))}
+      </div>
+    </div>
+    <div class="menu-cta center">
+      <a href={ORDER_URL} class="btn btn-cream" target="_blank" rel="noopener">Order Now<svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+    </div>
+  </div>
+</section>

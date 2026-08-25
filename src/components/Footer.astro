@@ -1,0 +1,39 @@
+---
+const MAPS_URL = "https://maps.app.goo.gl/qKiXufxYfqKcgbWy9";
+const currentYear = new Date().getFullYear();
+---
+<footer id="contact">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="#home" class="logo">
+          <div class="crest"><span>RD</span></div>
+          <div class="logo-name">Rajubhai Dabeliwale<small>Est. 1987 · Nashik</small></div>
+        </a>
+        <p>Serving authentic Kutchi Dabeli, Kutchi Kadak and Kathiyawadi Fafda in Nashik since 1987 — one recipe, three decades, made fresh every day.</p>
+      </div>
+      <div>
+        <h4>Open Hours</h4>
+        <ul>
+          <li><svg class="icon" aria-hidden="true"><use href="#i-clock"/></svg>Mon – Thu: 1:00 PM – 9:00 PM</li>
+          <li><svg class="icon" aria-hidden="true"><use href="#i-clock"/></svg>Fri – Sun: 1:00 PM – 9:00 PM</li>
+        </ul>
+        <h4 style="margin-top:28px;">Quick Links</h4>
+        <ul>
+          <li><a href="#about">About Us</a></li>
+          <li><a href="#menu">Menu</a></li>
+          <li><a href="#gallery">Gallery</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Contact Us</h4>
+        <ul>
+          <li><svg class="icon" aria-hidden="true"><use href="#i-pin"/></svg><a href={MAPS_URL} target="_blank" rel="noopener">Shop No 01, Signal, near Shete Hospital, Mahatma Nagar, Parijat Nagar, Nashik, Maharashtra 422005</a></li>
+          <li><svg class="icon" aria-hidden="true"><use href="#i-mail"/></svg><a href="mailto:devesh.jobanputra@gmail.com">devesh.jobanputra@gmail.com</a></li>
+          <li><svg class="icon" aria-hidden="true"><use href="#i-phone"/></svg><a href="tel:+919168169991">+91 91681 69991</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">Copyright © {currentYear} Rajubhai Dabeliwale. All Rights Reserved.</div>
+  </div>
+</footer>
