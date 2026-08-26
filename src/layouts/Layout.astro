@@ -189,10 +189,9 @@ const canonicalURL = "https://rajubhaidabeliwale.com/";
   .hero h1 em{font-weight:500;}
   .hero p{font-size:17px; color:var(--muted); max-width:480px; margin-bottom:36px;}
   .hero-actions{display:flex; gap:16px; flex-wrap:wrap; margin-bottom:52px;}
-  .stat-strip{display:flex; border-top:1px solid var(--line); padding-top:26px;}
-  .stat-strip div{flex:1; padding-right:24px; border-right:1px solid var(--line);}
-  .stat-strip div:last-child{border-right:none;}
-  .stat-strip strong{display:block; font-family:'Zilla Slab',serif; font-style:italic; font-weight:600; font-size:32px; color:var(--red); line-height:1;}
+  .stat-strip{display:flex; gap:48px; border-top:1px solid var(--line); padding-top:26px;}
+  .stat-strip div{flex:1;}
+  .stat-strip strong{display:block; font-family:'Zilla Slab',serif; font-style:italic; font-weight:600; font-size:clamp(40px,5vw,56px); color:var(--red); line-height:1; letter-spacing:-.01em; font-variant-numeric:tabular-nums;}
   .stat-strip span{font-size:11.5px; font-weight:600; letter-spacing:1.4px; text-transform:uppercase; color:var(--muted);}
 
   .hero-visual{position:relative; display:flex; justify-content:center;}
@@ -329,8 +328,8 @@ const canonicalURL = "https://rajubhaidabeliwale.com/";
     .hamburger{display:flex;}
     .menu-list{columns:1;}
     .section{padding:80px 0;}
-    .stat-strip{flex-wrap:wrap; gap:18px;}
-    .stat-strip div{flex:1 1 40%; border-right:none; padding-right:0;}
+    .stat-strip{flex-wrap:wrap; gap:24px;}
+    .stat-strip div{flex:1 1 40%;}
     .points{grid-template-columns:1fr;}
     .gallery-grid{grid-template-columns:repeat(2,1fr); gap:20px;}
   }
@@ -370,8 +369,47 @@ const canonicalURL = "https://rajubhaidabeliwale.com/";
     });
   });
 
+  // stat strip: count up from 0 once revealed. Reads the real number straight out of the
+  // markup (so no-JS/SEO still see the correct final value), then animates toward it.
+  const parseStat = (raw: string) => {
+    const m = raw.trim().match(/^([\d.]+)(.*)$/);
+    if (!m) return null;
+    const [, numStr, suffix] = m;
+    return { target: parseFloat(numStr), decimals: (numStr.split('.')[1] || '').length, suffix };
+  };
+  const statEls = Array.from(document.querySelectorAll<HTMLElement>('.stat-strip strong'));
+  const statData = new Map(statEls.map(el => [el, parseStat(el.textContent ?? '')] as const));
+  if (!prefersReducedMotion) {
+    statEls.forEach(el => {
+      const d = statData.get(el);
+      if (d) el.textContent = (0).toFixed(d.decimals) + d.suffix;
+    });
+  }
+  const animateStats = (strip: Element) => {
+    strip.querySelectorAll<HTMLElement>('strong').forEach((el) => {
+      const d = statData.get(el);
+      if (!d) return;
+      const duration = 1400;
+      const start = performance.now();
+      const tick = (now: number) => {
+        const p = Math.min((now - start) / duration, 1);
+        const eased = 1 - Math.pow(1 - p, 3);
+        el.textContent = (d.target * eased).toFixed(d.decimals) + d.suffix;
+        if (p < 1) requestAnimationFrame(tick);
+        else el.textContent = d.target.toFixed(d.decimals) + d.suffix;
+      };
+      requestAnimationFrame(tick);
+    });
+  };
+
   const io = new IntersectionObserver((entries) => {
-    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in-view'); io.unobserve(e.target); } });
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('in-view');
+        if (e.target.classList.contains('stat-strip') && !prefersReducedMotion) animateStats(e.target);
+        io.unobserve(e.target);
+      }
+    });
   }, { threshold: 0.15 });
   document.querySelectorAll('[data-reveal]').forEach(el => io.observe(el));
 
