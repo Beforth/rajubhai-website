@@ -1,5 +1,6 @@
 ---
 import IconSprite from "../components/IconSprite.astro";
+import ComingSoonModal from "../components/ComingSoonModal.astro";
 
 interface Props {
   title?: string;
@@ -306,6 +307,41 @@ const canonicalURL = "https://rajubhaidabeliwale.com/";
   footer li a:hover{color:var(--gold);}
   .footer-bottom{padding:26px 0; text-align:center; font-size:12px; color:#a88a7f;}
 
+  /* ================= COMING SOON MODAL ================= */
+  .modal-overlay{
+    position:fixed; inset:0; z-index:3000; display:flex; align-items:center; justify-content:center; padding:24px;
+    background:rgba(43,23,18,.82);
+    opacity:0; visibility:hidden;
+    transition:opacity .25s ease, visibility 0s linear .25s;
+  }
+  .modal-overlay.open{opacity:1; visibility:visible; transition:opacity .25s ease, visibility 0s linear 0s;}
+  .modal-card{
+    position:relative; background:var(--paper); border:1.5px solid var(--ink);
+    max-width:420px; width:100%; padding:44px 36px 36px; text-align:center;
+    transform:translateY(14px) scale(.97); transition:transform .25s ease;
+  }
+  .modal-overlay.open .modal-card{transform:translateY(0) scale(1);}
+  .modal-close{
+    position:absolute; top:14px; right:14px; width:36px; height:36px;
+    border:1.5px solid var(--ink); background:transparent; color:var(--ink);
+    display:flex; align-items:center; justify-content:center; cursor:pointer; transition:all .2s ease;
+  }
+  .modal-close:hover{background:var(--ink); color:var(--paper);}
+  .modal-close .icon{width:16px; height:16px;}
+  .modal-icon{
+    width:64px; height:64px; margin:0 auto 20px; border-radius:50%;
+    background:linear-gradient(160deg,var(--maroon),var(--ink));
+    display:flex; align-items:center; justify-content:center;
+  }
+  .modal-icon svg{width:30px; height:30px; color:var(--gold);}
+  .modal-card .tag{margin-bottom:16px;}
+  .modal-card h3{font-family:'Zilla Slab',serif; font-weight:600; font-size:24px; margin-bottom:12px; color:var(--ink); line-height:1.2;}
+  .modal-card p{color:var(--muted); font-size:14.5px; margin-bottom:28px;}
+  .modal-actions{display:flex; gap:12px; flex-wrap:wrap; justify-content:center;}
+  @media (prefers-reduced-motion: reduce){
+    .modal-overlay, .modal-card{transition:none;}
+  }
+
   /* ================= RESPONSIVE ================= */
   @media (max-width:980px){
     .hero-grid{grid-template-columns:1fr;}
@@ -353,6 +389,8 @@ const canonicalURL = "https://rajubhaidabeliwale.com/";
 
 <slot />
 
+<ComingSoonModal />
+
 <script>
   const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -368,6 +406,47 @@ const canonicalURL = "https://rajubhaidabeliwale.com/";
       navLinks.classList.remove('open');
     });
   });
+
+  // "Order Now" buttons open a Coming Soon dialog instead of navigating out —
+  // online ordering isn't live yet.
+  const modalOverlay = document.getElementById('comingSoonOverlay');
+  const modalCard = modalOverlay?.querySelector('.modal-card') as HTMLElement | null;
+  const modalCloseBtn = document.getElementById('comingSoonClose');
+  const focusableSelector = 'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])';
+  let lastTrigger: HTMLElement | null = null;
+
+  const onModalKeydown = (e: KeyboardEvent) => {
+    if (e.key === 'Escape') { closeModal(); return; }
+    if (e.key !== 'Tab' || !modalCard) return;
+    const focusables = Array.from(modalCard.querySelectorAll<HTMLElement>(focusableSelector));
+    if (!focusables.length) return;
+    const first = focusables[0];
+    const last = focusables[focusables.length - 1];
+    if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+    else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+  };
+  const openModal = (trigger: HTMLElement) => {
+    if (!modalOverlay) return;
+    lastTrigger = trigger;
+    modalOverlay.classList.add('open');
+    modalOverlay.setAttribute('aria-hidden', 'false');
+    // deferred one frame: the overlay is still `visibility:hidden` until this style change
+    // flushes, and focusing a hidden element is silently ignored by the browser.
+    requestAnimationFrame(() => { modalCard?.querySelector<HTMLElement>(focusableSelector)?.focus(); });
+    document.addEventListener('keydown', onModalKeydown);
+  };
+  const closeModal = () => {
+    if (!modalOverlay) return;
+    modalOverlay.classList.remove('open');
+    modalOverlay.setAttribute('aria-hidden', 'true');
+    document.removeEventListener('keydown', onModalKeydown);
+    lastTrigger?.focus();
+  };
+  document.querySelectorAll<HTMLElement>('[data-order-trigger]').forEach(btn => {
+    btn.addEventListener('click', () => openModal(btn));
+  });
+  modalCloseBtn?.addEventListener('click', closeModal);
+  modalOverlay?.addEventListener('click', (e) => { if (e.target === modalOverlay) closeModal(); });
 
   // stat strip: count up from 0 once revealed. Reads the real number straight out of the
   // markup (so no-JS/SEO still see the correct final value), then animates toward it.

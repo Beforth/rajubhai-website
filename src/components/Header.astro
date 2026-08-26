@@ -1,6 +1,3 @@
----
-const ORDER_URL = "https://rajubhaidabeliwale.com/onlineorder/";
----
 <header>
   <div class="nav-wrap container">
     <a href="#home" class="logo">
@@ -16,7 +13,7 @@ const ORDER_URL = "https://rajubhaidabeliwale.com/onlineorder/";
       <a href="#contact">Contact</a>
     </nav>
     <div class="nav-cta">
-      <a href={ORDER_URL} class="btn btn-primary btn-sm" target="_blank" rel="noopener">Order Now<svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+      <button type="button" class="btn btn-primary btn-sm" data-order-trigger>Order Now<svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></button>
       <button class="hamburger" id="hamburger" aria-label="Toggle navigation"><span></span><span></span><span></span></button>
     </div>
   </div>
