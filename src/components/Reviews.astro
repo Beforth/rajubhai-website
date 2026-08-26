@@ -23,7 +23,7 @@ const REVIEWS_URL = "https://maps.app.goo.gl/tYZ99UTRadycaDyy8";
       </div>
     </div>
   </div>
-  <div class="container" style="max-width:1400px;">
+  <div class="reviews-viewport container" style="max-width:1400px;">
     <div class="reviews-track" id="reviewsTrack">
       {reviews.map((r) => (
         <div class="r-card">
@@ -32,6 +32,15 @@ const REVIEWS_URL = "https://maps.app.goo.gl/tYZ99UTRadycaDyy8";
           <div class="r-foot"><span class="r-name">{r.name}</span><span class="r-stars">★★★★★</span></div>
         </div>
       ))}
+      <div aria-hidden="true" style="display:contents;">
+        {reviews.map((r) => (
+          <div class="r-card">
+            <svg class="icon quote-mark" aria-hidden="true"><use href="#i-quote"/></svg>
+            <p>&quot;{r.text}&quot;</p>
+            <div class="r-foot"><span class="r-name">{r.name}</span><span class="r-stars">★★★★★</span></div>
+          </div>
+        ))}
+      </div>
     </div>
   </div>
   <div class="container reviews-cta">
