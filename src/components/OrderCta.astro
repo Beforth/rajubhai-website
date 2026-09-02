@@ -1,8 +1,13 @@
+---
+const MAPS_URL = "https://maps.app.goo.gl/qKiXufxYfqKcgbWy9";
+---
 <section class="order-cta">
   <div class="inner container">
-    <div class="tag on-dark tag-plain center" style="justify-content:center;">Order Online</div>
-    <h2>Hot, fresh &amp; <em style="color:var(--gold)">on its way</em></h2>
-    <p>Rajesh Gokuldas Jobanputra started Rajubhai Dabeliwale in Nashik back in 1987 — now your favourite Dabeli is a few taps away.</p>
-    <button type="button" class="btn btn-cream" data-order-trigger>Order Now<svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></button>
+    <h2>Hot, fresh &amp; <em style="color:var(--gold)">ready when you call</em></h2>
+    <p>Rajesh Gokuldas Jobanputra started Rajubhai Dabeliwale in Nashik back in 1987 — call ahead and your favourite Dabeli will be waiting.</p>
+    <div class="order-cta-actions">
+      <a href="tel:+919168169991" class="btn btn-cream">Call to Order<svg class="icon" aria-hidden="true"><use href="#i-phone"/></svg></a>
+      <a href={MAPS_URL} class="btn btn-line" target="_blank" rel="noopener">Get Directions</a>
+    </div>
   </div>
 </section>

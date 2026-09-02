@@ -1,37 +1,60 @@
 ---
-const items = [
-  "Amul Butter Dabeli",
-  "Amul Cheese Dabeli",
-  "Kutchi Kadak",
-  "Kathiyawadi Fafda",
-  "Veg Club Sandwich",
-  "Cheese Pakoda Sandwich",
-  "Chilly Garlic Cheese Burst",
-  "Tandoori Garlic Paneer Pizza",
-  "Tandoori Tikki Burger",
-  "Dahi Puri",
+const categories = [
+  {
+    name: "Dabeli",
+    items: [
+      { name: "Amul Butter Dabeli", desc: "Toasted bun stuffed with spiced potato, sweet-tangy chutneys, peanuts & pomegranate, finished with butter.", signature: true },
+      { name: "Amul Cheese Dabeli", desc: "Our classic dabeli loaded with grated Amul cheese." },
+      { name: "Kutchi Kadak", desc: "A spicier, crunchier take on the original — the crowd favourite since '91.", signature: true },
+    ],
+  },
+  {
+    name: "Fafda & Chaat",
+    items: [
+      { name: "Kathiyawadi Fafda", desc: "Crisp gram-flour fafda made to Shri. Deepak Ramkrushna Agravat's homemade recipe, served with chutney.", signature: true },
+      { name: "Dahi Puri", desc: "Crisp puris loaded with dahi, chutneys, sev & pomegranate." },
+    ],
+  },
+  {
+    name: "Sandwiches, Burgers & More",
+    items: [
+      { name: "Veg Club Sandwich", desc: "Toasted triple-layer sandwich with fresh vegetables." },
+      { name: "Cheese Pakoda Sandwich", desc: "Grilled sandwich stuffed with a crisp cheese pakoda." },
+      { name: "Chilly Garlic Cheese Burst", desc: "Cheese-loaded flatbread with a chilli-garlic kick." },
+      { name: "Tandoori Garlic Paneer Pizza", desc: "Tandoori paneer pizza finished with roasted garlic." },
+      { name: "Tandoori Tikki Burger", desc: "Spiced potato tikki burger, tandoori-style." },
+    ],
+  },
 ];
 ---
 <section class="section menu-section" id="menu">
   <div class="container">
-    <div class="tag on-dark center" style="justify-content:center;"><span class="idx">03</span>Today's Specials</div>
     <h2 class="section-title center">Off the <em>menu board</em></h2>
     <p class="section-sub center" style="margin:0 auto 52px;">A taste of Kutch, made with love — ten dishes our regulars keep coming back for.</p>
     <div class="receipt" data-reveal>
       <div class="receipt-head"><h3>Rajubhai Dabeliwale</h3><span>Menu No. 01</span></div>
-      <div class="menu-list">
-        {items.map((name, i) => (
-          <div class="menu-row">
-            <span class="menu-idx">{String(i + 1).padStart(2, "0")}</span>
-            <span class="menu-name">{name}</span>
-            <span class="menu-dots"></span>
-            <span class="menu-rating">★★★★★</span>
+      {categories.map((cat) => (
+        <div class="menu-category">
+          <h3 class="menu-category-title">{cat.name}</h3>
+          <div class="menu-list">
+            {cat.items.map((item) => (
+              <div class="menu-row">
+                <div class="menu-row-main">
+                  <span class="menu-name">{item.name}</span>
+                  {item.signature && <span class="menu-signature">Signature</span>}
+                  <span class="menu-dots"></span>
+                  <span class="menu-price">₹—</span>
+                </div>
+                <p class="menu-desc">{item.desc}</p>
+              </div>
+            ))}
           </div>
-        ))}
-      </div>
+        </div>
+      ))}
+      <p class="menu-note">* Prices coming soon — ask in-store or on the phone.</p>
     </div>
     <div class="menu-cta center">
-      <button type="button" class="btn btn-cream" data-order-trigger>Order Now<svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></button>
+      <a href="tel:+919168169991" class="btn btn-cream">Call to Order<svg class="icon" aria-hidden="true"><use href="#i-phone"/></svg></a>
     </div>
   </div>
 </section>
