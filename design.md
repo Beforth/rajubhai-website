@@ -32,20 +32,24 @@ Two families only, loaded via Google Fonts (`Zilla+Slab:ital,wght@0,400;0,500;0,
 
 | Element | Size | Weight |
 |---|---|---|
-| H1 | `clamp(42px, 6vw, 72px)` | 600 |
-| H2 | `clamp(32px, 4.6vw, 54px)` | 600 |
+| H1 | `clamp(48px, 7.5vw, 88px)` | 600 |
+| H2 | `clamp(34px, 5.2vw, 62px)` | 600 |
+| Pull-quote | `clamp(22px, 2.6vw, 28px)` italic | 500 |
 | Body | 15–17px | 400 |
-| Buttons / labels | 11–14px | 600–700, uppercase, 1–3px letter-spacing |
+| Buttons / labels | 13px, 700, uppercase, 1.5px letter-spacing |
 
-Line-height: 1.65 body, ~1.04 large headings. `em` inside headings/copy renders italic in `--maroon` (or `--gold`/`--peach` on dark sections) — never bold-red.
+Line-height: 1.65 body, ~1.04 large headings. `em` inside headings/copy renders italic in `--maroon` (or `--gold`/`--peach` on dark sections) — never bold-red. Scale runs deliberately large at the top of the page (H1, stat numbers) — a client review called an earlier, more conservative pass "safe" and "cheap"; don't walk the ceiling back down without a reason.
+
+**Specificity trap to watch for:** a generic descendant selector like `.about-text p` can silently beat a single-class selector like `.pull` on the same element (`.about-text p` has specificity 0,1,1 vs `.pull`'s 0,1,0) regardless of source order — this happened for real and the pull-quote rendered at 15.5px muted body-text size instead of its intended 28px maroon for the entire time it existed. When a classed element sits inside a container that also has a generic tag-selector rule, scope the class selector to the container too (`.about-text .pull`, specificity 0,2,0) rather than relying on source order to save you.
 
 **Headline formula variety:** most section H2s use a "plain phrase + `<em>` accent" formula (e.g. "Off the *menu board*"), but at least two on the page deliberately break it — About/Gallery/Reviews/OrderCta lead with plain text and trail with the em accent, Gallery inverts that (em leads: "*A closer look* at the stall"), and Dine-In drops the em split entirely for a single plain statement ("You're always welcome here."). When adding a section, don't default to the trailing-em formula if five others already use it.
 
 ## Layout conventions
 
 - `border-radius: 0` everywhere — cards, buttons, frames all sharp-cornered
-- Borders: `1.5px solid var(--ink)`
-- No drop-shadows at rest; shadows only appear on hover-lift (`translateY(-2px)` + soft colored shadow), or on the one section deliberately given permanent depth (About's full-bleed photo)
+- Borders: `1.5px solid var(--ink)` on cards/frames; `2px` on buttons and the header crest — buttons and the crest are meant to feel substantial, not thin
+- No drop-shadows at rest, with two deliberate exceptions: the primary button (`--red` at rest, permanent soft red glow) and About's full-bleed photo. Everything else only gets a shadow on hover-lift (`translateY(-2px)` + soft colored shadow). Two exceptions, not a pattern — don't add a third without a reason.
+- `.btn-primary` is filled `--red` at rest (not `--ink`) — buttons are explicitly whitelisted for red per the contrast rule above, and a red-at-rest CTA is one of the highest-leverage moves for color confidence on an otherwise paper/ink page. Hover deepens to `--maroon`.
 - `.container` — `max-width: 1200px`, `padding: 0 32px`
 - `.section` — `padding: 120px 0` (`80px` at ≤1010px). About no longer uses `.section`/`.container` for its full width — see below.
 - Faint (`opacity: .025`) SVG fractal-noise paper-grain texture, fixed, `mix-blend-mode: multiply`, pointer-events none — gives the flat paper background some tooth
