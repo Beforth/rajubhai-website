@@ -109,10 +109,10 @@ const canonicalURL = "https://rajubhaidabeliwale.com/";
   ul{list-style:none;}
   .icon{width:19px; height:19px; flex-shrink:0;}
   .container{width:100%; max-width:1200px; margin:0 auto; padding:0 32px;}
-  .section{padding:120px 0;}
+  .section{padding:144px 0;}
   .center{text-align:center; margin-left:auto; margin-right:auto;}
 
-  .section-title{font-size:clamp(34px,5.2vw,62px); line-height:1.04; color:var(--ink); margin-bottom:20px;}
+  .section-title{font-size:clamp(34px,5.2vw,62px); line-height:1.04; color:var(--ink); margin-bottom:28px;}
   .section-title em{font-weight:500;}
   .section-sub{max-width:560px; color:var(--muted); font-size:16px;}
 
@@ -170,11 +170,11 @@ const canonicalURL = "https://rajubhaidabeliwale.com/";
 
   /* ================= HERO ================= */
   .hero{padding:88px 0 80px;}
-  .hero-grid{display:grid; grid-template-columns:1.12fr 0.88fr; gap:64px; align-items:center;}
-  .hero h1{font-size:clamp(48px,7.5vw,88px); line-height:.98; margin-bottom:24px; color:var(--ink); font-weight:600;}
+  .hero-grid{display:grid; grid-template-columns:1.12fr 0.88fr; gap:80px; align-items:center;}
+  .hero h1{font-size:clamp(48px,7.5vw,88px); line-height:.98; margin-bottom:32px; color:var(--ink); font-weight:600;}
   .hero h1 em{font-weight:500;}
-  .hero p{font-size:17px; color:var(--muted); max-width:480px; margin-bottom:36px;}
-  .hero-actions{display:flex; gap:16px; flex-wrap:wrap; margin-bottom:52px;}
+  .hero p{font-size:17px; color:var(--muted); max-width:480px; margin-bottom:44px;}
+  .hero-actions{display:flex; gap:20px; flex-wrap:wrap; margin-bottom:64px;}
   .stat-strip{display:flex; gap:48px; border-top:1px solid var(--line); padding-top:26px;}
   .stat-strip div{flex:1;}
   .stat-strip strong{display:block; font-family:'Zilla Slab',serif; font-style:italic; font-weight:600; font-size:clamp(44px,6vw,64px); color:var(--red); line-height:1; letter-spacing:-.01em; font-variant-numeric:tabular-nums;}
@@ -201,7 +201,7 @@ const canonicalURL = "https://rajubhaidabeliwale.com/";
   .about-photo-bleed{position:relative; overflow:hidden;}
   .about-photo-bleed img{width:100%; height:100%; object-fit:cover; display:block;}
 
-  .about-text p{color:var(--muted); margin-bottom:18px; font-size:15.5px;}
+  .about-text p{color:var(--muted); margin-bottom:24px; font-size:15.5px;}
   .about-text .pull{border-left:5px solid var(--red); padding-left:22px; margin:12px 0 30px; font-family:'Zilla Slab',serif; font-style:italic; font-weight:500; font-size:clamp(22px,2.6vw,28px); color:var(--maroon); line-height:1.4;}
   .points{display:grid; grid-template-columns:1fr 1fr; gap:1px; margin-top:30px; background:var(--line); border:1px solid var(--line);}
   .point{display:flex; gap:14px; align-items:flex-start; padding:20px; background:var(--paper);}
@@ -214,7 +214,7 @@ const canonicalURL = "https://rajubhaidabeliwale.com/";
   .menu-section .section-sub{color:#c9b3aa;}
   .menu-section .section-title{color:var(--paper);}
   .menu-section .section-title em{color:var(--peach);}
-  .receipt{background:var(--paper); color:var(--ink); border:1.5px solid var(--ink); padding:46px 50px; position:relative;}
+  .receipt{background:var(--paper); color:var(--ink); border:1.5px solid var(--ink); padding:56px 60px; position:relative;}
   .receipt::before, .receipt::after{content:''; position:absolute; width:20px; height:20px; border-radius:50%; background:var(--ink); top:50%; transform:translateY(-50%);}
   .receipt::before{left:-11px;}
   .receipt::after{right:-11px;}
@@ -222,12 +222,12 @@ const canonicalURL = "https://rajubhaidabeliwale.com/";
      order-ticket printer, instead of the generic fade+rise every other section uses. */
   .receipt[data-reveal]{opacity:1; transform:none; clip-path:inset(0 0 100% 0); transition:clip-path .9s cubic-bezier(.16,1,.3,1);}
   .receipt[data-reveal].in-view{clip-path:inset(0 0 0% 0);}
-  .receipt-head{display:flex; justify-content:space-between; align-items:baseline; margin-bottom:10px; border-bottom:1px solid var(--line); padding-bottom:18px;}
+  .receipt-head{display:flex; justify-content:space-between; align-items:baseline; margin-bottom:10px; border-bottom:2px solid var(--orange); padding-bottom:18px;}
   .receipt-head h3{font-size:21px; font-weight:600; color:var(--ink);}
   .receipt-head span{font-family:'Zilla Slab',serif; font-style:italic; font-size:14px; color:var(--muted);}
-  .menu-category{margin-top:32px;}
-  .menu-category:first-of-type{margin-top:22px;}
-  .menu-category-title{font-family:'Karla',sans-serif; font-weight:700; font-size:11.5px; letter-spacing:2.2px; text-transform:uppercase; color:var(--maroon); padding-bottom:10px; margin-bottom:4px; border-bottom:1px solid var(--line);}
+  .menu-category{margin-top:40px;}
+  .menu-category:first-of-type{margin-top:26px;}
+  .menu-category-title{font-family:'Karla',sans-serif; font-weight:700; font-size:11.5px; letter-spacing:2.2px; text-transform:uppercase; color:var(--maroon); padding-bottom:10px; margin-bottom:4px; border-bottom:2px solid var(--orange);}
   .menu-list{margin-top:4px;}
   .menu-row{padding:15px 0; border-bottom:1px solid var(--line); display:flex; flex-direction:column; gap:6px;}
   .menu-row-main{display:flex; align-items:baseline; gap:8px;}
@@ -240,13 +240,13 @@ const canonicalURL = "https://rajubhaidabeliwale.com/";
   .menu-cta{margin-top:40px;}
 
   /* ================= GALLERY ================= */
-  .gallery-grid{display:grid; grid-template-columns:repeat(4,1fr); grid-template-rows:170px 170px 220px; gap:20px; grid-auto-flow:dense;}
+  .gallery-grid{display:grid; grid-template-columns:repeat(4,1fr); grid-template-rows:180px 180px 230px; gap:26px; grid-auto-flow:dense;}
   .g-card{background:var(--paper); border:1.5px solid var(--ink); padding:10px; transition:transform .3s ease, box-shadow .3s ease;}
   .g-card .box{aspect-ratio:1/1; display:flex; align-items:center; justify-content:center; overflow:hidden;}
   .g-card .box svg{width:30%; height:30%; color:var(--paper);}
   .g-card .box img{width:100%; height:100%; object-fit:cover;}
   .g-card figcaption{font-size:10.5px; font-weight:600; letter-spacing:1.8px; text-transform:uppercase; text-align:center; padding-top:12px; color:var(--muted);}
-  .g-card:hover{transform:translateY(-6px); box-shadow:0 22px 40px rgba(43,23,18,.14);}
+  .g-card:hover{transform:translateY(-6px); box-shadow:0 22px 40px rgba(43,23,18,.14); border-color:var(--red);}
   /* the one deliberately dominant tile: full-bleed image, no padding, caption overlaid on a scrim */
   .g-card.featured{grid-column:span 2; grid-row:span 2; position:relative; padding:0; overflow:hidden;}
   .g-card.featured img{width:100%; height:100%; object-fit:cover; display:block;}
@@ -262,8 +262,8 @@ const canonicalURL = "https://rajubhaidabeliwale.com/";
   /* ================= BOOK TABLE ================= */
   .book-wrap{background:var(--peach); position:relative; overflow:hidden;}
   .book-wrap .section-sub{color:var(--maroon);} /* --muted fails AA on --peach (4.37:1); --maroon clears it at ~5.25:1 */
-  .book-grid{display:grid; grid-template-columns:1.2fr 1fr; gap:56px; align-items:center;}
-  .book-card{background:var(--paper); border:1.5px solid var(--ink); padding:38px; position:relative;}
+  .book-grid{display:grid; grid-template-columns:1.2fr 1fr; gap:72px; align-items:center;}
+  .book-card{background:var(--paper); border:1.5px solid var(--ink); border-top:5px solid var(--orange); padding:38px; position:relative;}
   .book-card::before, .book-card::after{content:''; position:absolute; width:18px; height:18px; border-radius:50%; background:var(--peach); left:50%; transform:translateX(-50%);}
   .book-card::before{top:-10px;}
   .book-card::after{bottom:-10px;}
@@ -283,7 +283,8 @@ const canonicalURL = "https://rajubhaidabeliwale.com/";
   .r-nav-btn:hover{background:var(--ink); color:var(--paper);}
   .reviews-viewport{overflow:hidden; -webkit-mask-image:linear-gradient(to right, transparent, black 48px, black calc(100% - 48px), transparent); mask-image:linear-gradient(to right, transparent, black 48px, black calc(100% - 48px), transparent);}
   .reviews-track{display:flex; gap:24px; padding:8px 4px 30px; width:max-content; will-change:transform;}
-  .r-card{min-width:296px; max-width:296px; background:var(--paper); border:1.5px solid var(--ink); padding:28px 26px; position:relative; flex-shrink:0;}
+  .r-card{min-width:296px; max-width:296px; background:var(--paper); border:1.5px solid var(--ink); padding:28px 26px; position:relative; flex-shrink:0; transition:border-color .25s ease;}
+  .r-card:hover{border-color:var(--red);}
   .r-card .quote-mark{width:30px; height:22px; margin-bottom:14px; color:var(--maroon); opacity:.5;}
   .r-card p{font-size:14.5px; color:var(--ink); margin-bottom:20px; min-height:112px;}
   .r-foot{display:flex; align-items:center; justify-content:space-between; border-top:1px solid var(--line); padding-top:16px;}
@@ -300,8 +301,8 @@ const canonicalURL = "https://rajubhaidabeliwale.com/";
   .order-cta-actions{display:flex; gap:16px; flex-wrap:wrap; justify-content:center;}
 
   /* ================= FOOTER ================= */
-  footer{background:var(--ink); color:#dcc7bd; padding:70px 0 0;}
-  .footer-grid{display:grid; grid-template-columns:1.3fr 1fr 1.2fr; gap:52px; padding-bottom:50px; border-bottom:1px solid rgba(251,246,239,.12);}
+  footer{background:var(--ink); color:#dcc7bd; padding:70px 0 0; border-top:4px solid var(--gold);}
+  .footer-grid{display:grid; grid-template-columns:1.3fr 1fr 1.2fr; gap:64px; padding-bottom:60px; border-bottom:1px solid rgba(251,246,239,.12);}
   .footer-brand .logo-name{color:var(--paper);}
   .footer-brand .logo-name small{color:#a88a7f;} /* --muted fails AA on --ink; reuse the footer's existing AA-safe warm neutral */
   .footer-brand .crest{border-color:rgba(251,246,239,.5);}
@@ -333,7 +334,7 @@ const canonicalURL = "https://rajubhaidabeliwale.com/";
     .nav-links.open{transform:translateY(0); opacity:1; pointer-events:auto;}
     .nav-links a{width:100%; padding:15px 0; border-bottom:1px solid var(--line);}
     .hamburger{display:flex;}
-    .section{padding:80px 0;}
+    .section{padding:92px 0;}
     .stat-strip{flex-wrap:wrap; gap:24px;}
     .stat-strip div{flex:1 1 40%;}
     .points{grid-template-columns:1fr;}

@@ -51,9 +51,10 @@ Line-height: 1.65 body, ~1.04 large headings. `em` inside headings/copy renders 
 - No drop-shadows at rest, with two deliberate exceptions: the primary button (`--red` at rest, permanent soft red glow) and About's full-bleed photo. Everything else only gets a shadow on hover-lift (`translateY(-2px)` + soft colored shadow). Two exceptions, not a pattern — don't add a third without a reason.
 - `.btn-primary` is filled `--red` at rest (not `--ink`) — buttons are explicitly whitelisted for red per the contrast rule above, and a red-at-rest CTA is one of the highest-leverage moves for color confidence on an otherwise paper/ink page. Hover deepens to `--maroon`.
 - `.container` — `max-width: 1200px`, `padding: 0 32px`
-- `.section` — `padding: 120px 0` (`80px` at ≤1010px). About no longer uses `.section`/`.container` for its full width — see below.
+- `.section` — `padding: 144px 0` (`92px` at ≤1010px). About no longer uses `.section`/`.container` for its full width — see below. A client review called an earlier, tighter pass (120px/80px) too dense; err toward more room, not less, and carry that through heading margins, grid gaps, and card padding too — don't just widen the outer section padding and leave everything inside it cramped.
 - Faint (`opacity: .025`) SVG fractal-noise paper-grain texture, fixed, `mix-blend-mode: multiply`, pointer-events none — gives the flat paper background some tooth
 - **No kicker/eyebrow labels, and no decorative section numbering** (01/02/03…). Both were removed sitewide — they read as generic template scaffolding and the numbering never covered every section anyway. A heading stands alone; if a section needs a label, put the context in the heading itself.
+- **Structural color accents beyond buttons**: a handful of borders carry brand color instead of `--line` — the receipt-head divider and each menu category underline (`--orange`, 2px), the Dine-In hours card's top edge (`--orange`, 5px), the footer's top edge (`--gold`, 4px), and hover states on gallery/review cards (`border-color: var(--red)`). These are deliberate, not decoration for its own sake — color was concentrated almost entirely in buttons/stat-numbers before, and the rest of the page read as flat because of it. Reach for one of the existing tokens on a structural border before reaching for a new decorative element.
 
 ## Header / nav
 
