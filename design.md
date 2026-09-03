@@ -77,7 +77,7 @@ Line icons only: `stroke: currentColor; stroke-width: 1.5; fill: none`. Defined 
 | [Hero.astro](src/components/Hero.astro) | H1 + count-up stat strip (1987 / 30+ / 4.8) + photo card that fills its grid column (no artificial width cap) |
 | [About.astro](src/components/About.astro) | The one deliberately bold section — see Layout conventions and Images. `--paper-2` background, faint "1987" watermark behind the text column |
 | [Menu.astro](src/components/Menu.astro) | Dark `--ink` section, receipt-style card with ticket-notch cutouts, items grouped into categories (Dabeli / Fafda & Chaat / Sandwiches, Burgers & More) with descriptions, a `Signature` badge on 3 items, and a price column (currently `₹—` placeholders — real prices pending from the client) |
-| [Gallery.astro](src/components/Gallery.astro) | Asymmetric 4-column bento grid, not a uniform tile wall — see Images |
+| [Gallery.astro](src/components/Gallery.astro) | Asymmetric 3-column grid, not a uniform tile wall — see Images. Sizing is `aspect-ratio`-only (no fixed pixel row-heights, no flexbox); that's a hard lesson, not a style preference — see the note below. |
 | [DineIn.astro](src/components/DineIn.astro) | `--peach` background, opening-hours card |
 | [Reviews.astro](src/components/Reviews.astro) | Auto-drifting marquee, see Motion |
 | [OrderCta.astro](src/components/OrderCta.astro) | Dark, diagonal-stripe texture overlay, two real CTAs |
@@ -93,12 +93,14 @@ Real photography, not AI-generated — supplied by the business or sourced to ma
 | Browser favicon | `favicon.png` | (not `favicon.ico` — that file is leftover Astro-scaffold branding, unused and deleted) |
 | Hero visual | `book-table-img.webp` | Signature Kutchi Dabeli, fills its frame-card at full column width |
 | **About photo** | `about-img.webp` | **Full-bleed, unframed, no caption** — the section's one deliberate break from the page's own frame-everything convention. Bleeds from the text column's right edge to the viewport's right edge (`.about-bleed` grid + a `calc()` that matches `.container`'s left gutter for the text column) |
-| Gallery — Signature Dabeli (**featured tile**) | `dish-1.webp` | **Unframed**, spans 2×2 grid cells, caption overlaid on a bottom gradient scrim — the gallery's one dominant tile |
-| Gallery — Kutchi Kadak | `book-table-img3.webp` | Standard framed tile |
-| Gallery — Kathiyawadi Fafda | `book-table-img4.webp` | Standard framed tile |
-| Gallery — Club Sandwich | `dish-5.webp` | Standard framed tile |
-| Gallery — Dahi Puri | `book-table-img2.webp` | Standard framed tile |
-| Gallery — Our Nashik Outlet (**wide tile**) | `about-img.webp` | Framed, spans all 4 columns as a closing banner strip |
+| Gallery — Signature Dabeli (**featured tile**) | `dish-1.webp` | **Unframed**, `grid-column:span 2`, `img{aspect-ratio:16/9}` — caption overlaid on a bottom gradient scrim, the gallery's one dominant tile |
+| Gallery — Kutchi Kadak | `book-table-img3.webp` | Standard framed tile, `.box{aspect-ratio:1/1}` |
+| Gallery — Kathiyawadi Fafda | `book-table-img4.webp` | Standard framed tile, `.box{aspect-ratio:1/1}` |
+| Gallery — Club Sandwich | `dish-5.webp` | Standard framed tile, `.box{aspect-ratio:1/1}` |
+| Gallery — Dahi Puri | `book-table-img2.webp` | Standard framed tile, `.box{aspect-ratio:1/1}` |
+| Gallery — Our Nashik Outlet (**wide tile**) | `about-img.webp` | Framed, `grid-column:span 3`, `.box{aspect-ratio:3/1}` — a closing banner strip |
+
+**Lesson learned on the two special tiles:** the featured and wide tiles were originally sized with fixed-pixel `grid-template-rows` + `grid-row:span 2` (featured) and a column-flexbox with `flex:1` (wide). Both broke in production — the flexbox version let the image balloon past its frame because flex items default to `min-height:auto`, computed from the image's own intrinsic size rather than the ~200px actually available; the fixed-row version required hand-matching row heights to every breakpoint's spans, which drifted out of sync at least once. Both are now sized by `aspect-ratio` alone (`16/9` and `3/1` respectively) — height derives directly from width, no distribution logic, no per-breakpoint height to maintain. If a future tile needs a distinct shape, give it an `aspect-ratio`, not a fixed height or a flex context.
 
 Unused leftover template assets in `public/` (garlic.png, mashroom.png, leaf.png, menu-bg.png, banner-shape-1.png, title-shape.svg, blog-pattern-bg.png, newsletter-bg.jpg, testimonials-bg.jpg, loader.jpg, dish-2/3/4/6/7/8.png, book-table-img5.jpg, and the original unresized about-img.jpg/book-table-img*.jpg/dish-1.png/dish-5.png) were deliberately **not** wired in — the template ones read as generic stock decoration; the unresized originals are kept on disk only as source material behind the `.webp` versions actually served.
 

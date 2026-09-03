@@ -240,24 +240,29 @@ const canonicalURL = "https://rajubhaidabeliwale.com/";
   .menu-cta{margin-top:40px;}
 
   /* ================= GALLERY ================= */
-  .gallery-grid{display:grid; grid-template-columns:repeat(4,1fr); grid-template-rows:180px 180px 230px; gap:26px; grid-auto-flow:dense;}
-  .g-card{background:var(--paper); border:1.5px solid var(--ink); padding:10px; transition:transform .3s ease, box-shadow .3s ease;}
+  /* Every tile — including the two "special" ones below — sizes itself purely from
+     aspect-ratio on its own box/img. No fixed pixel row-heights, no flexbox distribution:
+     those broke twice (images escaping their frame) because flex's default min-height:auto
+     fights a shrinking box, and fixed grid-template-rows has to be hand-matched to spans.
+     aspect-ratio has neither failure mode — height always derives directly from width. */
+  .gallery-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:26px;}
+  .g-card{background:var(--paper); border:1.5px solid var(--ink); padding:10px; transition:box-shadow .3s ease, border-color .3s ease;}
   .g-card .box{aspect-ratio:1/1; display:flex; align-items:center; justify-content:center; overflow:hidden;}
   .g-card .box svg{width:30%; height:30%; color:var(--paper);}
   .g-card .box img{width:100%; height:100%; object-fit:cover;}
   .g-card figcaption{font-size:10.5px; font-weight:600; letter-spacing:1.8px; text-transform:uppercase; text-align:center; padding-top:12px; color:var(--muted);}
   .g-card:hover{box-shadow:0 22px 40px rgba(43,23,18,.14); border-color:var(--red);}
   /* the one deliberately dominant tile: full-bleed image, no padding, caption overlaid on a scrim */
-  .g-card.featured{grid-column:span 2; grid-row:span 2; position:relative; padding:0; overflow:hidden;}
-  .g-card.featured img{width:100%; height:100%; object-fit:cover; display:block;}
+  .g-card.featured{grid-column:span 2; position:relative; padding:0; overflow:hidden;}
+  .g-card.featured img{width:100%; display:block; aspect-ratio:16/9; object-fit:cover;}
   .g-card.featured figcaption{
     position:absolute; left:0; right:0; bottom:0; padding:32px 20px 16px;
     background:linear-gradient(to top, rgba(43,23,18,.88), transparent);
     color:var(--paper); font-size:13px; font-weight:700; letter-spacing:2px; text-transform:uppercase; text-align:left;
   }
-  /* the closing banner tile: same frame/caption convention as the small cards, just wider */
-  .g-card.wide{grid-column:span 4; display:flex; flex-direction:column; min-height:0;}
-  .g-card.wide .box{aspect-ratio:auto; flex:1; min-height:0; overflow:hidden;}
+  /* the closing banner tile: same frame/caption convention as the small cards, just wider and shorter */
+  .g-card.wide{grid-column:span 3;}
+  .g-card.wide .box{aspect-ratio:3/1;}
 
   /* ================= BOOK TABLE ================= */
   .book-wrap{background:var(--peach); position:relative; overflow:hidden;}
@@ -338,9 +343,8 @@ const canonicalURL = "https://rajubhaidabeliwale.com/";
     .stat-strip{flex-wrap:wrap; gap:24px;}
     .stat-strip div{flex:1 1 40%;}
     .points{grid-template-columns:1fr;}
-    .gallery-grid{grid-template-columns:repeat(2,1fr); grid-template-rows:none; grid-auto-rows:minmax(160px,auto);}
-    .g-card.featured{grid-row:span 1; min-height:280px;}
-    .g-card.wide{min-height:200px;}
+    .gallery-grid{grid-template-columns:repeat(2,1fr);}
+    .g-card.wide{grid-column:span 2;}
   }
   @media (max-width:480px){
     .hero-actions .btn{width:100%; justify-content:center;}
@@ -354,7 +358,7 @@ const canonicalURL = "https://rajubhaidabeliwale.com/";
     .nav-cta .btn-sm .icon{width:14px; height:14px;}
     .btn-label-ext{display:none;} /* "Call" + phone icon reads clearly on its own at this width */
     .gallery-grid{grid-template-columns:1fr;}
-    .g-card.featured{grid-column:span 1; min-height:260px;}
+    .g-card.featured{grid-column:span 1;}
     .g-card.wide{grid-column:span 1;}
   }
 </style>
