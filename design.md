@@ -92,6 +92,8 @@ Real photography, not AI-generated — supplied by the business or sourced to ma
 |---|---|---|
 | Header/footer crest | `logo.png` | Real brand mark (red circle, gold script "R", "Since 1987") |
 | Browser favicon | `favicon.png` | (not `favicon.ico` — that file is leftover Astro-scaffold branding, unused and deleted) |
+| iOS home-screen icon | `apple-touch-icon.png` | 180×180, generated once from `logo.png` composited on `--ink` (not the raw logo — see SEO/meta) |
+| Social share preview | `og-image.jpg` | 1200×630, generated once (not built per-request) — wordmark + red underline + framed dish photo, see SEO/meta |
 | Hero visual | `book-table-img.webp` | Signature Kutchi Dabeli, fills its frame-card at full column width |
 | **About photo** | `about-img.webp` | **Full-bleed, unframed, no caption** — the section's one deliberate break from the page's own frame-everything convention. Bleeds from the text column's right edge to the viewport's right edge (`.about-bleed` grid + a `calc()` that matches `.container`'s left gutter for the text column) |
 | Gallery — Signature Dabeli (**featured tile**) | `dish-1.webp` | **Unframed**, `grid-column:span 2`, `img{aspect-ratio:16/9}` — caption overlaid on a bottom gradient scrim, the gallery's one dominant tile |
@@ -136,7 +138,11 @@ One authored focal moment, specific to this brand rather than a generic effect �
 
 ## SEO / meta
 
-Canonical link, `favicon.png`, `theme-color #2B1712`, Open Graph + Twitter Card tags, and a `Restaurant` schema.org JSON-LD block (cuisine, price range, phone, email, full address, opening hours) — all defined in `Layout.astro`'s `<head>`.
+Canonical link, `favicon.png`, `apple-touch-icon.png` (180×180, the crest composited on an `--ink` square — generated once from `logo.png`, not referenced directly since the source logo's transparent corners would otherwise get filled black/white by the OS), `theme-color #2B1712`, full Open Graph + Twitter Card tags including a real **`og-image.jpg`** (1200×630 — Rajubhai/*Dabeliwale* wordmark with the same red underline device as the hero, framed dish photo on the right, generated once and committed as a static asset, not built per-request), `twitter:card` set to `summary_large_image` (not `summary` — the large card is what actually shows a preview image on WhatsApp/iMessage/Twitter, which matters more than usual for a stall whose link mostly travels by WhatsApp share), and a `Restaurant` schema.org JSON-LD block (cuisine, price range, phone, email, full address, opening hours, and a `menu` field pointing at the real in-page `#menu` anchor — it previously pointed at `/our-menu`, a route that doesn't exist on this one-page site; fixed for real, not cosmetic). All defined in `Layout.astro`'s `<head>`.
+
+A **print stylesheet** (`@media print`) strips everything that only exists for screen — the paper-grain overlay, watermark, hero photo, Gallery, Dine-In, Reviews, the dark Order CTA band — and flattens the Menu section and footer from `--ink` dark-mode back to plain paper/ink so someone who hits Cmd/Ctrl+P to print the menu doesn't burn a page of ink on a near-black background. `[data-reveal]` is forced fully visible since no JS runs the scroll-reveal on a printed page.
+
+Two small cross-cutting details that add up: `::selection` is styled `--red`/`--paper` (was falling back to the browser's default blue, which fought the palette on every text selection), and the scrollbar (`scrollbar-color` + `::-webkit-scrollbar*`) is themed `--maroon` on `--paper-2` instead of the OS default — small, but a default blue selection or default grey scrollbar is the kind of detail that quietly undercuts an otherwise fully-tokenized color system.
 
 ## Known gaps (tracked, not yet fixed)
 

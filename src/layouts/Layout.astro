@@ -23,14 +23,20 @@ const canonicalURL = "https://rajubhaidabeliwale.com/";
 <link rel="canonical" href={canonicalURL}>
 <meta name="theme-color" content="#2B1712">
 <link rel="icon" type="image/png" href="/favicon.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
 <meta property="og:type" content="restaurant.restaurant">
 <meta property="og:site_name" content="Rajubhai Dabeliwale">
 <meta property="og:title" content={title}>
 <meta property="og:description" content={description}>
 <meta property="og:url" content={canonicalURL}>
-<meta name="twitter:card" content="summary">
+<meta property="og:image" content="https://rajubhaidabeliwale.com/og-image.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Rajubhai Dabeliwale — authentic Kutchi Dabeli since 1987, Nashik">
+<meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content={title}>
 <meta name="twitter:description" content={description}>
+<meta name="twitter:image" content="https://rajubhaidabeliwale.com/og-image.jpg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Zilla+Slab:ital,wght@0,400;0,500;0,600;0,700;1,500;1,600&family=Karla:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -43,7 +49,7 @@ const canonicalURL = "https://rajubhaidabeliwale.com/";
   "telephone": "+91-9168169991",
   "email": "devesh.jobanputra@gmail.com",
   "url": "https://rajubhaidabeliwale.com/",
-  "menu": "https://rajubhaidabeliwale.com/our-menu",
+  "menu": "https://rajubhaidabeliwale.com/#menu",
   "address": {
     "@type": "PostalAddress",
     "streetAddress": "Shop No 01, Signal, near Shete Hospital, Mahatma Nagar, Parijat Nagar",
@@ -72,7 +78,12 @@ const canonicalURL = "https://rajubhaidabeliwale.com/";
     --muted:#7a5f56;
   }
   *{box-sizing:border-box; margin:0; padding:0;}
-  html{scroll-behavior:smooth;}
+  html{scroll-behavior:smooth; scrollbar-color:var(--maroon) var(--paper-2);}
+  ::selection{background:var(--red); color:var(--paper);}
+  ::-webkit-scrollbar{width:12px; height:12px;}
+  ::-webkit-scrollbar-track{background:var(--paper-2);}
+  ::-webkit-scrollbar-thumb{background:var(--maroon); border:3px solid var(--paper-2);}
+  ::-webkit-scrollbar-thumb:hover{background:var(--red);}
   body{
     font-family:'Karla', sans-serif;
     color:var(--ink);
@@ -372,6 +383,28 @@ const canonicalURL = "https://rajubhaidabeliwale.com/";
     .gallery-grid{grid-template-columns:1fr;}
     .g-card.featured{grid-column:span 1;}
     .g-card.wide{grid-column:span 1;}
+  }
+
+  /* ================= PRINT ================= */
+  /* Practical, not decorative: someone hits Cmd/Ctrl+P mainly to print the menu.
+     Keep the header identity + the receipt, drop everything photo/motion-heavy that
+     just burns ink (no JS runs the reveal/parallax/marquee on a printed page anyway). */
+  @media print{
+    body::before, .skip-link, header .nav-cta, .hamburger, .watermark,
+    #home .hero-visual, #gallery, .book-wrap, #reviews, .order-cta{display:none !important;}
+    [data-reveal]{opacity:1 !important; transform:none !important; clip-path:none !important; transition:none !important;}
+    header{position:static; border-bottom:1px solid #000;}
+    .section{padding:32px 0;}
+    .menu-section{background:var(--paper) !important; color:var(--ink) !important; border:none !important;}
+    .menu-section .section-title, .menu-section .section-title em, .menu-section .section-sub{color:var(--ink) !important;}
+    .receipt{border:1px solid #000; box-shadow:none;}
+    .receipt::before, .receipt::after{display:none;}
+    .menu-price{opacity:1;}
+    a[href]{color:var(--ink) !important;}
+    .btn{display:none !important;}
+    footer{background:var(--paper) !important; color:var(--ink) !important; border-top:1px solid #000;}
+    footer h3, footer li, .footer-bottom{color:var(--ink) !important;}
+    .footer-brand .logo-name small{color:#555 !important;}
   }
 </style>
 </head>
