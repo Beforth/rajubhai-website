@@ -109,15 +109,15 @@ Images are pre-resized and converted to WebP at build-prep time (via `cwebp`, no
 
 ## Motion
 
-Two authored focal moments, each specific to this brand rather than a generic effect — everything else in this list is supporting motion, not the main event:
+One authored focal moment, specific to this brand rather than a generic effect — everything else in this list is supporting motion, not the main event. (An earlier pass also added looping steam wisps over the hero photo; removed on client feedback — no animation directly on the food photography.)
 
 - **The receipt prints in** (Menu): instead of the generic fade+rise every other section uses, `.receipt` reveals via an animated `clip-path: inset()` from top to bottom (0.9s, `cubic-bezier(.16,1,.3,1)`) — reads as paper feeding out of an order-ticket printer, extending the site's one genuinely brand-specific device (the receipt-styled menu). Implemented as `.receipt[data-reveal]` overriding the generic `[data-reveal]` rule (needs the extra specificity — see the specificity-trap note in Typography). Reduced motion: `clip-path:none !important`, full content visible instantly.
-- **Steam off the hero dish**: three blurred, staggered light wisps (`.steam-wisps`, pure CSS `@keyframes`, infinite loop) rise and fade over the hero photo — abstract enough to read as heat/steam without a literal cartoon icon, tied directly to "hot, fresh street food." Fully decorative with no state to preserve, so it's simply not rendered under reduced motion (`display:none`), not just slowed down.
 - **Scroll-reveal**: elements start `opacity:0; translateY(24px)`, animate in via `IntersectionObserver` (threshold 0.15), class added once then unobserved. Staggered via `transition-delay` of `.05s / .15s / .25s / .35s` (`data-reveal="1..4"`).
 - **Stat count-up**: the hero's three stats (1987 / 30+ / 4.8) count up from 0 once the strip scrolls into view, reusing the same reveal observer. The real final value stays in the static HTML (JS resets to 0 and animates back up), so no-JS/SEO see correct content. Skipped under reduced motion.
 - **Parallax**: `requestAnimationFrame`-throttled, skips elements far off-screen. Factors: about watermark `0.18` (most drift), about photo `0.05`, hero frame card `0.06`. Kept in the 0.05–0.2 range on purpose — stronger looks gimmicky.
 - **Reviews marquee**: continuous auto-drift at `70px/s`, driven by `transform: translateX()` (GPU-composited, not `scrollLeft`, to stay smooth at speed). Cards are duplicated in the DOM for a seamless loop; edges fade via a mask gradient. Pauses on hover/touch/focus; manual prev/next arrows trigger an eased jump (exponential ease, ~0.6s) and re-arm auto-drift after 2.8s idle.
-- **`prefers-reduced-motion: reduce`**: scroll-reveal shows content instantly (no transition), the parallax listener never attaches, the stat counters skip straight to their final values, the reviews marquee falls back to a plain native scroll container driven only by the arrow buttons, the receipt appears fully visible with no print-in clip, and the steam wisps don't render at all.
+- **`prefers-reduced-motion: reduce`**: scroll-reveal shows content instantly (no transition), the parallax listener never attaches, the stat counters skip straight to their final values, the reviews marquee falls back to a plain native scroll container driven only by the arrow buttons, and the receipt appears fully visible with no print-in clip.
+- **Rule of thumb going forward: no animation directly on the food/product photography itself** (per client feedback) — motion on surrounding UI (cards, text, layout) is fine; overlays or effects on top of the images are not.
 
 ## Accessibility
 

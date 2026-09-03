@@ -183,29 +183,8 @@ const canonicalURL = "https://rajubhaidabeliwale.com/";
   .hero-visual{position:relative; display:flex; justify-content:center;}
   .frame-card{width:100%; border:1.5px solid var(--ink); background:var(--paper); padding:14px;}
   .frame{aspect-ratio:4/5; position:relative; overflow:hidden; background:linear-gradient(165deg,var(--maroon) 0%, var(--ink) 100%); display:flex; align-items:center; justify-content:center;}
-  .frame > svg{width:34%; height:34%; color:var(--gold); opacity:.92;}
-  .frame .steam{position:absolute; top:14%; width:22%; height:22%; opacity:.55;}
-  .frame .chili-accent{position:absolute; bottom:16%; right:20%; width:15%; height:15%; opacity:.7; transform:rotate(18deg);}
   .frame img{width:100%; height:100%; object-fit:cover;}
   .frame-caption{text-align:center; padding-top:14px; font-size:12.5px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--maroon);}
-  /* signature ambient motion: soft steam rising off the hero dish — specific to hot fresh food,
-     not a generic decorative loop. Fully decorative, so fully disabled under reduced motion. */
-  .steam-wisps{position:absolute; top:6%; left:0; right:0; height:46%; display:flex; align-items:flex-end; justify-content:center; gap:20px; pointer-events:none; z-index:2;}
-  .steam-wisps span{width:3px; height:100%; border-radius:3px; filter:blur(3px);
-    background:linear-gradient(to top, transparent, rgba(255,255,255,.6) 45%, rgba(255,255,255,.25) 75%, transparent);
-    opacity:0; animation:steamRise 3.6s ease-in-out infinite;}
-  .steam-wisps span:nth-child(1){animation-delay:0s;}
-  .steam-wisps span:nth-child(2){height:80%; animation-delay:1.2s;}
-  .steam-wisps span:nth-child(3){height:65%; animation-delay:2.3s;}
-  @keyframes steamRise{
-    0%{transform:translateY(15%) scaleY(.7); opacity:0;}
-    25%{opacity:.85;}
-    65%{opacity:.35;}
-    100%{transform:translateY(-70%) scaleY(1.2); opacity:0;}
-  }
-  @media (prefers-reduced-motion: reduce){
-    .steam-wisps{display:none;}
-  }
 
   /* ================= ABOUT ================= */
   /* The one section allowed to break the page's own rhythm: the photo bleeds to the
