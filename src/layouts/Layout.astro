@@ -216,7 +216,7 @@ const canonicalURL = "https://rajubhaidabeliwale.com/";
   .menu-section .section-sub{color:#c9b3aa;}
   .menu-section .section-title{color:var(--paper);}
   .menu-section .section-title em{color:var(--peach);}
-  .receipt{background:var(--paper); color:var(--ink); border:1.5px solid var(--ink); padding:56px 60px; position:relative;}
+  .receipt{background:var(--paper); color:var(--ink); border:1.5px solid var(--ink); padding:44px 48px; position:relative;}
   .receipt::before, .receipt::after{content:''; position:absolute; width:20px; height:20px; border-radius:50%; background:var(--ink); top:50%; transform:translateY(-50%);}
   .receipt::before{left:-11px;}
   .receipt::after{right:-11px;}
@@ -227,17 +227,21 @@ const canonicalURL = "https://rajubhaidabeliwale.com/";
   .receipt-head{display:flex; justify-content:space-between; align-items:baseline; margin-bottom:10px; border-bottom:2px solid var(--orange); padding-bottom:18px;}
   .receipt-head h3{font-size:21px; font-weight:600; color:var(--ink);}
   .receipt-head span{font-family:'Zilla Slab',serif; font-style:italic; font-size:14px; color:var(--muted);}
-  .menu-category{margin-top:40px;}
-  .menu-category:first-of-type{margin-top:26px;}
-  .menu-category-title{font-family:'Karla',sans-serif; font-weight:700; font-size:11.5px; letter-spacing:2.2px; text-transform:uppercase; color:var(--maroon); padding-bottom:10px; margin-bottom:4px; border-bottom:2px solid var(--orange);}
+  /* three menu-board columns side by side, one per category, instead of one long stacked
+     list — the previous single column made the receipt very tall and visually monotonous. */
+  .menu-categories{display:grid; grid-template-columns:repeat(3,1fr); gap:0 36px;}
+  .menu-category{border-left:1px solid var(--line); padding-left:28px;}
+  .menu-category:first-child{border-left:none; padding-left:0;}
+  .menu-category-title{display:flex; align-items:center; gap:8px; font-family:'Karla',sans-serif; font-weight:700; font-size:11.5px; letter-spacing:1.6px; text-transform:uppercase; color:var(--maroon); padding-bottom:10px; margin-bottom:4px; border-bottom:2px solid var(--orange);}
+  .menu-category-title .icon{width:16px; height:16px; color:var(--orange); flex-shrink:0;}
   .menu-list{margin-top:4px;}
-  .menu-row{padding:15px 0; border-bottom:1px solid var(--line); display:flex; flex-direction:column; gap:6px;}
-  .menu-row-main{display:flex; align-items:baseline; gap:8px;}
-  .menu-name{font-weight:600; font-size:15.5px;}
-  .menu-signature{font-family:'Karla',sans-serif; font-weight:700; font-size:9.5px; letter-spacing:1px; text-transform:uppercase; color:var(--paper); background:var(--red); padding:2px 7px; flex-shrink:0;}
-  .menu-dots{flex:1; border-bottom:1px dotted rgba(43,23,18,.35); margin-bottom:5px; min-width:8px;}
-  .menu-price{font-family:'Zilla Slab',serif; font-style:italic; font-weight:600; font-size:15px; color:var(--maroon); opacity:.55; flex-shrink:0;}
-  .menu-desc{font-size:13.5px; color:var(--muted); line-height:1.5; max-width:60ch;}
+  .menu-row{padding:14px 0; border-bottom:1px solid var(--line); display:flex; flex-direction:column; gap:5px;}
+  .menu-row-main{display:flex; align-items:baseline; justify-content:space-between; gap:8px;}
+  .menu-row-label{display:flex; align-items:baseline; flex-wrap:wrap; gap:6px;}
+  .menu-name{font-weight:600; font-size:14.5px;}
+  .menu-signature{font-family:'Karla',sans-serif; font-weight:700; font-size:8.5px; letter-spacing:.8px; text-transform:uppercase; color:var(--paper); background:var(--red); padding:2px 6px; flex-shrink:0;}
+  .menu-price{font-family:'Zilla Slab',serif; font-style:italic; font-weight:600; font-size:14px; color:var(--maroon); opacity:.55; flex-shrink:0;}
+  .menu-desc{font-size:12.5px; color:var(--muted); line-height:1.5;}
   .menu-note{margin-top:24px; font-size:12px; font-style:italic; color:var(--muted); text-align:right;}
   .menu-cta{margin-top:40px;}
 
@@ -330,6 +334,9 @@ const canonicalURL = "https://rajubhaidabeliwale.com/";
     .about-photo-bleed{order:-1; height:320px;}
     .book-grid{grid-template-columns:1fr;}
     .receipt{padding:36px 28px;}
+    .menu-categories{grid-template-columns:1fr; gap:0;}
+    .menu-category{border-left:none; padding-left:0; padding-top:28px; border-top:1px solid var(--line);}
+    .menu-category:first-child{padding-top:0; border-top:none;}
     .footer-grid{grid-template-columns:1fr; gap:40px;}
   }
   @media (max-width:1010px){
