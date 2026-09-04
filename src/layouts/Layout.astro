@@ -127,29 +127,29 @@ const canonicalURL = "https://rajubhaidabeliwale.com/";
   .section-title em{font-weight:600;}
   .section-sub{max-width:560px; color:var(--muted); font-size:16px;}
 
-  /* ---- buttons: pill-shaped, a little hand-stamped on hover ---- */
+  /* ---- buttons: pill-shaped, calm hover (plain lift, no rotate) ---- */
   .btn{
     display:inline-flex; align-items:center; gap:10px;
     font-family:'Karla',sans-serif; font-weight:700; font-size:13px;
     letter-spacing:1.5px; text-transform:uppercase;
     padding:18px 34px; border:2px solid var(--ink); border-radius:999px;
-    cursor:pointer; transition:all .3s cubic-bezier(.34,1.56,.64,1);
+    cursor:pointer; transition:all .28s cubic-bezier(.4,0,.2,1);
     background:transparent; white-space:nowrap;
   }
   .btn .icon{width:16px; height:16px; transition:transform .28s ease;}
   .btn-primary{background:var(--red); color:var(--paper); border-color:var(--red); box-shadow:0 10px 24px rgba(255,9,23,.25);}
-  .btn-primary:hover{background:var(--maroon); border-color:var(--maroon); transform:translateY(-2px) rotate(-1.5deg); box-shadow:0 16px 32px rgba(144,65,55,.32);}
-  .btn-primary:hover .icon{transform:translateX(3px) rotate(20deg);}
+  .btn-primary:hover{background:var(--maroon); border-color:var(--maroon); transform:translateY(-2px); box-shadow:0 16px 32px rgba(144,65,55,.32);}
+  .btn-primary:hover .icon{transform:translateX(3px);}
   .btn-outline{background:transparent; color:var(--ink); border-color:var(--ink);}
-  .btn-outline:hover{background:var(--ink); color:var(--paper); transform:translateY(-2px) rotate(1.5deg);}
+  .btn-outline:hover{background:var(--ink); color:var(--paper); transform:translateY(-2px);}
   .btn-cream{background:var(--paper); color:var(--ink); border-color:var(--paper);}
-  .btn-cream:hover{background:var(--gold); border-color:var(--gold); transform:translateY(-2px) rotate(-1.5deg);}
+  .btn-cream:hover{background:var(--gold); border-color:var(--gold); transform:translateY(-2px);}
   .btn-line{background:transparent; color:var(--paper); border-color:rgba(251,246,239,.5);}
   .btn-line:hover{border-color:var(--paper); background:rgba(251,246,239,.08);}
   .btn-sm{padding:12px 20px; font-size:11.5px;}
 
-  [data-reveal]{opacity:0; transform:translateY(26px) rotate(-.7deg); transition:opacity .8s cubic-bezier(.16,1,.3,1), transform .8s cubic-bezier(.16,1,.3,1);}
-  [data-reveal].in-view{opacity:1; transform:translateY(0) rotate(0);}
+  [data-reveal]{opacity:0; transform:translateY(24px); transition:opacity .7s ease, transform .7s ease;}
+  [data-reveal].in-view{opacity:1; transform:translateY(0);}
   [data-reveal="1"]{transition-delay:.05s;}
   [data-reveal="2"]{transition-delay:.15s;}
   [data-reveal="3"]{transition-delay:.25s;}
@@ -185,7 +185,7 @@ const canonicalURL = "https://rajubhaidabeliwale.com/";
   .hero-grid{display:grid; grid-template-columns:1.12fr 0.88fr; gap:80px; align-items:center;}
   .hero h1{font-size:clamp(48px,7.5vw,90px); line-height:.96; margin-bottom:32px; color:var(--ink); font-weight:800;}
   .hero h1 em{font-weight:600; position:relative; display:inline-block;}
-  .hero h1 em::after{content:''; position:absolute; left:-4px; right:-4px; bottom:.05em; height:.16em; background:var(--red); border-radius:6px; z-index:-1; transform:rotate(-1.2deg);}
+  .hero h1 em::after{content:''; position:absolute; left:-4px; right:-4px; bottom:.05em; height:.14em; background:var(--red); border-radius:3px; z-index:-1;}
   .hero p{font-size:17px; color:var(--muted); max-width:480px; margin-bottom:44px;}
   .hero-actions{display:flex; gap:20px; flex-wrap:wrap; margin-bottom:64px;}
   .stat-strip{display:flex; gap:48px; border-top:1px solid var(--line); padding-top:26px;}
@@ -193,26 +193,14 @@ const canonicalURL = "https://rajubhaidabeliwale.com/";
   .stat-strip strong{display:block; font-family:'Bebas Neue',sans-serif; font-weight:400; font-size:clamp(46px,6.4vw,68px); color:var(--red); line-height:1; letter-spacing:.01em; font-variant-numeric:tabular-nums;}
   .stat-strip span{font-size:11.5px; font-weight:600; letter-spacing:1.4px; text-transform:uppercase; color:var(--muted);}
 
-  .hero-visual{position:relative; display:flex; justify-content:center; padding-top:22px;}
+  .hero-visual{position:relative; display:flex; justify-content:center;}
   .frame-parallax{width:100%; max-width:440px;}
-  /* pinned-polaroid treatment: rotated, thick paper border, caption in the bottom strip like a
-     real instant photo — the site's new photo device, reused by Gallery's small tiles too. */
-  .frame-card{width:100%; border:1.5px solid var(--ink); background:var(--paper); padding:16px 16px 8px; position:relative; transform:rotate(-2.5deg); box-shadow:0 26px 44px rgba(43,23,18,.18);}
+  /* framed photo, thick paper border, caption in the bottom strip — calm and flat, no tilt. */
+  .frame-card{width:100%; border:1.5px solid var(--ink); background:var(--paper); padding:16px 16px 8px; position:relative; box-shadow:0 20px 36px rgba(43,23,18,.14);}
   .frame-card::before{content:''; position:absolute; inset:7px; border:1px solid var(--orange); pointer-events:none;}
   .frame{aspect-ratio:4/5; position:relative; overflow:hidden; background:linear-gradient(165deg,var(--maroon) 0%, var(--ink) 100%); display:flex; align-items:center; justify-content:center;}
   .frame img{width:100%; height:100%; object-fit:cover;}
   .frame-caption{text-align:center; padding:16px 4px 10px; font-family:'Bebas Neue',sans-serif; letter-spacing:2px; font-size:15px; color:var(--maroon);}
-
-  /* spinning ticket stamp — the hero's one unique, always-moving detail, pinned over the
-     photo's top-left corner like a wax seal. Pure CSS/SVG, no JS dependency. */
-  .stamp{position:absolute; top:-30px; left:-30px; width:112px; height:112px; z-index:2; filter:drop-shadow(0 10px 18px rgba(43,23,18,.3));}
-  .stamp::before{content:''; position:absolute; inset:6px; background:var(--red); border-radius:50%;}
-  .stamp-spin{width:100%; height:100%; animation:stamp-spin 26s linear infinite;}
-  .stamp-spin text{font-family:'Bebas Neue',sans-serif; font-size:10.5px; letter-spacing:2.5px; fill:var(--gold);}
-  .stamp-center{position:absolute; inset:0; display:flex; align-items:center; justify-content:center; color:var(--gold);}
-  .stamp-center .icon{width:26px; height:26px;}
-  @keyframes stamp-spin{to{transform:rotate(360deg);}}
-  @media (prefers-reduced-motion: reduce){.stamp-spin{animation:none;}}
 
   /* ================= ABOUT ================= */
   /* Full-bleed photo stays the one deliberate structural break — but the section now sits
@@ -234,8 +222,8 @@ const canonicalURL = "https://rajubhaidabeliwale.com/";
      slightly rotated, instead of a plain border-left rule running straight down the page. */
   .about-text .pull{
     display:inline-block; background:var(--paper); border-left:5px solid var(--red);
-    padding:18px 22px; margin:14px 0 32px; transform:rotate(-1.2deg);
-    box-shadow:0 14px 28px rgba(43,23,18,.14);
+    padding:18px 22px; margin:14px 0 32px;
+    box-shadow:0 10px 22px rgba(43,23,18,.1);
     font-family:'Fraunces',serif; font-style:italic; font-weight:500;
     font-size:clamp(20px,2.3vw,25px); color:var(--maroon); line-height:1.4;
   }
@@ -292,19 +280,15 @@ const canonicalURL = "https://rajubhaidabeliwale.com/";
      those broke twice (images escaping their frame) because flex's default min-height:auto
      fights a shrinking box, and fixed grid-template-rows has to be hand-matched to spans.
      aspect-ratio has neither failure mode — height always derives directly from width. */
-  .gallery-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:32px 26px;}
-  /* small tiles are pinned polaroids at a slight tilt (set per-tile via --tilt in markup),
-     straightening and lifting on hover — the same pinned-photo language as the Hero frame. */
-  .g-card{background:var(--paper); border:1.5px solid var(--ink); padding:10px 10px 30px; box-shadow:0 8px 18px rgba(43,23,18,.12); transform:rotate(var(--tilt, 0deg)); transition:transform .35s cubic-bezier(.34,1.56,.64,1), box-shadow .3s ease, border-color .3s ease;}
+  .gallery-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:26px;}
+  .g-card{background:var(--paper); border:1.5px solid var(--ink); padding:10px 10px 26px; transition:box-shadow .3s ease, border-color .3s ease, transform .3s ease;}
   .g-card .box{aspect-ratio:1/1; display:flex; align-items:center; justify-content:center; overflow:hidden;}
   .g-card .box svg{width:30%; height:30%; color:var(--paper);}
   .g-card .box img{width:100%; height:100%; object-fit:cover;}
   .g-card figcaption{font-family:'Bebas Neue',sans-serif; font-size:14px; letter-spacing:2px; text-align:center; padding-top:12px; color:var(--maroon);}
-  .g-card:hover{transform:rotate(0deg) translateY(-8px) scale(1.02); box-shadow:0 24px 40px rgba(43,23,18,.2); border-color:var(--red); position:relative; z-index:2;}
-  /* the one deliberately dominant tile: full-bleed image, no padding, caption overlaid on a scrim
-     — kept flat (no tilt) so it reads as the anchor amid the tilted small tiles around it */
-  .g-card.featured{grid-column:span 2; position:relative; padding:0; overflow:hidden; transform:none;}
-  .g-card.featured:hover{transform:translateY(-6px);}
+  .g-card:hover{transform:translateY(-6px); box-shadow:0 22px 40px rgba(43,23,18,.14); border-color:var(--red); position:relative; z-index:2;}
+  /* the one deliberately dominant tile: full-bleed image, no padding, caption overlaid on a scrim */
+  .g-card.featured{grid-column:span 2; position:relative; padding:0; overflow:hidden;}
   .g-card.featured img{width:100%; display:block; aspect-ratio:16/9; object-fit:cover;}
   .g-card.featured figcaption{
     position:absolute; left:0; right:0; bottom:0; padding:32px 20px 16px;
@@ -319,8 +303,7 @@ const canonicalURL = "https://rajubhaidabeliwale.com/";
   .book-wrap{background:var(--peach); position:relative; overflow:hidden;}
   .book-wrap .section-sub{color:var(--maroon);} /* --muted fails AA on --peach (4.37:1); --maroon clears it at ~5.25:1 */
   .book-grid{display:grid; grid-template-columns:1.2fr 1fr; gap:72px; align-items:center;}
-  .book-card{background:var(--paper); border:1.5px solid var(--ink); border-top:5px solid var(--orange); padding:38px; position:relative; transform:rotate(1.2deg); box-shadow:0 18px 32px rgba(43,23,18,.14); transition:transform .35s cubic-bezier(.34,1.56,.64,1);}
-  .book-card:hover{transform:rotate(0deg);}
+  .book-card{background:var(--paper); border:1.5px solid var(--ink); border-top:5px solid var(--orange); padding:38px; position:relative; box-shadow:0 14px 28px rgba(43,23,18,.1);}
   .book-card::before, .book-card::after{content:''; position:absolute; width:18px; height:18px; border-radius:50%; background:var(--peach); left:50%; transform:translateX(-50%);}
   .book-card::before{top:-10px;}
   .book-card::after{bottom:-10px;}
