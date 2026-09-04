@@ -2,7 +2,6 @@
 const categories = [
   {
     name: "Dabeli",
-    icon: "i-dabeli",
     items: [
       { name: "Amul Butter Dabeli", desc: "Toasted bun stuffed with spiced potato, sweet-tangy chutneys, peanuts & pomegranate, finished with butter.", signature: true },
       { name: "Amul Cheese Dabeli", desc: "Our classic dabeli loaded with grated Amul cheese." },
@@ -11,7 +10,6 @@ const categories = [
   },
   {
     name: "Fafda & Chaat",
-    icon: "i-bowl",
     items: [
       { name: "Kathiyawadi Fafda", desc: "Crisp gram-flour fafda made to Shri. Deepak Ramkrushna Agravat's homemade recipe, served with chutney.", signature: true },
       { name: "Dahi Puri", desc: "Crisp puris loaded with dahi, chutneys, sev & pomegranate." },
@@ -19,7 +17,6 @@ const categories = [
   },
   {
     name: "Sandwiches, Burgers & More",
-    icon: "i-sandwich",
     items: [
       { name: "Veg Club Sandwich", desc: "Toasted triple-layer sandwich with fresh vegetables." },
       { name: "Cheese Pakoda Sandwich", desc: "Grilled sandwich stuffed with a crisp cheese pakoda." },
@@ -33,33 +30,26 @@ const categories = [
 <section class="section menu-section" id="menu">
   <div class="container">
     <h2 class="section-title center">Off the <em>menu board</em></h2>
-    <p class="section-sub center" style="margin:0 auto 52px;">A taste of Kutch, made with love — ten dishes our regulars keep coming back for.</p>
-    <div class="receipt" data-reveal>
-      <div class="receipt-head"><h3>Rajubhai Dabeliwale</h3><span>Menu No. 01</span></div>
-      <div class="menu-categories">
-        {categories.map((cat) => (
-          <div class="menu-category">
-            <h3 class="menu-category-title"><svg class="icon" aria-hidden="true"><use href={`#${cat.icon}`}/></svg>{cat.name}</h3>
-            <div class="menu-list">
-              {cat.items.map((item) => (
-                <div class="menu-row">
-                  <div class="menu-row-main">
-                    <span class="menu-row-label">
-                      <span class="menu-name">{item.name}</span>
-                      {item.signature && <span class="menu-signature">Signature</span>}
-                    </span>
-                    <span class="menu-price">₹—</span>
-                  </div>
-                  <p class="menu-desc">{item.desc}</p>
-                </div>
-              ))}
-            </div>
+    <p class="section-sub center" style="margin:0 auto;">A taste of Kutch, made with love — ten dishes our regulars keep coming back for.</p>
+    <div class="menu-spread" data-reveal>
+      {categories.map((cat) => (
+        <div class="menu-cat">
+          <h3 class="menu-cat-title">{cat.name}</h3>
+          <div class="menu-list">
+            {cat.items.map((item) => (
+              <div class="menu-row">
+                <span class="menu-name">{item.name}</span>
+                {item.signature && <span class="menu-signature">Signature</span>}
+                <span class="menu-leader" aria-hidden="true"></span>
+                <span class="menu-price">₹—</span>
+                <p class="menu-desc">{item.desc}</p>
+              </div>
+            ))}
           </div>
-        ))}
-      </div>
-      <p class="menu-note">* Prices coming soon — ask in-store or on the phone.</p>
-      <div class="ticket-edge" aria-hidden="true"></div>
+        </div>
+      ))}
     </div>
+    <p class="menu-note center">* Prices coming soon — ask in-store or on the phone.</p>
     <div class="menu-cta center">
       <a href="tel:+919168169991" class="btn btn-cream">Call to Order<svg class="icon" aria-hidden="true"><use href="#i-phone"/></svg></a>
     </div>

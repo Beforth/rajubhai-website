@@ -111,7 +111,6 @@ const canonicalURL = "https://rajubhaidabeliwale.com/";
   @media (prefers-reduced-motion: reduce){
     html{scroll-behavior:auto;}
     [data-reveal]{opacity:1 !important; transform:none !important; transition:none !important;}
-    .receipt[data-reveal]{clip-path:none !important;}
   }
   h1,h2,h3,h4{font-family:'Fraunces', serif; font-weight:700;}
   em{font-style:italic; color:var(--maroon); font-family:'Fraunces',serif;}
@@ -180,27 +179,24 @@ const canonicalURL = "https://rajubhaidabeliwale.com/";
   .hamburger.active span:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
 
   /* ================= HERO ================= */
-  .hero{padding:88px 0 90px; position:relative; overflow:hidden;}
-  .hero .container{position:relative; z-index:1;}
-  .hero-grid{display:grid; grid-template-columns:1.12fr 0.88fr; gap:80px; align-items:center;}
-  .hero h1{font-size:clamp(48px,7.5vw,90px); line-height:.96; margin-bottom:32px; color:var(--ink); font-weight:800;}
+  /* Full-height, full-bleed asymmetric split — the photo runs edge-to-edge with no frame or
+     border, instead of a boxed card floating in whitespace. The single biggest structural
+     break from the old "everything in a bordered box" convention that ran through every
+     earlier pass; see design.md v3. */
+  .hero{min-height:100vh; display:grid; grid-template-columns:1fr 1fr; align-items:stretch;}
+  .hero-text{display:flex; flex-direction:column; justify-content:center; padding:80px clamp(32px,6vw,96px);}
+  .hero h1{font-size:clamp(52px,6.2vw,104px); line-height:.94; margin-bottom:32px; color:var(--ink); font-weight:800; letter-spacing:-.01em;}
   .hero h1 em{font-weight:600; position:relative; display:inline-block;}
-  .hero h1 em::after{content:''; position:absolute; left:-4px; right:-4px; bottom:.05em; height:.14em; background:var(--red); border-radius:3px; z-index:-1;}
-  .hero p{font-size:17px; color:var(--muted); max-width:480px; margin-bottom:44px;}
-  .hero-actions{display:flex; gap:20px; flex-wrap:wrap; margin-bottom:64px;}
+  .hero h1 em::after{content:''; position:absolute; left:-4px; right:-4px; bottom:.05em; height:.12em; background:var(--red); border-radius:3px; z-index:-1;}
+  .hero p{font-size:17px; color:var(--muted); max-width:440px; margin-bottom:44px;}
+  .hero-actions{display:flex; gap:20px; flex-wrap:wrap; margin-bottom:68px;}
   .stat-strip{display:flex; gap:48px; border-top:1px solid var(--line); padding-top:26px;}
   .stat-strip div{flex:1;}
-  .stat-strip strong{display:block; font-family:'Bebas Neue',sans-serif; font-weight:400; font-size:clamp(46px,6.4vw,68px); color:var(--red); line-height:1; letter-spacing:.01em; font-variant-numeric:tabular-nums;}
+  .stat-strip strong{display:block; font-family:'Bebas Neue',sans-serif; font-weight:400; font-size:clamp(40px,4vw,56px); color:var(--red); line-height:1; letter-spacing:.01em; font-variant-numeric:tabular-nums;}
   .stat-strip span{font-size:11.5px; font-weight:600; letter-spacing:1.4px; text-transform:uppercase; color:var(--muted);}
 
-  .hero-visual{position:relative; display:flex; justify-content:center;}
-  .frame-parallax{width:100%; max-width:440px;}
-  /* framed photo, thick paper border, caption in the bottom strip — calm and flat, no tilt. */
-  .frame-card{width:100%; border:1.5px solid var(--ink); background:var(--paper); padding:16px 16px 8px; position:relative; box-shadow:0 20px 36px rgba(43,23,18,.14);}
-  .frame-card::before{content:''; position:absolute; inset:7px; border:1px solid var(--orange); pointer-events:none;}
-  .frame{aspect-ratio:4/5; position:relative; overflow:hidden; background:linear-gradient(165deg,var(--maroon) 0%, var(--ink) 100%); display:flex; align-items:center; justify-content:center;}
-  .frame img{width:100%; height:100%; object-fit:cover;}
-  .frame-caption{text-align:center; padding:16px 4px 10px; font-family:'Bebas Neue',sans-serif; letter-spacing:2px; font-size:15px; color:var(--maroon);}
+  .hero-photo{position:relative; overflow:hidden; background:linear-gradient(165deg,var(--maroon) 0%, var(--ink) 100%); min-height:360px;}
+  .hero-photo img{width:100%; height:100%; object-fit:cover; display:block;}
 
   /* ================= ABOUT ================= */
   /* Full-bleed photo stays the one deliberate structural break — but the section now sits
@@ -237,82 +233,60 @@ const canonicalURL = "https://rajubhaidabeliwale.com/";
   .point p{margin:4px 0 0; font-size:13.5px; color:var(--maroon);}
 
   /* ================= MENU ================= */
+  /* An actual menu spread instead of a component in a box: no card, no border, no notches —
+     just italic category headers and dotted price-leaders directly on the dark section,
+     the way a printed restaurant menu sets type. Replaces the old receipt-card device. */
   .menu-section{background:var(--ink); color:var(--paper); position:relative; border-top:1px solid rgba(251,246,239,.12); border-bottom:1px solid rgba(251,246,239,.12);}
   .menu-section .section-sub{color:#c9b3aa;}
   .menu-section .section-title{color:var(--paper);}
   .menu-section .section-title em{color:var(--peach);}
-  .receipt{background:var(--paper); color:var(--ink); border:1.5px solid var(--ink); border-bottom:none; padding:44px 48px 0; position:relative;}
-  .receipt::before, .receipt::after{content:''; position:absolute; width:20px; height:20px; border-radius:50%; background:var(--ink); top:50%; transform:translateY(-50%);}
-  .receipt::before{left:-11px;}
-  .receipt::after{right:-11px;}
-  /* signature focal moment: the receipt prints in top-to-bottom, like paper feeding out of an
-     order-ticket printer, instead of the generic fade+rise every other section uses. */
-  .receipt[data-reveal]{opacity:1; transform:none; clip-path:inset(0 0 100% 0); transition:clip-path .9s cubic-bezier(.16,1,.3,1);}
-  .receipt[data-reveal].in-view{clip-path:inset(0 0 0% 0);}
-  /* torn-ticket bottom edge: a row of scalloped bites cut from the paper showing the dark
-     menu-section background behind, instead of a flat closing border. Classic radial-gradient
-     ticket-stub technique — reliable across browsers, no image asset needed. */
-  .ticket-edge{height:22px; margin:26px -48px 0; background-color:var(--ink); background-image:radial-gradient(circle at 11px 11px, transparent 11px, var(--paper) 11.5px); background-size:22px 22px; background-repeat:repeat-x;}
-  .receipt-head{display:flex; justify-content:space-between; align-items:baseline; margin-bottom:10px; border-bottom:2px solid var(--orange); padding-bottom:18px;}
-  .receipt-head h3{font-size:21px; font-weight:700; color:var(--ink);}
-  .receipt-head span{font-family:'Bebas Neue',sans-serif; letter-spacing:1px; font-size:15px; color:var(--muted);}
-  /* three menu-board columns side by side, one per category, instead of one long stacked
-     list — the previous single column made the receipt very tall and visually monotonous. */
-  .menu-categories{display:grid; grid-template-columns:repeat(3,1fr); gap:0 36px;}
-  .menu-category{border-left:1px solid var(--line); padding-left:28px;}
-  .menu-category:first-child{border-left:none; padding-left:0;}
-  .menu-category-title{display:flex; align-items:center; gap:8px; font-family:'Karla',sans-serif; font-weight:700; font-size:11.5px; letter-spacing:1.6px; text-transform:uppercase; color:var(--maroon); padding-bottom:10px; margin-bottom:4px; border-bottom:2px solid var(--orange);}
-  .menu-category-title .icon{width:16px; height:16px; color:var(--orange); flex-shrink:0;}
-  .menu-list{margin-top:4px;}
-  .menu-row{padding:14px 0; border-bottom:1px solid var(--line); display:flex; flex-direction:column; gap:5px;}
-  .menu-row-main{display:flex; align-items:baseline; justify-content:space-between; gap:8px;}
-  .menu-row-label{display:flex; align-items:baseline; flex-wrap:wrap; gap:6px;}
-  .menu-name{font-weight:600; font-size:14.5px;}
-  .menu-signature{font-family:'Karla',sans-serif; font-weight:700; font-size:8.5px; letter-spacing:.8px; text-transform:uppercase; color:var(--paper); background:var(--red); padding:2px 6px; flex-shrink:0;}
-  .menu-price{font-family:'Bebas Neue',sans-serif; letter-spacing:.5px; font-size:15px; color:var(--maroon); opacity:.55; flex-shrink:0;}
-  .menu-desc{font-size:12.5px; color:var(--muted); line-height:1.5;}
-  .menu-note{margin-top:24px; padding-bottom:20px; font-size:12px; font-style:italic; color:var(--muted); text-align:right;}
-  .menu-cta{margin-top:40px;}
+  .menu-spread{max-width:720px; margin:64px auto 0;}
+  .menu-cat{margin-bottom:56px;}
+  .menu-cat:last-child{margin-bottom:0;}
+  .menu-cat-title{font-family:'Fraunces',serif; font-style:italic; font-weight:600; font-size:clamp(24px,2.6vw,32px); color:var(--peach); margin-bottom:8px; padding-bottom:16px; border-bottom:1px solid rgba(251,246,239,.16);}
+  .menu-row{display:flex; align-items:baseline; flex-wrap:wrap; gap:0 10px; padding:16px 0; border-bottom:1px solid rgba(251,246,239,.08);}
+  .menu-row:last-child{border-bottom:none;}
+  .menu-name{font-weight:600; font-size:16px; white-space:nowrap;}
+  .menu-signature{font-family:'Karla',sans-serif; font-weight:700; font-size:8.5px; letter-spacing:.8px; text-transform:uppercase; color:var(--ink); background:var(--gold); padding:2px 6px;}
+  .menu-leader{flex:1; min-width:24px; border-bottom:1px dotted rgba(251,246,239,.32); margin-bottom:6px;}
+  .menu-price{font-family:'Bebas Neue',sans-serif; letter-spacing:.5px; font-size:16px; color:var(--gold); opacity:.75; flex-shrink:0;}
+  .menu-desc{width:100%; font-size:13px; color:#c9b3aa; line-height:1.55; margin-top:4px;}
+  .menu-note{margin-top:40px; font-size:12px; font-style:italic; color:#c9b3aa;}
+  .menu-cta{margin-top:36px;}
 
   /* ================= GALLERY ================= */
-  /* Every tile — including the two "special" ones below — sizes itself purely from
-     aspect-ratio on its own box/img. No fixed pixel row-heights, no flexbox distribution:
-     those broke twice (images escaping their frame) because flex's default min-height:auto
-     fights a shrinking box, and fixed grid-template-rows has to be hand-matched to spans.
-     aspect-ratio has neither failure mode — height always derives directly from width. */
-  .gallery-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:26px;}
-  .g-card{background:var(--paper); border:1.5px solid var(--ink); padding:10px 10px 26px; transition:box-shadow .3s ease, border-color .3s ease, transform .3s ease;}
-  .g-card .box{aspect-ratio:1/1; display:flex; align-items:center; justify-content:center; overflow:hidden;}
-  .g-card .box svg{width:30%; height:30%; color:var(--paper);}
-  .g-card .box img{width:100%; height:100%; object-fit:cover;}
-  .g-card figcaption{font-family:'Bebas Neue',sans-serif; font-size:14px; letter-spacing:2px; text-align:center; padding-top:12px; color:var(--maroon);}
-  .g-card:hover{transform:translateY(-6px); box-shadow:0 22px 40px rgba(43,23,18,.14); border-color:var(--red); position:relative; z-index:2;}
-  /* the one deliberately dominant tile: full-bleed image, no padding, caption overlaid on a scrim */
-  .g-card.featured{grid-column:span 2; position:relative; padding:0; overflow:hidden;}
-  .g-card.featured img{width:100%; display:block; aspect-ratio:16/9; object-fit:cover;}
+  /* Bare photography, not framed cards: no border, no background box — just the image and a
+     small printed-caption label underneath. Sizing is aspect-ratio-only on the img itself
+     (no fixed pixel row-heights, no flexbox distribution — both broke in production before;
+     aspect-ratio derives height directly from width with no distribution logic to fail). */
+  .gallery-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:40px 28px;}
+  .g-card img{width:100%; aspect-ratio:1/1; object-fit:cover; display:block; transition:opacity .3s ease;}
+  .g-card figcaption{font-family:'Bebas Neue',sans-serif; font-size:13px; letter-spacing:2.5px; padding-top:14px; color:var(--maroon);}
+  .g-card:hover img{opacity:.85;}
+  /* the one deliberately dominant tile: caption overlaid on a bottom scrim */
+  .g-card.featured{grid-column:span 2; position:relative;}
+  .g-card.featured img{aspect-ratio:16/9;}
   .g-card.featured figcaption{
     position:absolute; left:0; right:0; bottom:0; padding:32px 20px 16px;
     background:linear-gradient(to top, rgba(43,23,18,.88), transparent);
-    color:var(--paper); font-size:13px; font-weight:700; letter-spacing:2px; text-transform:uppercase; text-align:left;
+    color:var(--paper); font-size:13px; font-weight:700; letter-spacing:2px; text-transform:uppercase;
   }
-  /* the closing banner tile: same frame/caption convention as the small cards, just wider and shorter */
+  /* the closing banner tile: same bare convention, just wider and shorter */
   .g-card.wide{grid-column:span 3;}
-  .g-card.wide .box{aspect-ratio:3/1;}
+  .g-card.wide img{aspect-ratio:3/1;}
 
   /* ================= BOOK TABLE ================= */
   .book-wrap{background:var(--peach); position:relative; overflow:hidden;}
   .book-wrap .section-sub{color:var(--maroon);} /* --muted fails AA on --peach (4.37:1); --maroon clears it at ~5.25:1 */
   .book-grid{display:grid; grid-template-columns:1.2fr 1fr; gap:72px; align-items:center;}
-  .book-card{background:var(--paper); border:1.5px solid var(--ink); border-top:5px solid var(--orange); padding:38px; position:relative; box-shadow:0 14px 28px rgba(43,23,18,.1);}
-  .book-card::before, .book-card::after{content:''; position:absolute; width:18px; height:18px; border-radius:50%; background:var(--peach); left:50%; transform:translateX(-50%);}
-  .book-card::before{top:-10px;}
-  .book-card::after{bottom:-10px;}
+  /* no box — a rule line does the framing, like the rest of the flat/borderless system */
+  .book-card{border-top:2px solid var(--ink); padding-top:28px;}
   .book-card h3{font-family:'Fraunces',serif; font-style:italic; font-weight:600; font-size:15px; color:var(--maroon); margin-bottom:20px;}
-  .book-row{display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:4px 12px; padding:14px 0; border-bottom:1px solid var(--line); font-size:14px; font-weight:500;}
+  .book-row{display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:4px 12px; padding:14px 0; border-bottom:1px solid rgba(43,23,18,.14); font-size:14px; font-weight:500;}
   .book-row:last-of-type{border-bottom:none;}
   .book-row .icon{color:var(--maroon);}
   .book-row .left{display:flex; align-items:center; gap:10px;}
-  .book-card .btn{margin-top:26px; width:100%; justify-content:center;}
+  .book-card .btn{margin-top:26px;}
 
   /* ================= REVIEWS ================= */
   .reviews-head{display:flex; align-items:flex-end; justify-content:space-between; gap:24px; flex-wrap:wrap;}
@@ -323,8 +297,8 @@ const canonicalURL = "https://rajubhaidabeliwale.com/";
   .r-nav-btn:hover{background:var(--ink); color:var(--paper);}
   .reviews-viewport{overflow:hidden; -webkit-mask-image:linear-gradient(to right, transparent, black 48px, black calc(100% - 48px), transparent); mask-image:linear-gradient(to right, transparent, black 48px, black calc(100% - 48px), transparent);}
   .reviews-track{display:flex; gap:24px; padding:8px 4px 30px; width:max-content; will-change:transform;}
-  .r-card{min-width:296px; max-width:296px; background:var(--paper); border:1.5px solid var(--ink); border-radius:6px; padding:28px 26px; position:relative; flex-shrink:0; transition:border-color .25s ease, transform .25s ease;}
-  .r-card:hover{border-color:var(--red); transform:translateY(-4px);}
+  /* borderless, printed-card feel — a rule line does the separating, not a box */
+  .r-card{min-width:296px; max-width:296px; padding:4px 26px 4px 0; border-right:1px solid var(--line); position:relative; flex-shrink:0;}
   .r-card .quote-mark{width:30px; height:22px; margin-bottom:14px; color:var(--maroon); opacity:.5;}
   .r-card p{font-size:14.5px; color:var(--ink); margin-bottom:20px; min-height:112px;}
   .r-foot{display:flex; align-items:center; justify-content:space-between; border-top:1px solid var(--line); padding-top:16px;}
@@ -356,17 +330,14 @@ const canonicalURL = "https://rajubhaidabeliwale.com/";
 
   /* ================= RESPONSIVE ================= */
   @media (max-width:980px){
-    .hero-grid{grid-template-columns:1fr;}
-    .hero-visual{order:-1; max-width:440px; margin:0 auto 30px;}
+    .hero{grid-template-columns:1fr; min-height:0;}
+    .hero-photo{height:340px; order:-1;}
+    .hero-text{padding:56px 32px 64px;}
     .about-bleed{grid-template-columns:1fr; min-height:0;}
     .about-text{padding:80px 32px 40px;}
     .about-photo-bleed{order:-1; height:320px;}
     .book-grid{grid-template-columns:1fr;}
-    .receipt{padding:36px 28px 0;}
-    .ticket-edge{margin:22px -28px 0;}
-    .menu-categories{grid-template-columns:1fr; gap:0;}
-    .menu-category{border-left:none; padding-left:0; padding-top:28px; border-top:1px solid var(--line);}
-    .menu-category:first-child{padding-top:0; border-top:none;}
+    .menu-spread{margin-top:48px;}
     .footer-grid{grid-template-columns:1fr; gap:40px;}
   }
   @media (max-width:1010px){
@@ -403,20 +374,21 @@ const canonicalURL = "https://rajubhaidabeliwale.com/";
 
   /* ================= PRINT ================= */
   /* Practical, not decorative: someone hits Cmd/Ctrl+P mainly to print the menu.
-     Keep the header identity + the receipt, drop everything photo/motion-heavy that
+     Keep the header identity + the menu spread, drop everything photo/motion-heavy that
      just burns ink (no JS runs the reveal/parallax/marquee on a printed page anyway). */
   @media print{
     body::before, .skip-link, header .nav-cta, .hamburger,
-    #home .hero-visual, #gallery, .book-wrap, #reviews, .order-cta{display:none !important;}
+    #home .hero-photo, #gallery, .book-wrap, #reviews, .order-cta{display:none !important;}
     [data-reveal]{opacity:1 !important; transform:none !important; clip-path:none !important; transition:none !important;}
     header{position:static; border-bottom:1px solid #000;}
+    .hero{min-height:0; grid-template-columns:1fr;}
     .section{padding:32px 0;}
     .menu-section{background:var(--paper) !important; color:var(--ink) !important; border:none !important;}
     .menu-section .section-title, .menu-section .section-title em, .menu-section .section-sub{color:var(--ink) !important;}
-    .receipt{border:1px solid #000; border-bottom:1px solid #000; box-shadow:none;}
-    .receipt::before, .receipt::after{display:none;}
-    .ticket-edge{display:none;}
-    .menu-price{opacity:1;}
+    .menu-cat-title{color:var(--ink) !important;}
+    .menu-leader{border-bottom-color:rgba(0,0,0,.3) !important;}
+    .menu-desc{color:#444 !important;}
+    .menu-price{opacity:1; color:var(--ink) !important;}
     a[href]{color:var(--ink) !important;}
     .btn{display:none !important;}
     footer{background:var(--paper) !important; color:var(--ink) !important; border-top:1px solid #000;}
