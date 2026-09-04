@@ -39,7 +39,7 @@ const canonicalURL = "https://rajubhaidabeliwale.com/";
 <meta name="twitter:image" content="https://rajubhaidabeliwale.com/og-image.jpg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Zilla+Slab:ital,wght@0,400;0,500;0,600;0,700;1,500;1,600&family=Karla:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,500;0,600;0,700;0,900;1,500;1,600;1,700&family=Bebas+Neue&family=Karla:wght@400;500;600;700&display=swap" rel="stylesheet">
 <script type="application/ld+json" set:html={JSON.stringify({
   "@context": "https://schema.org",
   "@type": "Restaurant",
@@ -113,8 +113,8 @@ const canonicalURL = "https://rajubhaidabeliwale.com/";
     [data-reveal]{opacity:1 !important; transform:none !important; transition:none !important;}
     .receipt[data-reveal]{clip-path:none !important;}
   }
-  h1,h2,h3,h4{font-family:'Zilla Slab', serif; font-weight:600;}
-  em{font-style:italic; color:var(--maroon);}
+  h1,h2,h3,h4{font-family:'Fraunces', serif; font-weight:700;}
+  em{font-style:italic; color:var(--maroon); font-family:'Fraunces',serif;}
   img,svg{display:block;}
   a{color:inherit; text-decoration:none;}
   ul{list-style:none;}
@@ -123,48 +123,48 @@ const canonicalURL = "https://rajubhaidabeliwale.com/";
   .section{padding:144px 0;}
   .center{text-align:center; margin-left:auto; margin-right:auto;}
 
-  .section-title{font-size:clamp(34px,5.2vw,62px); line-height:1.04; color:var(--ink); margin-bottom:28px;}
-  .section-title em{font-weight:500;}
+  .section-title{font-family:'Fraunces',serif; font-weight:700; font-size:clamp(34px,5.2vw,64px); line-height:1.02; letter-spacing:-.01em; color:var(--ink); margin-bottom:28px;}
+  .section-title em{font-weight:600;}
   .section-sub{max-width:560px; color:var(--muted); font-size:16px;}
 
-  /* ---- buttons: refined, no cartoon shadow ---- */
+  /* ---- buttons: pill-shaped, a little hand-stamped on hover ---- */
   .btn{
     display:inline-flex; align-items:center; gap:10px;
     font-family:'Karla',sans-serif; font-weight:700; font-size:13px;
     letter-spacing:1.5px; text-transform:uppercase;
-    padding:18px 34px; border:2px solid var(--ink);
-    cursor:pointer; transition:all .28s cubic-bezier(.4,0,.2,1);
+    padding:18px 34px; border:2px solid var(--ink); border-radius:999px;
+    cursor:pointer; transition:all .3s cubic-bezier(.34,1.56,.64,1);
     background:transparent; white-space:nowrap;
   }
   .btn .icon{width:16px; height:16px; transition:transform .28s ease;}
-  .btn-primary{background:var(--red); color:var(--paper); border-color:var(--red); box-shadow:0 10px 24px rgba(255,9,23,.2);}
-  .btn-primary:hover{background:var(--maroon); border-color:var(--maroon); transform:translateY(-2px); box-shadow:0 16px 32px rgba(144,65,55,.32);}
-  .btn-primary:hover .icon{transform:translateX(3px);}
+  .btn-primary{background:var(--red); color:var(--paper); border-color:var(--red); box-shadow:0 10px 24px rgba(255,9,23,.25);}
+  .btn-primary:hover{background:var(--maroon); border-color:var(--maroon); transform:translateY(-2px) rotate(-1.5deg); box-shadow:0 16px 32px rgba(144,65,55,.32);}
+  .btn-primary:hover .icon{transform:translateX(3px) rotate(20deg);}
   .btn-outline{background:transparent; color:var(--ink); border-color:var(--ink);}
-  .btn-outline:hover{background:var(--ink); color:var(--paper); transform:translateY(-2px);}
+  .btn-outline:hover{background:var(--ink); color:var(--paper); transform:translateY(-2px) rotate(1.5deg);}
   .btn-cream{background:var(--paper); color:var(--ink); border-color:var(--paper);}
-  .btn-cream:hover{background:var(--gold); border-color:var(--gold); transform:translateY(-2px);}
+  .btn-cream:hover{background:var(--gold); border-color:var(--gold); transform:translateY(-2px) rotate(-1.5deg);}
   .btn-line{background:transparent; color:var(--paper); border-color:rgba(251,246,239,.5);}
   .btn-line:hover{border-color:var(--paper); background:rgba(251,246,239,.08);}
   .btn-sm{padding:12px 20px; font-size:11.5px;}
 
-  [data-reveal]{opacity:0; transform:translateY(24px); transition:opacity .7s ease, transform .7s ease;}
-  [data-reveal].in-view{opacity:1; transform:translateY(0);}
+  [data-reveal]{opacity:0; transform:translateY(26px) rotate(-.7deg); transition:opacity .8s cubic-bezier(.16,1,.3,1), transform .8s cubic-bezier(.16,1,.3,1);}
+  [data-reveal].in-view{opacity:1; transform:translateY(0) rotate(0);}
   [data-reveal="1"]{transition-delay:.05s;}
   [data-reveal="2"]{transition-delay:.15s;}
   [data-reveal="3"]{transition-delay:.25s;}
   [data-reveal="4"]{transition-delay:.35s;}
 
   /* ================= HEADER ================= */
-  header{position:sticky; top:0; z-index:1000; background:rgba(251,246,239,.94); backdrop-filter:blur(6px); border-bottom:1px solid var(--line);}
+  header{position:sticky; top:0; z-index:1000; background:rgba(251,246,239,.94); backdrop-filter:blur(6px); border-bottom:2px solid var(--ink);}
   .nav-wrap{display:flex; align-items:center; justify-content:space-between; padding:16px 32px; gap:24px;}
   .logo{display:flex; align-items:center; gap:14px;}
   .crest{width:56px; height:56px; border-radius:50%; border:2px solid var(--ink); display:flex; align-items:center; justify-content:center; position:relative; flex-shrink:0; overflow:hidden;}
   .crest::before{content:''; position:absolute; inset:4px; border:1px solid var(--red); border-radius:50%;}
-  .crest span{font-family:'Zilla Slab',serif; font-style:italic; font-weight:600; font-size:16px; color:var(--maroon);}
+  .crest span{font-family:'Fraunces',serif; font-style:italic; font-weight:600; font-size:16px; color:var(--maroon);}
   .crest-logo::before{display:none;}
   .crest-logo img{width:100%; height:100%; object-fit:cover; border-radius:50%;}
-  .logo-name{font-family:'Zilla Slab',serif; font-weight:600; font-size:18.5px; line-height:1.2; color:var(--ink);}
+  .logo-name{font-family:'Fraunces',serif; font-weight:700; font-size:18.5px; line-height:1.2; color:var(--ink);}
   .logo-name small{display:block; font-family:'Karla',sans-serif; font-weight:500; font-size:10px; letter-spacing:1.8px; color:var(--muted); margin-top:4px; text-transform:uppercase;}
   .nav-links{display:flex; align-items:center; gap:36px; font-weight:500; font-size:12.5px; letter-spacing:1.6px; text-transform:uppercase;}
   .nav-links a{position:relative; padding:6px 0; color:var(--ink); transition:color .2s ease;}
@@ -180,31 +180,44 @@ const canonicalURL = "https://rajubhaidabeliwale.com/";
   .hamburger.active span:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
 
   /* ================= HERO ================= */
-  .hero{padding:88px 0 80px; position:relative; overflow:hidden;}
+  .hero{padding:88px 0 90px; position:relative; overflow:hidden;}
   .hero .container{position:relative; z-index:1;}
   .hero-grid{display:grid; grid-template-columns:1.12fr 0.88fr; gap:80px; align-items:center;}
-  .hero h1{font-size:clamp(48px,7.5vw,88px); line-height:.98; margin-bottom:32px; color:var(--ink); font-weight:600;}
-  .hero h1 em{font-weight:500; position:relative; display:inline-block;}
-  .hero h1 em::after{content:''; position:absolute; left:2px; right:2px; bottom:.08em; height:.07em; background:var(--red); z-index:-1;}
+  .hero h1{font-size:clamp(48px,7.5vw,90px); line-height:.96; margin-bottom:32px; color:var(--ink); font-weight:800;}
+  .hero h1 em{font-weight:600; position:relative; display:inline-block;}
+  .hero h1 em::after{content:''; position:absolute; left:-4px; right:-4px; bottom:.05em; height:.16em; background:var(--red); border-radius:6px; z-index:-1; transform:rotate(-1.2deg);}
   .hero p{font-size:17px; color:var(--muted); max-width:480px; margin-bottom:44px;}
   .hero-actions{display:flex; gap:20px; flex-wrap:wrap; margin-bottom:64px;}
   .stat-strip{display:flex; gap:48px; border-top:1px solid var(--line); padding-top:26px;}
   .stat-strip div{flex:1;}
-  .stat-strip strong{display:block; font-family:'Zilla Slab',serif; font-style:italic; font-weight:600; font-size:clamp(44px,6vw,64px); color:var(--red); line-height:1; letter-spacing:-.01em; font-variant-numeric:tabular-nums;}
+  .stat-strip strong{display:block; font-family:'Bebas Neue',sans-serif; font-weight:400; font-size:clamp(46px,6.4vw,68px); color:var(--red); line-height:1; letter-spacing:.01em; font-variant-numeric:tabular-nums;}
   .stat-strip span{font-size:11.5px; font-weight:600; letter-spacing:1.4px; text-transform:uppercase; color:var(--muted);}
 
-  .hero-visual{position:relative; display:flex; justify-content:center;}
-  .frame-card{width:100%; border:1.5px solid var(--ink); background:var(--paper); padding:14px; position:relative;}
-  .frame-card::before{content:''; position:absolute; inset:6px; border:1px solid var(--orange); pointer-events:none;}
+  .hero-visual{position:relative; display:flex; justify-content:center; padding-top:22px;}
+  .frame-parallax{width:100%; max-width:440px;}
+  /* pinned-polaroid treatment: rotated, thick paper border, caption in the bottom strip like a
+     real instant photo — the site's new photo device, reused by Gallery's small tiles too. */
+  .frame-card{width:100%; border:1.5px solid var(--ink); background:var(--paper); padding:16px 16px 8px; position:relative; transform:rotate(-2.5deg); box-shadow:0 26px 44px rgba(43,23,18,.18);}
+  .frame-card::before{content:''; position:absolute; inset:7px; border:1px solid var(--orange); pointer-events:none;}
   .frame{aspect-ratio:4/5; position:relative; overflow:hidden; background:linear-gradient(165deg,var(--maroon) 0%, var(--ink) 100%); display:flex; align-items:center; justify-content:center;}
   .frame img{width:100%; height:100%; object-fit:cover;}
-  .frame-caption{text-align:center; padding-top:14px; font-size:12.5px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--maroon);}
+  .frame-caption{text-align:center; padding:16px 4px 10px; font-family:'Bebas Neue',sans-serif; letter-spacing:2px; font-size:15px; color:var(--maroon);}
+
+  /* spinning ticket stamp — the hero's one unique, always-moving detail, pinned over the
+     photo's top-left corner like a wax seal. Pure CSS/SVG, no JS dependency. */
+  .stamp{position:absolute; top:-30px; left:-30px; width:112px; height:112px; z-index:2; filter:drop-shadow(0 10px 18px rgba(43,23,18,.3));}
+  .stamp::before{content:''; position:absolute; inset:6px; background:var(--red); border-radius:50%;}
+  .stamp-spin{width:100%; height:100%; animation:stamp-spin 26s linear infinite;}
+  .stamp-spin text{font-family:'Bebas Neue',sans-serif; font-size:10.5px; letter-spacing:2.5px; fill:var(--gold);}
+  .stamp-center{position:absolute; inset:0; display:flex; align-items:center; justify-content:center; color:var(--gold);}
+  .stamp-center .icon{width:26px; height:26px;}
+  @keyframes stamp-spin{to{transform:rotate(360deg);}}
+  @media (prefers-reduced-motion: reduce){.stamp-spin{animation:none;}}
 
   /* ================= ABOUT ================= */
-  /* The one section allowed to break the page's own rhythm: the photo bleeds to the
-     viewport edge full-height, unframed, no caption — commit to one moment, per design.md. */
-  .about{position:relative; overflow:hidden; background:var(--paper-2, var(--paper)); border-top:1px solid var(--line);}
-  .watermark{position:absolute; top:-20px; left:-16px; font-family:'Zilla Slab',serif; font-style:italic; font-weight:500; font-size:min(22vw,260px); color:rgba(144,65,55,.06); line-height:1; z-index:0; pointer-events:none;}
+  /* Full-bleed photo stays the one deliberate structural break — but the section now sits
+     inside a bold peach color-block instead of a barely-there paper shift. */
+  .about{position:relative; overflow:hidden; background:var(--peach); border-top:2px solid var(--ink);}
   .about-bleed{display:grid; grid-template-columns:minmax(0,1fr) min(48vw,640px); min-height:640px; position:relative; z-index:1;}
   .about-text{
     padding-top:120px; padding-bottom:120px;
@@ -215,22 +228,32 @@ const canonicalURL = "https://rajubhaidabeliwale.com/";
   .about-photo-bleed{position:relative; overflow:hidden;}
   .about-photo-bleed img{width:100%; height:100%; object-fit:cover; display:block;}
 
-  .about-text p{color:var(--muted); margin-bottom:24px; font-size:15.5px;}
-  .about-text .pull{border-left:5px solid var(--red); padding-left:22px; margin:12px 0 30px; font-family:'Zilla Slab',serif; font-style:italic; font-weight:500; font-size:clamp(22px,2.6vw,28px); color:var(--maroon); line-height:1.4;}
+  /* --muted fails AA on --peach (4.37:1); --maroon clears it (~5.25:1) — see design.md Color note */
+  .about-text p{color:var(--maroon); margin-bottom:24px; font-size:15.5px;}
+  /* pinned "sticky note" pull-quote — a small paper card floating on the peach block,
+     slightly rotated, instead of a plain border-left rule running straight down the page. */
+  .about-text .pull{
+    display:inline-block; background:var(--paper); border-left:5px solid var(--red);
+    padding:18px 22px; margin:14px 0 32px; transform:rotate(-1.2deg);
+    box-shadow:0 14px 28px rgba(43,23,18,.14);
+    font-family:'Fraunces',serif; font-style:italic; font-weight:500;
+    font-size:clamp(20px,2.3vw,25px); color:var(--maroon); line-height:1.4;
+  }
   /* deliberately not a bordered card grid — same-size icon+heading+text cards are the single
      most generic "feature grid" pattern on the web. Icon + text standing on their own instead. */
   .points{display:grid; grid-template-columns:1fr 1fr; gap:30px 36px; margin-top:36px;}
   .point{display:flex; gap:16px; align-items:flex-start;}
-  .point .icon{color:var(--red); width:26px; height:26px; margin-top:2px; flex-shrink:0;}
-  .point strong{display:block; font-family:'Zilla Slab',serif; font-weight:600; font-size:16.5px; color:var(--ink);}
-  .point p{margin:4px 0 0; font-size:13.5px; color:var(--muted);}
+  .point .icon-roundel{display:flex; align-items:center; justify-content:center; width:44px; height:44px; border-radius:50%; background:var(--ink); color:var(--gold); flex-shrink:0;}
+  .point .icon-roundel .icon{width:20px; height:20px;}
+  .point strong{display:block; font-family:'Fraunces',serif; font-weight:700; font-size:16.5px; color:var(--ink);}
+  .point p{margin:4px 0 0; font-size:13.5px; color:var(--maroon);}
 
   /* ================= MENU ================= */
   .menu-section{background:var(--ink); color:var(--paper); position:relative; border-top:1px solid rgba(251,246,239,.12); border-bottom:1px solid rgba(251,246,239,.12);}
   .menu-section .section-sub{color:#c9b3aa;}
   .menu-section .section-title{color:var(--paper);}
   .menu-section .section-title em{color:var(--peach);}
-  .receipt{background:var(--paper); color:var(--ink); border:1.5px solid var(--ink); padding:44px 48px; position:relative;}
+  .receipt{background:var(--paper); color:var(--ink); border:1.5px solid var(--ink); border-bottom:none; padding:44px 48px 0; position:relative;}
   .receipt::before, .receipt::after{content:''; position:absolute; width:20px; height:20px; border-radius:50%; background:var(--ink); top:50%; transform:translateY(-50%);}
   .receipt::before{left:-11px;}
   .receipt::after{right:-11px;}
@@ -238,9 +261,13 @@ const canonicalURL = "https://rajubhaidabeliwale.com/";
      order-ticket printer, instead of the generic fade+rise every other section uses. */
   .receipt[data-reveal]{opacity:1; transform:none; clip-path:inset(0 0 100% 0); transition:clip-path .9s cubic-bezier(.16,1,.3,1);}
   .receipt[data-reveal].in-view{clip-path:inset(0 0 0% 0);}
+  /* torn-ticket bottom edge: a row of scalloped bites cut from the paper showing the dark
+     menu-section background behind, instead of a flat closing border. Classic radial-gradient
+     ticket-stub technique — reliable across browsers, no image asset needed. */
+  .ticket-edge{height:22px; margin:26px -48px 0; background-color:var(--ink); background-image:radial-gradient(circle at 11px 11px, transparent 11px, var(--paper) 11.5px); background-size:22px 22px; background-repeat:repeat-x;}
   .receipt-head{display:flex; justify-content:space-between; align-items:baseline; margin-bottom:10px; border-bottom:2px solid var(--orange); padding-bottom:18px;}
-  .receipt-head h3{font-size:21px; font-weight:600; color:var(--ink);}
-  .receipt-head span{font-family:'Zilla Slab',serif; font-style:italic; font-size:14px; color:var(--muted);}
+  .receipt-head h3{font-size:21px; font-weight:700; color:var(--ink);}
+  .receipt-head span{font-family:'Bebas Neue',sans-serif; letter-spacing:1px; font-size:15px; color:var(--muted);}
   /* three menu-board columns side by side, one per category, instead of one long stacked
      list — the previous single column made the receipt very tall and visually monotonous. */
   .menu-categories{display:grid; grid-template-columns:repeat(3,1fr); gap:0 36px;}
@@ -254,9 +281,9 @@ const canonicalURL = "https://rajubhaidabeliwale.com/";
   .menu-row-label{display:flex; align-items:baseline; flex-wrap:wrap; gap:6px;}
   .menu-name{font-weight:600; font-size:14.5px;}
   .menu-signature{font-family:'Karla',sans-serif; font-weight:700; font-size:8.5px; letter-spacing:.8px; text-transform:uppercase; color:var(--paper); background:var(--red); padding:2px 6px; flex-shrink:0;}
-  .menu-price{font-family:'Zilla Slab',serif; font-style:italic; font-weight:600; font-size:14px; color:var(--maroon); opacity:.55; flex-shrink:0;}
+  .menu-price{font-family:'Bebas Neue',sans-serif; letter-spacing:.5px; font-size:15px; color:var(--maroon); opacity:.55; flex-shrink:0;}
   .menu-desc{font-size:12.5px; color:var(--muted); line-height:1.5;}
-  .menu-note{margin-top:24px; font-size:12px; font-style:italic; color:var(--muted); text-align:right;}
+  .menu-note{margin-top:24px; padding-bottom:20px; font-size:12px; font-style:italic; color:var(--muted); text-align:right;}
   .menu-cta{margin-top:40px;}
 
   /* ================= GALLERY ================= */
@@ -265,15 +292,19 @@ const canonicalURL = "https://rajubhaidabeliwale.com/";
      those broke twice (images escaping their frame) because flex's default min-height:auto
      fights a shrinking box, and fixed grid-template-rows has to be hand-matched to spans.
      aspect-ratio has neither failure mode — height always derives directly from width. */
-  .gallery-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:26px;}
-  .g-card{background:var(--paper); border:1.5px solid var(--ink); padding:10px; transition:box-shadow .3s ease, border-color .3s ease;}
+  .gallery-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:32px 26px;}
+  /* small tiles are pinned polaroids at a slight tilt (set per-tile via --tilt in markup),
+     straightening and lifting on hover — the same pinned-photo language as the Hero frame. */
+  .g-card{background:var(--paper); border:1.5px solid var(--ink); padding:10px 10px 30px; box-shadow:0 8px 18px rgba(43,23,18,.12); transform:rotate(var(--tilt, 0deg)); transition:transform .35s cubic-bezier(.34,1.56,.64,1), box-shadow .3s ease, border-color .3s ease;}
   .g-card .box{aspect-ratio:1/1; display:flex; align-items:center; justify-content:center; overflow:hidden;}
   .g-card .box svg{width:30%; height:30%; color:var(--paper);}
   .g-card .box img{width:100%; height:100%; object-fit:cover;}
-  .g-card figcaption{font-size:10.5px; font-weight:600; letter-spacing:1.8px; text-transform:uppercase; text-align:center; padding-top:12px; color:var(--muted);}
-  .g-card:hover{box-shadow:0 22px 40px rgba(43,23,18,.14); border-color:var(--red);}
-  /* the one deliberately dominant tile: full-bleed image, no padding, caption overlaid on a scrim */
-  .g-card.featured{grid-column:span 2; position:relative; padding:0; overflow:hidden;}
+  .g-card figcaption{font-family:'Bebas Neue',sans-serif; font-size:14px; letter-spacing:2px; text-align:center; padding-top:12px; color:var(--maroon);}
+  .g-card:hover{transform:rotate(0deg) translateY(-8px) scale(1.02); box-shadow:0 24px 40px rgba(43,23,18,.2); border-color:var(--red); position:relative; z-index:2;}
+  /* the one deliberately dominant tile: full-bleed image, no padding, caption overlaid on a scrim
+     — kept flat (no tilt) so it reads as the anchor amid the tilted small tiles around it */
+  .g-card.featured{grid-column:span 2; position:relative; padding:0; overflow:hidden; transform:none;}
+  .g-card.featured:hover{transform:translateY(-6px);}
   .g-card.featured img{width:100%; display:block; aspect-ratio:16/9; object-fit:cover;}
   .g-card.featured figcaption{
     position:absolute; left:0; right:0; bottom:0; padding:32px 20px 16px;
@@ -288,11 +319,12 @@ const canonicalURL = "https://rajubhaidabeliwale.com/";
   .book-wrap{background:var(--peach); position:relative; overflow:hidden;}
   .book-wrap .section-sub{color:var(--maroon);} /* --muted fails AA on --peach (4.37:1); --maroon clears it at ~5.25:1 */
   .book-grid{display:grid; grid-template-columns:1.2fr 1fr; gap:72px; align-items:center;}
-  .book-card{background:var(--paper); border:1.5px solid var(--ink); border-top:5px solid var(--orange); padding:38px; position:relative;}
+  .book-card{background:var(--paper); border:1.5px solid var(--ink); border-top:5px solid var(--orange); padding:38px; position:relative; transform:rotate(1.2deg); box-shadow:0 18px 32px rgba(43,23,18,.14); transition:transform .35s cubic-bezier(.34,1.56,.64,1);}
+  .book-card:hover{transform:rotate(0deg);}
   .book-card::before, .book-card::after{content:''; position:absolute; width:18px; height:18px; border-radius:50%; background:var(--peach); left:50%; transform:translateX(-50%);}
   .book-card::before{top:-10px;}
   .book-card::after{bottom:-10px;}
-  .book-card h3{font-family:'Zilla Slab',serif; font-style:italic; font-weight:600; font-size:15px; color:var(--maroon); margin-bottom:20px;}
+  .book-card h3{font-family:'Fraunces',serif; font-style:italic; font-weight:600; font-size:15px; color:var(--maroon); margin-bottom:20px;}
   .book-row{display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:4px 12px; padding:14px 0; border-bottom:1px solid var(--line); font-size:14px; font-weight:500;}
   .book-row:last-of-type{border-bottom:none;}
   .book-row .icon{color:var(--maroon);}
@@ -302,18 +334,18 @@ const canonicalURL = "https://rajubhaidabeliwale.com/";
   /* ================= REVIEWS ================= */
   .reviews-head{display:flex; align-items:flex-end; justify-content:space-between; gap:24px; flex-wrap:wrap;}
   .reviews-nav{display:flex; gap:12px; margin-bottom:8px;}
-  .r-nav-btn{width:46px; height:46px; border:1.5px solid var(--ink); background:transparent; color:var(--ink); display:flex; align-items:center; justify-content:center; cursor:pointer; transition:all .2s ease; flex-shrink:0;}
+  .r-nav-btn{width:46px; height:46px; border-radius:50%; border:1.5px solid var(--ink); background:transparent; color:var(--ink); display:flex; align-items:center; justify-content:center; cursor:pointer; transition:all .2s ease; flex-shrink:0;}
   .r-nav-btn .icon{width:18px; height:18px; transform:rotate(180deg);}
   .r-nav-btn.next .icon{transform:rotate(0);}
   .r-nav-btn:hover{background:var(--ink); color:var(--paper);}
   .reviews-viewport{overflow:hidden; -webkit-mask-image:linear-gradient(to right, transparent, black 48px, black calc(100% - 48px), transparent); mask-image:linear-gradient(to right, transparent, black 48px, black calc(100% - 48px), transparent);}
   .reviews-track{display:flex; gap:24px; padding:8px 4px 30px; width:max-content; will-change:transform;}
-  .r-card{min-width:296px; max-width:296px; background:var(--paper); border:1.5px solid var(--ink); padding:28px 26px; position:relative; flex-shrink:0; transition:border-color .25s ease;}
-  .r-card:hover{border-color:var(--red);}
+  .r-card{min-width:296px; max-width:296px; background:var(--paper); border:1.5px solid var(--ink); border-radius:6px; padding:28px 26px; position:relative; flex-shrink:0; transition:border-color .25s ease, transform .25s ease;}
+  .r-card:hover{border-color:var(--red); transform:translateY(-4px);}
   .r-card .quote-mark{width:30px; height:22px; margin-bottom:14px; color:var(--maroon); opacity:.5;}
   .r-card p{font-size:14.5px; color:var(--ink); margin-bottom:20px; min-height:112px;}
   .r-foot{display:flex; align-items:center; justify-content:space-between; border-top:1px solid var(--line); padding-top:16px;}
-  .r-name{font-family:'Zilla Slab',serif; font-weight:600; font-size:14.5px; color:var(--ink);}
+  .r-name{font-family:'Fraunces',serif; font-weight:700; font-size:14.5px; color:var(--ink);}
   .r-stars{font-size:11px; color:var(--maroon); letter-spacing:1px;}
   .reviews-cta{margin-top:6px;}
 
@@ -333,7 +365,7 @@ const canonicalURL = "https://rajubhaidabeliwale.com/";
   .footer-brand .crest{border-color:rgba(251,246,239,.5);}
   .footer-brand .crest span{color:var(--gold);}
   .footer-brand p{margin-top:18px; color:#b89a8f; font-size:14px; max-width:320px;}
-  footer h3{font-family:'Zilla Slab',serif; font-style:italic; font-weight:600; font-size:15px; color:var(--gold); margin-bottom:20px;}
+  footer h3{font-family:'Fraunces',serif; font-style:italic; font-weight:600; font-size:15px; color:var(--gold); margin-bottom:20px;}
   footer li{margin-bottom:15px; font-size:14px; color:#d3bcb1; display:flex; gap:10px; align-items:flex-start;}
   footer li .icon{width:16px; height:16px; color:var(--gold); margin-top:2px;}
   footer li a:hover{color:var(--gold);}
@@ -347,7 +379,8 @@ const canonicalURL = "https://rajubhaidabeliwale.com/";
     .about-text{padding:80px 32px 40px;}
     .about-photo-bleed{order:-1; height:320px;}
     .book-grid{grid-template-columns:1fr;}
-    .receipt{padding:36px 28px;}
+    .receipt{padding:36px 28px 0;}
+    .ticket-edge{margin:22px -28px 0;}
     .menu-categories{grid-template-columns:1fr; gap:0;}
     .menu-category{border-left:none; padding-left:0; padding-top:28px; border-top:1px solid var(--line);}
     .menu-category:first-child{padding-top:0; border-top:none;}
@@ -390,15 +423,16 @@ const canonicalURL = "https://rajubhaidabeliwale.com/";
      Keep the header identity + the receipt, drop everything photo/motion-heavy that
      just burns ink (no JS runs the reveal/parallax/marquee on a printed page anyway). */
   @media print{
-    body::before, .skip-link, header .nav-cta, .hamburger, .watermark,
+    body::before, .skip-link, header .nav-cta, .hamburger,
     #home .hero-visual, #gallery, .book-wrap, #reviews, .order-cta{display:none !important;}
     [data-reveal]{opacity:1 !important; transform:none !important; clip-path:none !important; transition:none !important;}
     header{position:static; border-bottom:1px solid #000;}
     .section{padding:32px 0;}
     .menu-section{background:var(--paper) !important; color:var(--ink) !important; border:none !important;}
     .menu-section .section-title, .menu-section .section-title em, .menu-section .section-sub{color:var(--ink) !important;}
-    .receipt{border:1px solid #000; box-shadow:none;}
+    .receipt{border:1px solid #000; border-bottom:1px solid #000; box-shadow:none;}
     .receipt::before, .receipt::after{display:none;}
+    .ticket-edge{display:none;}
     .menu-price{opacity:1;}
     a[href]{color:var(--ink) !important;}
     .btn{display:none !important;}
