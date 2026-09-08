@@ -2,6 +2,8 @@
 const categories = [
   {
     name: "Dabeli",
+    icon: "i-dabeli",
+    accent: "var(--red)",
     items: [
       { name: "Amul Butter Dabeli", desc: "Toasted bun stuffed with spiced potato, sweet-tangy chutneys, peanuts & pomegranate, finished with butter.", signature: true },
       { name: "Amul Cheese Dabeli", desc: "Our classic dabeli loaded with grated Amul cheese." },
@@ -10,6 +12,8 @@ const categories = [
   },
   {
     name: "Fafda & Chaat",
+    icon: "i-bowl",
+    accent: "var(--orange)",
     items: [
       { name: "Kathiyawadi Fafda", desc: "Crisp gram-flour fafda made to Shri. Deepak Ramkrushna Agravat's homemade recipe, served with chutney.", signature: true },
       { name: "Dahi Puri", desc: "Crisp puris loaded with dahi, chutneys, sev & pomegranate." },
@@ -17,6 +21,8 @@ const categories = [
   },
   {
     name: "Sandwiches, Burgers & More",
+    icon: "i-sandwich",
+    accent: "var(--maroon)",
     items: [
       { name: "Veg Club Sandwich", desc: "Toasted triple-layer sandwich with fresh vegetables." },
       { name: "Cheese Pakoda Sandwich", desc: "Grilled sandwich stuffed with a crisp cheese pakoda." },
@@ -31,17 +37,23 @@ const categories = [
   <div class="container">
     <h2 class="section-title center">Off the <em>menu board</em></h2>
     <p class="section-sub center" style="margin:0 auto;">A taste of Kutch, made with love — ten dishes our regulars keep coming back for.</p>
-    <div class="menu-spread" data-reveal>
-      {categories.map((cat) => (
-        <div class="menu-cat">
-          <h3 class="menu-cat-title">{cat.name}</h3>
+    <div class="menu-spread">
+      {categories.map((cat, i) => (
+        <div class="menu-cat" data-reveal={String((i % 4) + 1)} style={`--cat-accent:${cat.accent}`}>
+          <div class="menu-cat-head">
+            <span class="menu-cat-icon"><svg class="icon" aria-hidden="true"><use href={`#${cat.icon}`}/></svg></span>
+            <h3 class="menu-cat-title">{cat.name}</h3>
+          </div>
           <div class="menu-list">
             {cat.items.map((item) => (
               <div class="menu-row">
-                <span class="menu-name">{item.name}</span>
-                {item.signature && <span class="menu-signature">Signature</span>}
-                <span class="menu-leader" aria-hidden="true"></span>
-                <span class="menu-price">₹—</span>
+                <div class="menu-row-main">
+                  <span class="menu-row-label">
+                    <span class="menu-name">{item.name}</span>
+                    {item.signature && <span class="menu-signature">Signature</span>}
+                  </span>
+                  <span class="menu-price">₹—</span>
+                </div>
                 <p class="menu-desc">{item.desc}</p>
               </div>
             ))}

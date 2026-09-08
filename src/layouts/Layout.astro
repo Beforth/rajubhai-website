@@ -233,45 +233,51 @@ const canonicalURL = "https://rajubhaidabeliwale.com/";
   .point p{margin:4px 0 0; font-size:13.5px; color:var(--maroon);}
 
   /* ================= MENU ================= */
-  /* An actual menu spread instead of a component in a box: no card, no border, no notches —
-     just italic category headers and dotted price-leaders directly on the dark section,
-     the way a printed restaurant menu sets type. Replaces the old receipt-card device. */
+  /* Warm, rounded category cards floating on the dark section — rich and colorful, not a
+     stark list. Each card pops off the --ink background with a soft shadow and its own
+     accent color on the icon roundel, avoiding both the old sharp-cornered receipt look
+     and the too-bare dot-leader list that followed it. */
   .menu-section{background:var(--ink); color:var(--paper); position:relative; border-top:1px solid rgba(251,246,239,.12); border-bottom:1px solid rgba(251,246,239,.12);}
   .menu-section .section-sub{color:#c9b3aa;}
   .menu-section .section-title{color:var(--paper);}
   .menu-section .section-title em{color:var(--peach);}
-  .menu-spread{max-width:720px; margin:64px auto 0;}
-  .menu-cat{margin-bottom:56px;}
-  .menu-cat:last-child{margin-bottom:0;}
-  .menu-cat-title{font-family:'Fraunces',serif; font-style:italic; font-weight:600; font-size:clamp(24px,2.6vw,32px); color:var(--peach); margin-bottom:8px; padding-bottom:16px; border-bottom:1px solid rgba(251,246,239,.16);}
-  .menu-row{display:flex; align-items:baseline; flex-wrap:wrap; gap:0 10px; padding:16px 0; border-bottom:1px solid rgba(251,246,239,.08);}
+  .menu-spread{display:grid; grid-template-columns:repeat(3,1fr); gap:28px; align-items:start; margin:64px auto 0;}
+  .menu-cat{background:var(--paper); border-radius:20px; padding:32px 28px; box-shadow:0 22px 44px rgba(0,0,0,.28);}
+  .menu-cat-head{display:flex; align-items:center; gap:14px; margin-bottom:22px; padding-bottom:18px; border-bottom:2px solid var(--peach);}
+  .menu-cat-icon{width:46px; height:46px; border-radius:50%; background:var(--cat-accent, var(--red)); color:var(--paper); display:flex; align-items:center; justify-content:center; flex-shrink:0;}
+  .menu-cat-icon .icon{width:22px; height:22px;}
+  .menu-cat-title{font-family:'Fraunces',serif; font-style:italic; font-weight:600; font-size:clamp(19px,1.8vw,22px); color:var(--ink); margin:0; line-height:1.15;}
+  .menu-row{padding:14px 0; border-bottom:1px solid var(--line); display:flex; flex-direction:column; gap:5px;}
   .menu-row:last-child{border-bottom:none;}
-  .menu-name{font-weight:600; font-size:16px; white-space:nowrap;}
-  .menu-signature{font-family:'Karla',sans-serif; font-weight:700; font-size:8.5px; letter-spacing:.8px; text-transform:uppercase; color:var(--ink); background:var(--gold); padding:2px 6px;}
-  .menu-leader{flex:1; min-width:24px; border-bottom:1px dotted rgba(251,246,239,.32); margin-bottom:6px;}
-  .menu-price{font-family:'Bebas Neue',sans-serif; letter-spacing:.5px; font-size:16px; color:var(--gold); opacity:.75; flex-shrink:0;}
-  .menu-desc{width:100%; font-size:13px; color:#c9b3aa; line-height:1.55; margin-top:4px;}
+  .menu-row-main{display:flex; align-items:baseline; justify-content:space-between; gap:8px;}
+  .menu-row-label{display:flex; align-items:baseline; flex-wrap:wrap; gap:6px;}
+  .menu-name{font-weight:600; font-size:14.5px; color:var(--ink);}
+  .menu-signature{font-family:'Karla',sans-serif; font-weight:700; font-size:8.5px; letter-spacing:.8px; text-transform:uppercase; color:var(--paper); background:var(--cat-accent, var(--red)); padding:2px 6px; border-radius:4px; flex-shrink:0;}
+  .menu-price{font-family:'Bebas Neue',sans-serif; letter-spacing:.5px; font-size:15px; color:var(--maroon); opacity:.6; flex-shrink:0;}
+  .menu-desc{font-size:12.5px; color:var(--muted); line-height:1.5;}
   .menu-note{margin-top:40px; font-size:12px; font-style:italic; color:#c9b3aa;}
   .menu-cta{margin-top:36px;}
 
   /* ================= GALLERY ================= */
-  /* Bare photography, not framed cards: no border, no background box — just the image and a
-     small printed-caption label underneath. Sizing is aspect-ratio-only on the img itself
-     (no fixed pixel row-heights, no flexbox distribution — both broke in production before;
-     aspect-ratio derives height directly from width with no distribution logic to fail). */
-  .gallery-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:40px 28px;}
-  .g-card img{width:100%; aspect-ratio:1/1; object-fit:cover; display:block; transition:opacity .3s ease;}
-  .g-card figcaption{font-family:'Bebas Neue',sans-serif; font-size:13px; letter-spacing:2.5px; padding-top:14px; color:var(--maroon);}
-  .g-card:hover img{opacity:.85;}
+  /* Warm, rounded photo cards with a soft shadow — richer than a bare image, calmer than a
+     hard-edged bordered frame. Sizing is aspect-ratio-only on the img itself (no fixed pixel
+     row-heights, no flexbox distribution — both broke in production before; aspect-ratio
+     derives height directly from width with no distribution logic to fail). */
+  #gallery{background:var(--paper-2);}
+  .gallery-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:28px;}
+  .g-card{background:var(--paper); border-radius:18px; overflow:hidden; box-shadow:0 16px 34px rgba(43,23,18,.14); transition:transform .3s ease, box-shadow .3s ease;}
+  .g-card img{width:100%; aspect-ratio:1/1; object-fit:cover; display:block;}
+  .g-card figcaption{font-family:'Bebas Neue',sans-serif; font-size:13px; letter-spacing:2.5px; text-align:center; padding:14px 12px; color:var(--maroon);}
+  .g-card:hover{transform:translateY(-6px); box-shadow:0 26px 46px rgba(43,23,18,.22);}
   /* the one deliberately dominant tile: caption overlaid on a bottom scrim */
   .g-card.featured{grid-column:span 2; position:relative;}
   .g-card.featured img{aspect-ratio:16/9;}
   .g-card.featured figcaption{
     position:absolute; left:0; right:0; bottom:0; padding:32px 20px 16px;
     background:linear-gradient(to top, rgba(43,23,18,.88), transparent);
-    color:var(--paper); font-size:13px; font-weight:700; letter-spacing:2px; text-transform:uppercase;
+    color:var(--paper); font-size:13px; font-weight:700; letter-spacing:2px; text-transform:uppercase; text-align:left;
   }
-  /* the closing banner tile: same bare convention, just wider and shorter */
+  /* the closing banner tile: same warm-card convention, just wider and shorter */
   .g-card.wide{grid-column:span 3;}
   .g-card.wide img{aspect-ratio:3/1;}
 
@@ -279,14 +285,14 @@ const canonicalURL = "https://rajubhaidabeliwale.com/";
   .book-wrap{background:var(--peach); position:relative; overflow:hidden;}
   .book-wrap .section-sub{color:var(--maroon);} /* --muted fails AA on --peach (4.37:1); --maroon clears it at ~5.25:1 */
   .book-grid{display:grid; grid-template-columns:1.2fr 1fr; gap:72px; align-items:center;}
-  /* no box — a rule line does the framing, like the rest of the flat/borderless system */
-  .book-card{border-top:2px solid var(--ink); padding-top:28px;}
+  /* warm rounded card, soft shadow, colored top edge — sits forward off the peach block */
+  .book-card{background:var(--paper); border-radius:20px; border-top:5px solid var(--orange); padding:40px; box-shadow:0 22px 44px rgba(43,23,18,.16);}
   .book-card h3{font-family:'Fraunces',serif; font-style:italic; font-weight:600; font-size:15px; color:var(--maroon); margin-bottom:20px;}
-  .book-row{display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:4px 12px; padding:14px 0; border-bottom:1px solid rgba(43,23,18,.14); font-size:14px; font-weight:500;}
+  .book-row{display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:4px 12px; padding:14px 0; border-bottom:1px solid var(--line); font-size:14px; font-weight:500;}
   .book-row:last-of-type{border-bottom:none;}
   .book-row .icon{color:var(--maroon);}
   .book-row .left{display:flex; align-items:center; gap:10px;}
-  .book-card .btn{margin-top:26px;}
+  .book-card .btn{margin-top:26px; width:100%; justify-content:center;}
 
   /* ================= REVIEWS ================= */
   .reviews-head{display:flex; align-items:flex-end; justify-content:space-between; gap:24px; flex-wrap:wrap;}
@@ -297,8 +303,8 @@ const canonicalURL = "https://rajubhaidabeliwale.com/";
   .r-nav-btn:hover{background:var(--ink); color:var(--paper);}
   .reviews-viewport{overflow:hidden; -webkit-mask-image:linear-gradient(to right, transparent, black 48px, black calc(100% - 48px), transparent); mask-image:linear-gradient(to right, transparent, black 48px, black calc(100% - 48px), transparent);}
   .reviews-track{display:flex; gap:24px; padding:8px 4px 30px; width:max-content; will-change:transform;}
-  /* borderless, printed-card feel — a rule line does the separating, not a box */
-  .r-card{min-width:296px; max-width:296px; padding:4px 26px 4px 0; border-right:1px solid var(--line); position:relative; flex-shrink:0;}
+  /* warm rounded card, soft shadow, a colored top edge instead of a flat hairline border */
+  .r-card{min-width:296px; max-width:296px; background:var(--paper); border-radius:18px; border-top:4px solid var(--orange); padding:28px 26px; box-shadow:0 16px 32px rgba(43,23,18,.12); position:relative; flex-shrink:0;}
   .r-card .quote-mark{width:30px; height:22px; margin-bottom:14px; color:var(--maroon); opacity:.5;}
   .r-card p{font-size:14.5px; color:var(--ink); margin-bottom:20px; min-height:112px;}
   .r-foot{display:flex; align-items:center; justify-content:space-between; border-top:1px solid var(--line); padding-top:16px;}
@@ -337,7 +343,7 @@ const canonicalURL = "https://rajubhaidabeliwale.com/";
     .about-text{padding:80px 32px 40px;}
     .about-photo-bleed{order:-1; height:320px;}
     .book-grid{grid-template-columns:1fr;}
-    .menu-spread{margin-top:48px;}
+    .menu-spread{grid-template-columns:1fr; margin-top:48px;}
     .footer-grid{grid-template-columns:1fr; gap:40px;}
   }
   @media (max-width:1010px){
@@ -385,10 +391,10 @@ const canonicalURL = "https://rajubhaidabeliwale.com/";
     .section{padding:32px 0;}
     .menu-section{background:var(--paper) !important; color:var(--ink) !important; border:none !important;}
     .menu-section .section-title, .menu-section .section-title em, .menu-section .section-sub{color:var(--ink) !important;}
-    .menu-cat-title{color:var(--ink) !important;}
-    .menu-leader{border-bottom-color:rgba(0,0,0,.3) !important;}
+    .menu-spread{grid-template-columns:1fr;}
+    .menu-cat{box-shadow:none; border:1px solid #000;}
     .menu-desc{color:#444 !important;}
-    .menu-price{opacity:1; color:var(--ink) !important;}
+    .menu-price{opacity:1;}
     a[href]{color:var(--ink) !important;}
     .btn{display:none !important;}
     footer{background:var(--paper) !important; color:var(--ink) !important; border-top:1px solid #000;}

@@ -1,10 +1,11 @@
-# Rajubhai Dabeliwale — Design System (v3)
+# Rajubhai Dabeliwale — Design System (v4)
 
 **History, briefly:**
-- **v1** — editorial-minimalist: sharp corners, hairline borders, mostly paper backgrounds, everything in a bordered "card" box (framed photos, receipt, gallery tiles, review cards, the hours card).
-- **v2** — a from-scratch overhaul on "completely overhaul the design, idc, just use my colors": new type (Fraunces/Bebas Neue), bold color-blocking, and a "pinned & stamped" tilt/motion language (rotated Polaroids, a spinning stamp badge). Client feedback: **"i dont want too funky."**
-- **v2.1** — kept v2's type and color, removed every tilt/rotation and the spinning badge. Structurally, though, this was still v1's layout — same boxed-card convention everywhere, same split-hero-with-a-framed-photo composition, same receipt-in-a-box menu. The client's next note was **"completely overhaul the website... i mean completely"** — a signal that the *structure*, not just the decoration on top of it, needed to change.
-- **v3 (this version)** — the real structural break. Same ten color tokens (still untouched, still the one constant), same calm/flat shape language from v2.1 (no tilt, no spinning, no rotate-on-hover — that instruction still stands), but the page is now built on a fundamentally different convention: **almost nothing sits in a bordered box anymore.** Full-bleed photography, rule-lines instead of card outlines, a menu set as an actual printed spread instead of a receipt-shaped component. If a section still reads as "a card with a border" after this pass, that's a bug, not a style choice — flag it.
+- **v1** — editorial-minimalist: sharp corners, hairline borders, mostly paper backgrounds, everything in a bordered "card" box.
+- **v2** — a "pinned & stamped" overhaul: new type (Fraunces/Bebas Neue), bold color-blocking, tilted Polaroids, a spinning stamp badge. Feedback: **"i dont want too funky."**
+- **v2.1** — kept the type/color, removed every tilt and the spinning badge. Structurally still v1's boxed-card convention underneath.
+- **v3** — a real structural break: dropped almost every card/border sitewide in favor of full-bleed photography and rule-lines (a bare dot-leader menu, borderless gallery images, a flat hours list). Feedback: **"no minimal and no funky — make it attractive."**
+- **v4 (this version)** — v3 went too far the other way: no boxes at all read as sparse/unfinished, not "rich." v4 keeps v3's one genuinely good structural idea (the full-bleed Hero split) and v2.1's calm, no-motion posture, but **brings back cards — done warm, not stark.** Rounded corners (18–20px), soft warm-toned shadows, and actual brand color on icon roundels and top edges, instead of either the old sharp `1.5px solid var(--ink)` box or v3's bare rule-line minimalism. The instruction that has now held across three rounds and should not be re-litigated without new client input: **no tilt, no rotate-on-hover, no spinning/decorative motion.**
 
 Built as an [Astro](https://astro.build) static site. Global styles and behavior live in [src/layouts/Layout.astro](src/layouts/Layout.astro); each section is its own component under [src/components/](src/components/).
 
@@ -14,49 +15,50 @@ Exactly these ten tokens, defined once in `:root` (`Layout.astro`) — unchanged
 
 | Token | Hex | Use |
 |---|---|---|
-| `--red` | `#FF0917` | Primary CTAs, the hero underline bar |
-| `--gold` | `#FFDF54` | Menu prices, icon roundel color, footer accents |
+| `--red` | `#FF0917` | Primary CTAs, hero underline bar, Dabeli category icon |
+| `--gold` | `#FFDF54` | Icon roundel color (About), footer accents |
 | `--peach` | `#FFD8B4` | Bold section backgrounds (About, Dine-In) |
-| `--orange` | `#F67D00` | Secondary accent |
-| `--maroon` | `#904137` | Headings, icons, AA-safe text on `--peach` |
-| `--paper` | `#FBF6EF` | Default background |
-| `--paper-2` | `#F4EADC` | Rarely used — most former paper-2 sections are now `--peach` |
+| `--orange` | `#F67D00` | Fafda & Chaat category icon, Dine-In/Reviews card top edges |
+| `--maroon` | `#904137` | Headings, Sandwiches category icon, AA-safe text on `--peach` |
+| `--paper` | `#FBF6EF` | Default background, card fill |
+| `--paper-2` | `#F4EADC` | Gallery section background (added in v4 for warmth) |
 | `--ink` | `#2B1712` | Primary text, dark section backgrounds (Menu, Order CTA, Footer) |
-| `--line` | `rgba(43,23,18,.14)` | Hairline dividers — now doing more work than ever, since it's what replaces most card borders |
+| `--line` | `rgba(43,23,18,.14)` | Hairline internal dividers (menu rows inside a card, footer rule) |
 | `--muted` | `#7a5f56` | Secondary text — **fails AA on both `--ink` and `--peach`, see below** |
 
-**Contrast rule:** `--red` and `--orange` fail WCAG AA (4.5:1) for small text on `--paper`. Only use them for large display type, buttons, and backgrounds. `--muted` only clears AA on `--paper` — on `--ink` use `#a88a7f`, on `--peach` use `--maroon`.
+**Contrast rule:** `--red` and `--orange` fail WCAG AA (4.5:1) for small text on `--paper`. Only use them for large display type, buttons, icon-roundel fills, and backgrounds. `--muted` only clears AA on `--paper` — on `--ink` use `#a88a7f`, on `--peach` use `--maroon`.
+
+**v4's color-per-category device:** the three Menu categories each get a distinct accent color on their icon roundel and "Signature" badge (Dabeli = `--red`, Fafda & Chaat = `--orange`, Sandwiches = `--maroon`) via a `--cat-accent` custom property set inline per card. Reach for this pattern — an inline custom property, not a new class per color — if a future list needs per-item color variety.
 
 ## Typography
 
-Three families, unchanged from v2 (`Fraunces:ital,wght@0,400;0,500;0,600;0,700;0,900;1,500;1,600;1,700` + `Bebas+Neue` + `Karla:wght@400;500;600;700`):
+Unchanged since v2 — three families (`Fraunces:ital,wght@0,400;0,500;0,600;0,700;0,900;1,500;1,600;1,700` + `Bebas+Neue` + `Karla:wght@400;500;600;700`):
 
 - **Fraunces** — headings, `em` emphasis, pull-quotes, menu category titles, crest wordmark, footer headings.
-- **Bebas Neue** — stat numbers, menu prices. Tall, condensed, all-caps — never prose.
+- **Bebas Neue** — stat numbers, menu prices. Never prose.
 - **Karla** — body, nav, buttons, UI labels.
 
 | Element | Size | Family / weight |
 |---|---|---|
-| Hero H1 | `clamp(52px, 6.2vw, 104px)` | Fraunces 800 — pushed larger in v3 to earn the new full-bleed composition |
+| Hero H1 | `clamp(52px, 6.2vw, 104px)` | Fraunces 800 |
 | H2 | `clamp(34px, 5.2vw, 64px)` | Fraunces 700 |
-| Menu category title | `clamp(24px, 2.6vw, 32px)` italic | Fraunces 600 |
+| Menu category title | `clamp(19px, 1.8vw, 22px)` italic | Fraunces 600 |
 | Pull-quote | `clamp(20px, 2.3vw, 25px)` italic | Fraunces 500 |
-| Stat numbers / prices | `clamp(40px, 4vw, 56px)` / 16px | Bebas Neue 400 |
+| Stat numbers | `clamp(40px, 4vw, 56px)` | Bebas Neue 400 |
 | Body | 15–17px | Karla 400 |
 
 `em` renders italic in `--maroon` (or `--gold`/`--peach` on dark sections) — never bold-red.
 
 **Specificity trap to watch for:** a generic descendant selector like `.about-text p` can silently beat a single-class selector like `.pull` on the same element (0,1,1 vs 0,1,0) regardless of source order. Scope the class to its container (`.about-text .pull`) when this applies.
 
-## Layout conventions — the v3 break
+## Layout conventions — the v4 shape language
 
-- **No bordered-box cards, as a rule.** The convention that survived v1 through v2.1 — every photo, every list, every quote sitting inside a `1.5px solid var(--ink)` box — is gone except where explicitly noted below. Structure now comes from **whitespace, rule-lines (`--line` or a 1–2px `--ink` edge), and type scale**, not from drawing a box around things.
-- **Full-bleed photography.** The Hero photo runs edge-to-edge on its half of a full-height split (no frame, no padding, no border) — see Sections. About's photo was already full-bleed (kept, still the one place it originated). Gallery images sit bare with a small caption underneath, no card.
-- **Rule-lines replace borders.** Dine-In's hours block is a plain list under a `2px solid var(--ink)` top rule (was a padded, shadowed card). Review cards are separated by a single `1px solid var(--line)` on the right edge, not a box (marquee mechanism unchanged).
-- **The menu is a printed spread, not a component.** No card, no border, no ticket-notch circles. Category names in large italic Fraunces, items in a flat list with a dotted price-leader (`.menu-leader`, `border-bottom:1px dotted`) running from the name to the price — the classic printed-menu typographic device. This replaces the old receipt-card + torn-ticket-edge entirely; that device is gone, not hidden.
-- **What's still boxed, deliberately:** the header crest (circular, functional chrome) and buttons (pills) — both are UI controls, not content cards, so the "no box" rule doesn't apply to them.
-- **Shape language stays calm, per the last round's feedback:** no tilt, no rotate-on-hover, no spinning/decorative motion. Buttons are pills with a plain `translateY` lift on hover. This constraint did not change in v3 — only the box-everywhere convention did.
-- **No same-size icon+heading+text card grids, no kicker/eyebrow labels, no decorative section numbering** — all still hard bans, independent of whatever the current aesthetic is.
+- **Cards are back, but warm.** `border-radius: 18–20px` on every card (Menu category cards, Gallery tiles, Review cards, the Dine-In hours card), a soft warm-toned shadow (`rgba(43,23,18,...)`, never cool grey), and either a filled `--paper` background or a colored top/icon accent. This is the opposite instinct from v1/v2's sharp `1.5px solid var(--ink)` boxes — rounded and shadowed reads as inviting, sharp-and-hairlined reads as "editorial/minimal," which is exactly what the client didn't want this round.
+- **What's still full-bleed, deliberately:** the Hero photo (fills half the 100vh split, no frame) and About's photo (bleeds to the viewport edge). These are the two places a lack of framing is bold rather than sparse — don't add a card around either without a real reason.
+- **Buttons stay pills** (`border-radius:999px`), unchanged since v2 — already warm/friendly, not part of what needed fixing.
+- **No tilt, no rotate-on-hover, no spinning/decorative motion.** This constraint has now survived three rounds (v2.1 removed it, v3 didn't touch it, v4 doesn't touch it either) — treat it as settled unless the client explicitly asks for motion again.
+- **Section backgrounds carry more of the color** than v3's mostly-paper approach: About and Dine-In are `--peach`, Menu/Order CTA/Footer are `--ink`, and Gallery now sits on `--paper-2` (added in v4) instead of plain `--paper` — partly so the gallery's paper-colored cards have something to sit *on* rather than blending into an identical background.
+- **No same-size icon+heading+text card grids** (About's points still avoid this — icon-roundel + text, not a bordered grid), **no kicker/eyebrow labels, no decorative section numbering** — still hard bans, independent of whichever version of "boxed vs. bare" the page is in.
 
 ## Header / nav
 
@@ -64,19 +66,19 @@ Unchanged — sticky, `backdrop-filter: blur(6px)`, translucent paper background
 
 ## Icons
 
-Line icons only, `stroke: currentColor; stroke-width: 1.5; fill: none`, defined in [IconSprite.astro](src/components/IconSprite.astro). The menu no longer uses category icons (dropped for a cleaner typographic list) — `i-dabeli`/`i-bowl`/`i-sandwich` are still defined in the sprite but currently unreferenced; fine to reuse or remove later. About's points still use the `.icon-roundel` (44px circle, `--ink` fill, `--gold` icon).
+Line icons only, `stroke: currentColor; stroke-width: 1.5; fill: none`, defined in [IconSprite.astro](src/components/IconSprite.astro). Menu category icons (`i-dabeli`, `i-bowl`, `i-sandwich`) are back in v4, each in a colored `.menu-cat-icon` roundel matching that category's `--cat-accent`. About's points use `.icon-roundel` (44px circle, `--ink` fill, `--gold` icon).
 
 ## Sections
 
-| Component | v3 structure |
+| Component | v4 structure |
 |---|---|
-| [Hero.astro](src/components/Hero.astro) | `min-height:100vh` two-column grid: text on the left (`.hero-text`, centered vertically), the dish photo full-bleed on the right (`.hero-photo`, no frame/border, `object-fit:cover` filling the column edge-to-edge). This replaces the old boxed/framed photo floating in whitespace — the single biggest structural change in this pass. Stacks to photo-on-top/text-below under 980px. |
-| [About.astro](src/components/About.astro) | Unchanged structurally from v2.1 — bold `--peach` block, full-bleed photo (the one place this device originated, still works), flat paper pull-quote card with a red left border, icon-roundel points. |
-| [Menu.astro](src/components/Menu.astro) | Rebuilt as a plain typographic spread (`.menu-spread`, max-width 720px, centered) directly on the dark `--ink` section — no card, no border. Italic Fraunces category titles, a dotted leader line between each item name and its price. See Layout conventions above. |
-| [Gallery.astro](src/components/Gallery.astro) | Bare images, no card/border/background — `.g-card img` sized by `aspect-ratio` alone (unchanged hard-won mechanism), a small Bebas Neue caption underneath. Featured tile keeps its scrim-overlay caption (already borderless, no change needed there). |
-| [DineIn.astro](src/components/DineIn.astro) | `book-card` is now a flat list under a `2px solid var(--ink)` top rule — no box, no shadow, no circle notches. |
-| [Reviews.astro](src/components/Reviews.astro) | Cards lost their border/background — separated by a single `1px solid var(--line)` right-edge rule inside the marquee track. Auto-drift mechanism unchanged, see Motion. |
-| [OrderCta.astro](src/components/OrderCta.astro) | Unchanged — dark diagonal-stripe band, two real CTAs. |
+| [Hero.astro](src/components/Hero.astro) | Unchanged from v3 — `min-height:100vh` split, full-bleed photo on the right, no frame. This wasn't part of the "too minimal" complaint (it's bold, not sparse) and works well; left alone. |
+| [About.astro](src/components/About.astro) | Unchanged — bold `--peach` block, full-bleed photo, flat paper pull-quote card, icon-roundel points. |
+| [Menu.astro](src/components/Menu.astro) | Rebuilt again: each category is now a rounded (`20px`), shadowed `.menu-cat` card in `--paper`, floating on the dark `--ink` section in a 3-column grid (1 column ≤980px). Each card has a colored icon roundel (`.menu-cat-icon`) matching its `--cat-accent`. Replaces v3's bare dot-leader spread, which read as too sparse for a "menu board." |
+| [Gallery.astro](src/components/Gallery.astro) | Each tile is a rounded (`18px`) `.g-card` with a soft shadow, `background:var(--paper)`, sitting on a `--paper-2`-tinted section. Sizing is still `aspect-ratio`-only on the `img` (unchanged hard-won mechanism from v1). Featured tile keeps its scrim-overlay caption. |
+| [DineIn.astro](src/components/DineIn.astro) | `book-card` is a rounded (`20px`), shadowed `--paper` card with a 5px `--orange` top edge — back to a real card (was a bare rule-line list in v3). |
+| [Reviews.astro](src/components/Reviews.astro) | Cards are rounded (`18px`) `--paper` cards with a 4px `--orange` top edge and a soft shadow (was border-right-only hairline separation in v3). Marquee mechanism unchanged. |
+| [OrderCta.astro](src/components/OrderCta.astro) | Unchanged. |
 | [Footer.astro](src/components/Footer.astro) | Unchanged. |
 
 ## Images
@@ -86,14 +88,14 @@ Real photography, stored in [public/](public/) as `.webp`.
 | Slot | File | Notes |
 |---|---|---|
 | Header/footer crest | `logo.png` | Real brand mark |
-| Favicon / iOS icon / OG image | `favicon.png` / `apple-touch-icon.png` / `og-image.jpg` | See SEO/meta — `og-image.jpg` is now stylistically behind two redesigns, worth regenerating |
-| Hero visual | `book-table-img.webp` | **Full-bleed**, fills the hero's right half edge-to-edge, no frame |
-| About photo | `about-img.webp` | Full-bleed, unframed — unchanged |
-| Gallery — Signature Dabeli (featured) | `dish-1.webp` | `grid-column:span 2`, bare |
-| Gallery — Kutchi Kadak, Fafda, Sandwich, Dahi Puri | `book-table-img3/4.webp`, `dish-5.webp`, `book-table-img2.webp` | Bare, `aspect-ratio:1/1` |
-| Gallery — Our Nashik Outlet (wide) | `about-img.webp` | `grid-column:span 3`, bare, `aspect-ratio:3/1` |
+| Favicon / iOS icon / OG image | `favicon.png` / `apple-touch-icon.png` / `og-image.jpg` | See SEO/meta — `og-image.jpg` now predates three redesigns' worth of type/layout, worth regenerating |
+| Hero visual | `book-table-img.webp` | Full-bleed, fills the hero's right half edge-to-edge |
+| About photo | `about-img.webp` | Full-bleed, unframed |
+| Gallery — Signature Dabeli (featured) | `dish-1.webp` | `grid-column:span 2`, rounded card, scrim caption |
+| Gallery — Kutchi Kadak, Fafda, Sandwich, Dahi Puri | `book-table-img3/4.webp`, `dish-5.webp`, `book-table-img2.webp` | Rounded cards, `aspect-ratio:1/1` |
+| Gallery — Our Nashik Outlet (wide) | `about-img.webp` | `grid-column:span 3`, rounded card, `aspect-ratio:3/1` |
 
-**Lesson learned on Gallery's special tiles (still applies):** sized by `aspect-ratio` alone, never fixed rows or flexbox — both broke in production once. Don't reintroduce either for a new tile shape.
+**Lesson learned on Gallery's special tiles (still applies):** sized by `aspect-ratio` alone, never fixed rows or flexbox — both broke in production once.
 
 Photography is still a mix of real (storefront) and stock/studio (five of six gallery shots, the hero) — known, accepted per the client's earlier choice.
 
@@ -103,21 +105,20 @@ Unchanged — images pre-resized/converted to WebP via `cwebp` at build-prep tim
 
 ## Motion
 
-- **The receipt-prints-in animation is gone** along with the receipt itself. The menu's reveal is now the standard scroll-fade like every other section — there's no equivalent brand-specific device replacing it yet (see Known gaps).
-- **Scroll-reveal**: `IntersectionObserver` (threshold 0.15), plain `opacity:0; translateY(24px)` → visible, staggered via `data-reveal="1..4"`. No rotation (removed in v2.1, stays removed).
+- **Scroll-reveal**: `IntersectionObserver` (threshold 0.15), plain `opacity:0; translateY(24px)` → visible, staggered via `data-reveal="1..4"`. No rotation. Each `.menu-cat` now carries its own `data-reveal` (cycling 1–3) rather than one wrapper around the whole spread, since it's a grid of independent cards now, not a single list.
 - **Stat count-up, parallax, reviews marquee**: unchanged mechanics. Parallax factors: about photo `0.05`, hero photo `0.04`.
 - **`prefers-reduced-motion: reduce`**: scroll-reveal shows content instantly, parallax never attaches, stat counters skip to final values, the reviews marquee falls back to native scroll.
-- **Rule of thumb, still in force:** no animation directly on food/product photography, and no decorative motion for its own sake (spinning/tilting was tried and explicitly walked back).
+- **Rule of thumb, still in force:** no animation directly on food/product photography, and no decorative motion for its own sake (spinning/tilting was tried and explicitly walked back — don't reintroduce without new client direction).
 
 **CSS gotcha worth remembering:** `[data-reveal].in-view` and the parallax script's inline `el.style.transform = ...` both **fully replace** the `transform` property — they don't compose with a separate static `transform` on the same element. If a future element needs both a scroll/parallax effect *and* its own static transform, put the JS-driven attribute on a plain wrapper `<div>` around it, not on the element with the static transform.
 
 ## Accessibility
 
-Unchanged — skip-link, `<main>` landmark, `aria-hidden` on decorative icons/leader-lines, visible focus outlines (`outline:2px solid var(--red)`), 44×44px minimum touch targets, real `aria-label`s, no heading-level skips, per-background AA contrast discipline.
+Unchanged — skip-link, `<main>` landmark, `aria-hidden` on decorative icons, visible focus outlines (`outline:2px solid var(--red)`), 44×44px minimum touch targets, real `aria-label`s, no heading-level skips, per-background AA contrast discipline.
 
 ## SEO / meta
 
-Unchanged this pass — canonical link, `apple-touch-icon.png`, full OG/Twitter tags with `og-image.jpg`, `Restaurant` schema.org JSON-LD, print stylesheet (updated to match the new Menu markup — no more receipt/ticket-edge selectors), themed `::selection`/scrollbar. **Follow-up worth doing:** `og-image.jpg` now predates two redesigns' worth of type/layout changes — regenerate it next time it's touched.
+Unchanged this pass — canonical link, `apple-touch-icon.png`, full OG/Twitter tags with `og-image.jpg`, `Restaurant` schema.org JSON-LD, print stylesheet (updated to match the new card-based Menu markup), themed `::selection`/scrollbar. **Follow-up worth doing:** `og-image.jpg` predates three redesigns' worth of changes — regenerate it next time it's touched.
 
 ## Known gaps (tracked, not yet fixed)
 
@@ -125,14 +126,13 @@ Unchanged this pass — canonical link, `apple-touch-icon.png`, full OG/Twitter 
 - **No `<noscript>` fallback**: `[data-reveal]` elements stay at `opacity:0` with JS disabled.
 - **Stock photography**: five of six gallery images (plus the hero) are stock/studio shots.
 - **`og-image.jpg` is stylistically stale** — see SEO/meta above.
-- **The menu no longer has its own signature motion device** now that the receipt-print-in is gone — worth a calm (non-tilting, non-spinning) replacement if the page ever feels like it needs one more focal moment.
 
 ## Adding a new section
 
 1. New component under `src/components/`, imported into [src/pages/index.astro](src/pages/index.astro).
-2. **Default to no box.** Reach for whitespace + a rule-line (`--line` hairline or a `1–2px solid var(--ink)` edge) before reaching for `border:1.5px solid var(--ink)` all around something. If a genuine card is unavoidable, ask whether it should just be full-bleed or list-style instead.
+2. **Default to a warm rounded card** (`border-radius:18–20px`, soft warm shadow, `--paper` fill or a colored accent) for anything that needs visual containment — that's the current baseline, not v3's bare rule-line minimalism or v1/v2's sharp hairline box.
 3. Reuse existing utility classes (`.section`, `.container`, `.section-title`, `.btn` variants). No kicker/tag label above the heading.
-4. **No tilt, no rotate-on-hover, no spinning decorative elements** — tried and explicitly walked back twice now.
+4. **No tilt, no rotate-on-hover, no spinning decorative elements.**
 5. New icons go into [IconSprite.astro](src/components/IconSprite.astro) as `<symbol>`s, same stroke style as the rest.
 6. Any scroll-triggered element gets `data-reveal`; any drifting element gets `data-parallax="0.05–0.2"` — if it also needs a static transform, wrap rather than combine (see the CSS gotcha in Motion).
 7. Check the new color/text pairing against the AA contrast rule before shipping — per-background, not per-token.
