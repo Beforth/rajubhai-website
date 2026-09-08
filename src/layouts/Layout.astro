@@ -155,7 +155,7 @@ const canonicalURL = "https://rajubhaidabeliwale.com/";
   [data-reveal="4"]{transition-delay:.35s;}
 
   /* ================= HEADER ================= */
-  header{position:sticky; top:0; z-index:1000; background:rgba(251,246,239,.94); backdrop-filter:blur(6px); border-bottom:2px solid var(--ink);}
+  header{position:sticky; top:0; z-index:1000; background:rgba(251,246,239,.94); backdrop-filter:blur(6px); border-bottom:2px solid var(--ink); box-shadow:0 4px 20px rgba(43,23,18,.06);}
   .nav-wrap{display:flex; align-items:center; justify-content:space-between; padding:16px 32px; gap:24px;}
   .logo{display:flex; align-items:center; gap:14px;}
   .crest{width:56px; height:56px; border-radius:50%; border:2px solid var(--ink); display:flex; align-items:center; justify-content:center; position:relative; flex-shrink:0; overflow:hidden;}
@@ -242,7 +242,8 @@ const canonicalURL = "https://rajubhaidabeliwale.com/";
   .menu-section .section-title{color:var(--paper);}
   .menu-section .section-title em{color:var(--peach);}
   .menu-spread{display:grid; grid-template-columns:repeat(3,1fr); gap:28px; align-items:start; margin:64px auto 0;}
-  .menu-cat{background:var(--paper); border-radius:20px; padding:32px 28px; box-shadow:0 22px 44px rgba(0,0,0,.28);}
+  .menu-cat{background:var(--paper); border-radius:20px; padding:32px 28px; box-shadow:0 22px 44px rgba(0,0,0,.28); transition:transform .3s ease, box-shadow .3s ease;}
+  .menu-cat:hover{transform:translateY(-6px); box-shadow:0 30px 54px rgba(0,0,0,.36);}
   .menu-cat-head{display:flex; align-items:center; gap:14px; margin-bottom:22px; padding-bottom:18px; border-bottom:2px solid var(--peach);}
   .menu-cat-icon{width:46px; height:46px; border-radius:50%; background:var(--cat-accent, var(--red)); color:var(--paper); display:flex; align-items:center; justify-content:center; flex-shrink:0;}
   .menu-cat-icon .icon{width:22px; height:22px;}
@@ -286,7 +287,8 @@ const canonicalURL = "https://rajubhaidabeliwale.com/";
   .book-wrap .section-sub{color:var(--maroon);} /* --muted fails AA on --peach (4.37:1); --maroon clears it at ~5.25:1 */
   .book-grid{display:grid; grid-template-columns:1.2fr 1fr; gap:72px; align-items:center;}
   /* warm rounded card, soft shadow, colored top edge — sits forward off the peach block */
-  .book-card{background:var(--paper); border-radius:20px; border-top:5px solid var(--orange); padding:40px; box-shadow:0 22px 44px rgba(43,23,18,.16);}
+  .book-card{background:var(--paper); border-radius:20px; border-top:5px solid var(--orange); padding:40px; box-shadow:0 22px 44px rgba(43,23,18,.16); transition:transform .3s ease, box-shadow .3s ease;}
+  .book-card:hover{transform:translateY(-6px); box-shadow:0 30px 54px rgba(43,23,18,.22);}
   .book-card h3{font-family:'Fraunces',serif; font-style:italic; font-weight:600; font-size:15px; color:var(--maroon); margin-bottom:20px;}
   .book-row{display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:4px 12px; padding:14px 0; border-bottom:1px solid var(--line); font-size:14px; font-weight:500;}
   .book-row:last-of-type{border-bottom:none;}
@@ -304,7 +306,8 @@ const canonicalURL = "https://rajubhaidabeliwale.com/";
   .reviews-viewport{overflow:hidden; -webkit-mask-image:linear-gradient(to right, transparent, black 48px, black calc(100% - 48px), transparent); mask-image:linear-gradient(to right, transparent, black 48px, black calc(100% - 48px), transparent);}
   .reviews-track{display:flex; gap:24px; padding:8px 4px 30px; width:max-content; will-change:transform;}
   /* warm rounded card, soft shadow, a colored top edge instead of a flat hairline border */
-  .r-card{min-width:296px; max-width:296px; background:var(--paper); border-radius:18px; border-top:4px solid var(--orange); padding:28px 26px; box-shadow:0 16px 32px rgba(43,23,18,.12); position:relative; flex-shrink:0;}
+  .r-card{min-width:296px; max-width:296px; background:var(--paper); border-radius:18px; border-top:4px solid var(--orange); padding:28px 26px; box-shadow:0 16px 32px rgba(43,23,18,.12); position:relative; flex-shrink:0; transition:transform .3s ease, box-shadow .3s ease;}
+  .r-card:hover{transform:translateY(-6px); box-shadow:0 24px 44px rgba(43,23,18,.18);}
   .r-card .quote-mark{width:30px; height:22px; margin-bottom:14px; color:var(--maroon); opacity:.5;}
   .r-card p{font-size:14.5px; color:var(--ink); margin-bottom:20px; min-height:112px;}
   .r-foot{display:flex; align-items:center; justify-content:space-between; border-top:1px solid var(--line); padding-top:16px;}
