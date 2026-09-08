@@ -32,11 +32,11 @@ Exactly these ten tokens, defined once in `:root` (`Layout.astro`) — unchanged
 
 ## Typography
 
-Unchanged since v2 — three families (`Fraunces:ital,wght@0,400;0,500;0,600;0,700;0,900;1,500;1,600;1,700` + `Bebas+Neue` + `Karla:wght@400;500;600;700`):
+**Upgraded from Bebas Neue + Karla** (both fine but generic/overused — Bebas Neue especially is a cliché "impact" display font at this point) **to a more premium pairing**, keeping Fraunces (already a good choice, no reason to touch it): `Fraunces:ital,wght@0,400;0,500;0,600;0,700;0,900;1,500;1,600;1,700` + `Big+Shoulders+Display:wght@600;700;800` + `Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;1,600`.
 
-- **Fraunces** — headings, `em` emphasis, pull-quotes, menu category titles, crest wordmark, footer headings.
-- **Bebas Neue** — stat numbers, menu prices. Never prose.
-- **Karla** — body, nav, buttons, UI labels.
+- **Fraunces** — headings, `em` emphasis, pull-quotes, menu category titles, crest wordmark, footer headings. Unchanged.
+- **Big Shoulders Display** (replaces Bebas Neue) — stat numbers, menu prices, gallery captions. A condensed display face with real weight range (we load 600/700/800) and more refined letterforms than Bebas Neue's single-weight block-capital look. Never prose. **Always set an explicit `font-weight` matching a loaded weight (600/700/800)** — an unset or mismatched weight (e.g. the old `font-weight:400` left over from the Bebas Neue days) makes the browser fall back to the nearest loaded weight rather than what you asked for.
+- **Plus Jakarta Sans** (replaces Karla) — body, nav, buttons, UI labels, menu item names/descriptions. Warmer x-height and slightly more character than Karla while staying just as legible at small sizes.
 
 | Element | Size | Family / weight |
 |---|---|---|
@@ -44,8 +44,9 @@ Unchanged since v2 — three families (`Fraunces:ital,wght@0,400;0,500;0,600;0,7
 | H2 | `clamp(34px, 5.2vw, 64px)` | Fraunces 700 |
 | Menu category title | `clamp(19px, 1.8vw, 22px)` italic | Fraunces 600 |
 | Pull-quote | `clamp(20px, 2.3vw, 25px)` italic | Fraunces 500 |
-| Stat numbers | `clamp(40px, 4vw, 56px)` | Bebas Neue 400 |
-| Body | 15–17px | Karla 400 |
+| Stat numbers | `clamp(40px, 4vw, 56px)` | Big Shoulders Display 700 |
+| Menu prices | 16px | Big Shoulders Display 700 |
+| Body | 15–17px | Plus Jakarta Sans 400 |
 
 `em` renders italic in `--maroon` (or `--gold`/`--peach` on dark sections) — never bold-red.
 
