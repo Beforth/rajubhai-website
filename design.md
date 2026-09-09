@@ -1,11 +1,12 @@
-# Rajubhai Dabeliwale — Design System (v4)
+# Rajubhai Dabeliwale — Design System (v5)
 
 **History, briefly:**
 - **v1** — editorial-minimalist: sharp corners, hairline borders, mostly paper backgrounds, everything in a bordered "card" box.
 - **v2** — a "pinned & stamped" overhaul: new type (Fraunces/Bebas Neue), bold color-blocking, tilted Polaroids, a spinning stamp badge. Feedback: **"i dont want too funky."**
 - **v2.1** — kept the type/color, removed every tilt and the spinning badge. Structurally still v1's boxed-card convention underneath.
 - **v3** — a real structural break: dropped almost every card/border sitewide in favor of full-bleed photography and rule-lines (a bare dot-leader menu, borderless gallery images, a flat hours list). Feedback: **"no minimal and no funky — make it attractive."**
-- **v4 (this version)** — v3 went too far the other way: no boxes at all read as sparse/unfinished, not "rich." v4 keeps v3's one genuinely good structural idea (the full-bleed Hero split) and v2.1's calm, no-motion posture, but **brings back cards — done warm, not stark.** Rounded corners (18–20px), soft warm-toned shadows, and actual brand color on icon roundels and top edges, instead of either the old sharp `1.5px solid var(--ink)` box or v3's bare rule-line minimalism. The instruction that has now held across three rounds and should not be re-litigated without new client input: **no tilt, no rotate-on-hover, no spinning/decorative motion.**
+- **v4** — v3 went too far the other way: no boxes at all read as sparse/unfinished, not "rich." v4 brought back cards — done warm, not stark: rounded corners (18–20px), soft warm-toned shadows, actual brand color on icon roundels and top edges. Also swapped Bebas Neue/Karla for Big Shoulders Display/Plus Jakarta Sans (Fraunces kept).
+- **v5 (this version)** — direct feedback on both the motion and the fonts: **"reduce animtions for img slike parralax , cahnge the fonts dude wtf are tehse fonts."** Two changes, no other direction change: (1) parallax removed entirely — the last remaining scroll-driven motion on photos, deleted rather than just disabled; (2) fonts dropped to Poppins + Inter, the two safest/most-recognized webfonts available, ending three rounds of increasingly editorial/trendy type choices that kept not landing. The instruction that has now held across four rounds and should not be re-litigated without new client input: **no tilt, no rotate-on-hover, no spinning/decorative motion, and — as of this round — no scroll-driven motion on photos either.**
 
 Built as an [Astro](https://astro.build) static site. Global styles and behavior live in [src/layouts/Layout.astro](src/layouts/Layout.astro); each section is its own component under [src/components/](src/components/).
 
@@ -32,23 +33,23 @@ Exactly these ten tokens, defined once in `:root` (`Layout.astro`) — unchanged
 
 ## Typography
 
-**Upgraded from Bebas Neue + Karla** (both fine but generic/overused — Bebas Neue especially is a cliché "impact" display font at this point) **to a more premium pairing**, keeping Fraunces (already a good choice, no reason to touch it): `Fraunces:ital,wght@0,400;0,500;0,600;0,700;0,900;1,500;1,600;1,700` + `Big+Shoulders+Display:wght@600;700;800` + `Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;1,600`.
+**Third font pairing now.** Zilla Slab+Karla (v1) → Fraunces+Bebas Neue+Karla (v2) → Fraunces+Big Shoulders Display+Plus Jakarta Sans (the previous round) → direct client feedback ("change the fonts dude wtf are these fonts") made clear the more editorial/trendy choices weren't landing. v5 drops down to two of the safest, most widely-liked webfonts available — **no quirky serif, no condensed display face, no italics anywhere** — on the theory that after three swaps, "obviously good and familiar" beats "distinctive but polarizing": `Poppins:wght@500;600;700;800` + `Inter:wght@400;500;600;700`.
 
-- **Fraunces** — headings, `em` emphasis, pull-quotes, menu category titles, crest wordmark, footer headings. Unchanged.
-- **Big Shoulders Display** (replaces Bebas Neue) — stat numbers, menu prices, gallery captions. A condensed display face with real weight range (we load 600/700/800) and more refined letterforms than Bebas Neue's single-weight block-capital look. Never prose. **Always set an explicit `font-weight` matching a loaded weight (600/700/800)** — an unset or mismatched weight (e.g. the old `font-weight:400` left over from the Bebas Neue days) makes the browser fall back to the nearest loaded weight rather than what you asked for.
-- **Plus Jakarta Sans** (replaces Karla) — body, nav, buttons, UI labels, menu item names/descriptions. Warmer x-height and slightly more character than Karla while staying just as legible at small sizes.
+- **Poppins** — every heading, `em` emphasis, stat numbers, menu prices, menu category titles, pull-quote, crest wordmark, footer headings, book-card heading. A geometric sans that reads as clean and modern without being unfamiliar — doubles as both the "headline" face and the "display numerals" face that used to be a separate condensed font, which also means one fewer family to load.
+- **Inter** — body copy, nav, buttons, UI labels, menu item names/descriptions. About as safe and universally legible as a webfont gets.
+- **No italics.** Previously `em`, the pull-quote, menu category titles, and a few headings all leaned on italic serif/sans for emphasis. Poppins doesn't carry a genuinely distinct italic the way Fraunces did, so emphasis now comes from **weight + `--maroon` color** instead (`em{font-weight:700}`, headings drop to 600 where `em` sits inside them for slight contrast). Don't reintroduce `font-style:italic` on Poppins/Inter text without loading that specific italic weight first — an unloaded italic falls back to a browser-synthesized (faux) oblique, which looks worse than no italic at all.
 
 | Element | Size | Family / weight |
 |---|---|---|
-| Hero H1 | `clamp(52px, 6.2vw, 104px)` | Fraunces 800 |
-| H2 | `clamp(34px, 5.2vw, 64px)` | Fraunces 700 |
-| Menu category title | `clamp(19px, 1.8vw, 22px)` italic | Fraunces 600 |
-| Pull-quote | `clamp(20px, 2.3vw, 25px)` italic | Fraunces 500 |
-| Stat numbers | `clamp(40px, 4vw, 56px)` | Big Shoulders Display 700 |
-| Menu prices | 16px | Big Shoulders Display 700 |
-| Body | 15–17px | Plus Jakarta Sans 400 |
+| Hero H1 | `clamp(52px, 6.2vw, 104px)` | Poppins 800 |
+| H2 | `clamp(34px, 5.2vw, 64px)` | Poppins 700 |
+| Menu category title | `clamp(19px, 1.8vw, 22px)` | Poppins 700 |
+| Pull-quote | `clamp(20px, 2.3vw, 25px)` | Poppins 600 |
+| Stat numbers | `clamp(40px, 4vw, 56px)` | Poppins 800 |
+| Menu prices | 16px | Poppins 700 |
+| Body | 15–17px | Inter 400 |
 
-`em` renders italic in `--maroon` (or `--gold`/`--peach` on dark sections) — never bold-red.
+`em` renders in `--maroon` (or `--gold`/`--peach` on dark sections) at a heavier weight than surrounding text — never italic, never bold-red.
 
 **Specificity trap to watch for:** a generic descendant selector like `.about-text p` can silently beat a single-class selector like `.pull` on the same element (0,1,1 vs 0,1,0) regardless of source order. Scope the class to its container (`.about-text .pull`) when this applies.
 
@@ -73,7 +74,7 @@ Line icons only, `stroke: currentColor; stroke-width: 1.5; fill: none`, defined 
 
 ## Sections
 
-| Component | v4 structure |
+| Component | Structure |
 |---|---|
 | [Hero.astro](src/components/Hero.astro) | Unchanged from v3 — `min-height:100vh` split, full-bleed photo on the right, no frame. This wasn't part of the "too minimal" complaint (it's bold, not sparse) and works well; left alone. |
 | [About.astro](src/components/About.astro) | Unchanged — bold `--peach` block, full-bleed photo, flat paper pull-quote card, icon-roundel points. |
@@ -108,12 +109,13 @@ Unchanged — images pre-resized/converted to WebP via `cwebp` at build-prep tim
 
 ## Motion
 
-- **Scroll-reveal**: `IntersectionObserver` (threshold 0.15), plain `opacity:0; translateY(24px)` → visible, staggered via `data-reveal="1..4"`. No rotation. Each `.menu-cat` now carries its own `data-reveal` (cycling 1–3) rather than one wrapper around the whole spread, since it's a grid of independent cards now, not a single list.
-- **Stat count-up, parallax, reviews marquee**: unchanged mechanics. Parallax factors: about photo `0.05`, hero photo `0.04`.
-- **`prefers-reduced-motion: reduce`**: scroll-reveal shows content instantly, parallax never attaches, stat counters skip to final values, the reviews marquee falls back to native scroll.
-- **Rule of thumb, still in force:** no animation directly on food/product photography, and no decorative motion for its own sake (spinning/tilting was tried and explicitly walked back — don't reintroduce without new client direction).
+- **Parallax is gone.** The Hero and About photos both drifted slightly on scroll (`data-parallax="0.04"`/`"0.05"`) — removed per direct client feedback ("reduce animations for imgs like parallax"). The `data-parallax` attributes, the CSS `[data-parallax]{will-change:transform}` hook, and the entire parallax `requestAnimationFrame` block in `Layout.astro`'s script were all deleted rather than left dormant — there's no infrastructure left to accidentally re-trigger. Photos are now fully static.
+- **Scroll-reveal**: `IntersectionObserver` (threshold 0.15), plain `opacity:0; translateY(24px)` → visible, staggered via `data-reveal="1..4"`. No rotation. Each `.menu-cat` carries its own `data-reveal` (cycling 1–3) rather than one wrapper around the whole spread, since it's a grid of independent cards, not a single list.
+- **Stat count-up, reviews marquee**: unchanged mechanics — these are the only motion left on the page besides scroll-reveal.
+- **`prefers-reduced-motion: reduce`**: scroll-reveal shows content instantly, stat counters skip to final values, the reviews marquee falls back to native scroll.
+- **Rule of thumb, still in force:** no animation directly on food/product photography (now trivially true — there's no motion on photos at all), and no decorative motion for its own sake (spinning/tilting was tried and walked back before parallax was too — don't reintroduce any of it without new client direction).
 
-**CSS gotcha worth remembering:** `[data-reveal].in-view` and the parallax script's inline `el.style.transform = ...` both **fully replace** the `transform` property — they don't compose with a separate static `transform` on the same element. If a future element needs both a scroll/parallax effect *and* its own static transform, put the JS-driven attribute on a plain wrapper `<div>` around it, not on the element with the static transform.
+**Historical CSS gotcha, kept for reference even though parallax is gone:** `[data-reveal].in-view` sets `transform` directly, which would have fully replaced (not composed with) a separate static `transform` on the same element — this is why `data-reveal` should never sit on an element that also needs a static transform of its own (a tilt, etc.); wrap it in a plain `<div>` instead. Still applies to any future scroll-driven effect, not just the parallax that used to trigger it.
 
 ## Accessibility
 
@@ -135,8 +137,8 @@ Unchanged this pass — canonical link, `apple-touch-icon.png`, full OG/Twitter 
 1. New component under `src/components/`, imported into [src/pages/index.astro](src/pages/index.astro).
 2. **Default to a warm rounded card** (`border-radius:18–20px`, soft warm shadow, `--paper` fill or a colored accent) for anything that needs visual containment — that's the current baseline, not v3's bare rule-line minimalism or v1/v2's sharp hairline box.
 3. Reuse existing utility classes (`.section`, `.container`, `.section-title`, `.btn` variants). No kicker/tag label above the heading.
-4. **No tilt, no rotate-on-hover, no spinning decorative elements.**
+4. **No tilt, no rotate-on-hover, no spinning decorative elements, no parallax/scroll-driven drift on photos.**
 5. New icons go into [IconSprite.astro](src/components/IconSprite.astro) as `<symbol>`s, same stroke style as the rest.
-6. Any scroll-triggered element gets `data-reveal`; any drifting element gets `data-parallax="0.05–0.2"` — if it also needs a static transform, wrap rather than combine (see the CSS gotcha in Motion).
+6. Any scroll-triggered element gets `data-reveal` — if it also needs a static transform (a tilt, etc.), wrap rather than combine (see the CSS gotcha in Motion).
 7. Check the new color/text pairing against the AA contrast rule before shipping — per-background, not per-token.
 8. Before defaulting to the "plain text + trailing `<em>` accent" headline formula, check whether enough sections already use it — vary it if so.
