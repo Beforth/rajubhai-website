@@ -135,9 +135,9 @@ const canonicalURL = "https://rajubhaidabeliwale.com/";
     background:transparent; white-space:nowrap;
   }
   .btn .icon{width:16px; height:16px; transition:transform .28s ease;}
+  .btn:hover .icon{transform:translateX(3px);}
   .btn-primary{background:var(--red); color:var(--paper); border-color:var(--red); box-shadow:0 10px 24px rgba(255,9,23,.25);}
   .btn-primary:hover{background:var(--maroon); border-color:var(--maroon); transform:translateY(-2px); box-shadow:0 16px 32px rgba(144,65,55,.32);}
-  .btn-primary:hover .icon{transform:translateX(3px);}
   .btn-outline{background:transparent; color:var(--ink); border-color:var(--ink);}
   .btn-outline:hover{background:var(--ink); color:var(--paper); transform:translateY(-2px);}
   .btn-cream{background:var(--paper); color:var(--ink); border-color:var(--paper);}
@@ -157,8 +157,9 @@ const canonicalURL = "https://rajubhaidabeliwale.com/";
   header{position:sticky; top:0; z-index:1000; background:rgba(251,246,239,.94); backdrop-filter:blur(6px); border-bottom:2px solid var(--ink); box-shadow:0 4px 20px rgba(43,23,18,.06);}
   .nav-wrap{display:flex; align-items:center; justify-content:space-between; padding:16px 32px; gap:24px;}
   .logo{display:flex; align-items:center; gap:14px;}
-  .crest{width:56px; height:56px; border-radius:50%; border:2px solid var(--ink); display:flex; align-items:center; justify-content:center; position:relative; flex-shrink:0; overflow:hidden;}
+  .crest{width:56px; height:56px; border-radius:50%; border:2px solid var(--ink); display:flex; align-items:center; justify-content:center; position:relative; flex-shrink:0; overflow:hidden; transition:transform .25s ease, border-color .25s ease;}
   .crest::before{content:''; position:absolute; inset:4px; border:1px solid var(--red); border-radius:50%;}
+  .logo:hover .crest{transform:scale(1.06); border-color:var(--red);}
   .crest span{font-family:'Poppins',sans-serif; font-weight:700; font-size:16px; color:var(--maroon);}
   .crest-logo::before{display:none;}
   .crest-logo img{width:100%; height:100%; object-fit:cover; border-radius:50%;}
@@ -235,7 +236,8 @@ const canonicalURL = "https://rajubhaidabeliwale.com/";
      most generic "feature grid" pattern on the web. Icon + text standing on their own instead. */
   .points{display:grid; grid-template-columns:1fr 1fr; gap:30px 36px; margin-top:36px;}
   .point{display:flex; gap:16px; align-items:flex-start;}
-  .point .icon-roundel{display:flex; align-items:center; justify-content:center; width:44px; height:44px; border-radius:50%; background:var(--ink); color:var(--gold); flex-shrink:0;}
+  .point .icon-roundel{display:flex; align-items:center; justify-content:center; width:44px; height:44px; border-radius:50%; background:var(--ink); color:var(--gold); flex-shrink:0; transition:transform .3s ease;}
+  .point:hover .icon-roundel{transform:scale(1.1);}
   .point .icon-roundel .icon{width:20px; height:20px;}
   .point strong{display:block; font-family:'Poppins',sans-serif; font-weight:700; font-size:16.5px; color:var(--ink);}
   .point p{margin:4px 0 0; font-size:13.5px; color:var(--maroon);}
@@ -253,7 +255,8 @@ const canonicalURL = "https://rajubhaidabeliwale.com/";
   .menu-cat{background:var(--paper); border-radius:20px; padding:32px 28px; box-shadow:0 22px 44px rgba(0,0,0,.28); transition:transform .3s ease, box-shadow .3s ease;}
   .menu-cat:hover{transform:translateY(-6px); box-shadow:0 30px 54px rgba(0,0,0,.36);}
   .menu-cat-head{display:flex; align-items:center; gap:14px; margin-bottom:22px; padding-bottom:18px; border-bottom:2px solid var(--peach);}
-  .menu-cat-icon{width:46px; height:46px; border-radius:50%; background:var(--cat-accent, var(--red)); color:var(--paper); display:flex; align-items:center; justify-content:center; flex-shrink:0;}
+  .menu-cat-icon{width:46px; height:46px; border-radius:50%; background:var(--cat-accent, var(--red)); color:var(--paper); display:flex; align-items:center; justify-content:center; flex-shrink:0; transition:transform .3s ease;}
+  .menu-cat:hover .menu-cat-icon{transform:scale(1.1);}
   .menu-cat-icon .icon{width:22px; height:22px;}
   .menu-cat-title{font-family:'Poppins',sans-serif; font-weight:700; font-size:clamp(19px,1.8vw,22px); color:var(--ink); margin:0; line-height:1.15;}
   .menu-row{padding:14px 0; border-bottom:1px solid var(--line); display:flex; flex-direction:column; gap:5px;}
