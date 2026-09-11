@@ -199,13 +199,24 @@ const canonicalURL = "https://rajubhaidabeliwale.com/";
   @media (prefers-reduced-motion: reduce){.hero h1 em::after{transform:scaleX(1); transition:none;}}
   .hero p{font-size:17px; color:var(--muted); max-width:440px; margin-bottom:44px;}
   .hero-actions{display:flex; gap:20px; flex-wrap:wrap; margin-bottom:68px;}
-  .stat-strip{display:flex; gap:48px; border-top:1px solid var(--line); padding-top:26px;}
-  .stat-strip div{flex:1;}
+  .stat-strip{display:flex; border-top:1px solid var(--line); padding-top:26px;}
+  .stat-strip div{flex:1; padding-right:32px; margin-right:32px; border-right:1px solid var(--line);}
+  .stat-strip div:last-child{border-right:none; padding-right:0; margin-right:0;}
   .stat-strip strong{display:block; font-family:'Poppins',sans-serif; font-weight:800; font-size:clamp(40px,4vw,56px); color:var(--red); line-height:1; letter-spacing:-.01em; font-variant-numeric:tabular-nums;}
   .stat-strip span{font-size:11.5px; font-weight:600; letter-spacing:1.4px; text-transform:uppercase; color:var(--muted);}
 
   .hero-photo{position:relative; overflow:hidden; background:linear-gradient(165deg,var(--maroon) 0%, var(--ink) 100%); min-height:360px;}
   .hero-photo img{width:100%; height:100%; object-fit:cover; display:block;}
+  /* a small frosted caption tag, the same device Gallery's featured tile uses for its
+     overlay caption — gives the full-bleed photo a finished, labeled feel. Static, no
+     animation on the photo itself. */
+  .hero-photo-tag{
+    position:absolute; left:28px; bottom:28px; z-index:1;
+    background:rgba(43,23,18,.55); backdrop-filter:blur(6px); -webkit-backdrop-filter:blur(6px);
+    color:var(--paper); font-family:'Poppins',sans-serif; font-weight:700;
+    font-size:12.5px; letter-spacing:1.6px; text-transform:uppercase;
+    padding:12px 20px; border-radius:999px;
+  }
 
   /* ================= ABOUT ================= */
   /* Full-bleed photo stays the one deliberate structural break — but the section now sits
@@ -371,7 +382,7 @@ const canonicalURL = "https://rajubhaidabeliwale.com/";
     .hamburger{display:flex;}
     .section{padding:92px 0;}
     .stat-strip{flex-wrap:wrap; gap:24px;}
-    .stat-strip div{flex:1 1 40%;}
+    .stat-strip div{flex:1 1 40%; border-right:none; margin-right:0; padding-right:0;}
     .points{grid-template-columns:1fr;}
     .gallery-grid{grid-template-columns:repeat(2,1fr);}
     .g-card.wide{grid-column:span 2;}

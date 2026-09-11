@@ -77,7 +77,7 @@ Line icons only, `stroke: currentColor; stroke-width: 1.5; fill: none`, defined 
 
 | Component | Structure |
 |---|---|
-| [Hero.astro](src/components/Hero.astro) | Unchanged from v3 — `min-height:100vh` split, full-bleed photo on the right, no frame. This wasn't part of the "too minimal" complaint (it's bold, not sparse) and works well; left alone. |
+| [Hero.astro](src/components/Hero.astro) | Still the v3 `min-height:100vh` full-bleed split, but finished off per "hero can be better": the photo now carries a frosted caption pill (`.hero-photo-tag`, same `rgba(--ink,.55)` + `backdrop-filter:blur` device as Gallery's featured-tile caption) in its bottom-left corner instead of sitting bare, and the stat-strip has vertical hairline dividers between the three numbers (was gap-only spacing with just a top rule) for a more finished, considered feel. Both are static — no new motion on the photo. |
 | [About.astro](src/components/About.astro) | Unchanged — bold `--peach` block, full-bleed photo, flat paper pull-quote card, icon-roundel points. |
 | [Menu.astro](src/components/Menu.astro) | Rebuilt again: each category is now a rounded (`20px`), shadowed `.menu-cat` card in `--paper`, floating on the dark `--ink` section in a 3-column grid (1 column ≤980px). Each card has a colored icon roundel (`.menu-cat-icon`) matching its `--cat-accent`. Replaces v3's bare dot-leader spread, which read as too sparse for a "menu board." |
 | [Gallery.astro](src/components/Gallery.astro) | Each tile is a rounded (`18px`) `.g-card` with a soft shadow, `background:var(--paper)`, sitting on a `--paper-2`-tinted section. Sizing is still `aspect-ratio`-only on the `img` (unchanged hard-won mechanism from v1). Featured tile keeps its scrim-overlay caption. |
