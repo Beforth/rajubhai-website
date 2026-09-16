@@ -219,9 +219,11 @@ const canonicalURL = "https://rajubhaidabeliwale.com/";
   .stat-strip strong{display:block; font-family:'Inter',sans-serif; font-weight:800; font-size:clamp(40px,4vw,56px); color:var(--red); line-height:1; letter-spacing:-.01em; font-variant-numeric:tabular-nums;}
   .stat-strip span{font-size:11.5px; font-weight:600; letter-spacing:1.4px; text-transform:uppercase; color:var(--muted);}
 
-  /* same right gutter as About's photo (and every other section's right edge) — was bleeding
-     flush to the true viewport edge with zero margin, same "too far right" issue. */
-  .hero-photo{position:relative; overflow:hidden; background:linear-gradient(165deg,var(--maroon) 0%, var(--ink) 100%); min-height:360px; padding-right:max(32px, calc((100vw - 1200px)/2 + 32px));}
+  /* true full-bleed to the true right edge again — the reserved right-side gutter (padding
+     matching the container formula) was leaving the maroon placeholder background exposed
+     as a bare strip instead of the photo reaching the edge. Client wants the image itself
+     scaled to fill that space, not a margin showing through. */
+  .hero-photo{position:relative; overflow:hidden; background:linear-gradient(165deg,var(--maroon) 0%, var(--ink) 100%); min-height:360px;}
   .hero-photo img{width:100%; height:100%; object-fit:cover; display:block;}
   /* a small frosted caption tag, the same device Gallery's featured tile uses for its
      overlay caption — gives the full-bleed photo a finished, labeled feel. Static, no
@@ -253,16 +255,14 @@ const canonicalURL = "https://rajubhaidabeliwale.com/";
     padding-right:max(32px, calc((100vw - 1200px)/2 + 32px));
     display:flex; flex-direction:column; justify-content:center;
   }
-  /* left gutter matches the same formula .about-text now uses for its right inset (and
-     every .container-based section's edge) — the photo bleeds toward the true left edge
-     with a deliberate margin, not flush against it. Padding here (not a narrower grid
-     track) so the peach background shows through as the margin, not a gap. */
-  /* align-self:center, no forced height — the grid row was stretching this box to match
-     the text column's full height, so `cover` had to crop deep into the sides of this
-     landscape photo to fill it. The aspect-ratio now lives on the <img> itself, sized off
-     the box's own (post-padding) content width, so the image renders at its true 1600:1067
-     ratio with nothing to crop. */
-  .about-photo-bleed{order:1; align-self:center; position:relative; overflow:hidden; padding-left:max(32px, calc((100vw - 1200px)/2 + 32px));}
+  /* true full-bleed to the true left edge — no reserved gutter, so the image itself scales
+     up to fill that space (mirrors Hero's right-edge bleed) instead of a margin showing
+     through. align-self:center, no forced height — the grid row was stretching this box to
+     match the text column's full height, so `cover` had to crop deep into the sides of
+     this landscape photo to fill it. The aspect-ratio now lives on the <img> itself, sized
+     off the box's own full width, so growing the box (no more padding eating into it) just
+     scales the image proportionally — still nothing to crop. */
+  .about-photo-bleed{order:1; align-self:center; position:relative; overflow:hidden;}
   .about-photo-bleed img{width:100%; height:auto; aspect-ratio:1600/1067; object-fit:cover; display:block;}
 
   /* --muted fails AA on --peach (4.37:1); --maroon clears it (~5.25:1) — see design.md Color note */
