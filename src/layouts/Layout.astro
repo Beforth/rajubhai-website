@@ -184,7 +184,17 @@ const canonicalURL = "https://rajubhaidabeliwale.com/";
      break from the old "everything in a bordered box" convention that ran through every
      earlier pass; see design.md v3. */
   .hero{min-height:100vh; display:grid; grid-template-columns:1fr 1fr; align-items:stretch;}
-  .hero-text{display:flex; flex-direction:column; justify-content:center; padding:80px clamp(32px,6vw,96px);}
+  /* Left edge matches every other section's container inset exactly (same formula as
+     .about-text and .container's own centered gutter) — on wide screens a flat clamp() here
+     used to sit far to the left of where every other section's heading starts, since
+     .container's left edge grows with viewport width past 1200px+64px but a clamp() caps
+     out early. Fixed so nothing on the page drifts left/right relative to anything else. */
+  .hero-text{
+    display:flex; flex-direction:column; justify-content:center;
+    padding-top:80px; padding-bottom:80px;
+    padding-left:max(32px, calc((100vw - 1200px)/2 + 32px));
+    padding-right:clamp(32px, 6vw, 80px);
+  }
   .hero h1{font-size:clamp(52px,6.2vw,104px); line-height:.94; margin-bottom:32px; color:var(--ink); font-weight:800; letter-spacing:-.01em;}
   .hero h1 em{font-weight:800; position:relative; display:inline-block;}
   /* a thin accent line that draws in once the headline settles, instead of a flat static
