@@ -183,7 +183,11 @@ const canonicalURL = "https://rajubhaidabeliwale.com/";
      border, instead of a boxed card floating in whitespace. The single biggest structural
      break from the old "everything in a bordered box" convention that ran through every
      earlier pass; see design.md v3. */
-  .hero{min-height:100vh; display:grid; grid-template-columns:1fr 1fr; align-items:stretch;}
+  /* minmax(0,1fr), not a bare 1fr — a bare 1fr track still respects its content's min-content
+     width as a floor (it's really minmax(auto,1fr)), so the text column's nowrap buttons were
+     quietly pushing past 50% and starting the photo column somewhere other than the true
+     midpoint. minmax(0,1fr) removes that floor for a genuinely fixed 50/50 split. */
+  .hero{min-height:100vh; display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); align-items:stretch;}
   /* Left edge matches every other section's container inset exactly (same formula as
      .about-text and .container's own centered gutter) — on wide screens a flat clamp() here
      used to sit far to the left of where every other section's heading starts, since
@@ -234,7 +238,11 @@ const canonicalURL = "https://rajubhaidabeliwale.com/";
   /* Full-bleed photo stays the one deliberate structural break — but the section now sits
      inside a bold peach color-block instead of a barely-there paper shift. */
   .about{position:relative; overflow:hidden; background:var(--peach); border-top:2px solid var(--ink);}
-  .about-bleed{display:grid; grid-template-columns:minmax(0,1fr) min(48vw,640px); min-height:640px; position:relative; z-index:1;}
+  /* same 1fr/1fr split as .hero, not the old minmax(0,1fr) min(48vw,640px) — different
+     column formulas meant the two sections' photos started (and, at some widths, ended)
+     at different x-positions from each other. A flat 50/50 split is also viewport-width-
+     independent, so it can't drift the way a vw+cap formula does between breakpoints. */
+  .about-bleed{display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); min-height:640px; position:relative; z-index:1;}
   .about-text{
     padding-top:120px; padding-bottom:120px;
     padding-left:max(32px, calc((100vw - 1200px)/2 + 32px));
