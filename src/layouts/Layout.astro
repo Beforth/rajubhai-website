@@ -255,15 +255,13 @@ const canonicalURL = "https://rajubhaidabeliwale.com/";
     padding-right:max(32px, calc((100vw - 1200px)/2 + 32px));
     display:flex; flex-direction:column; justify-content:center;
   }
-  /* true full-bleed to the true left edge — no reserved gutter, so the image itself scales
-     up to fill that space (mirrors Hero's right-edge bleed) instead of a margin showing
-     through. align-self:center, no forced height — the grid row was stretching this box to
-     match the text column's full height, so `cover` had to crop deep into the sides of
-     this landscape photo to fill it. The aspect-ratio now lives on the <img> itself, sized
-     off the box's own full width, so growing the box (no more padding eating into it) just
-     scales the image proportionally — still nothing to crop. */
-  .about-photo-bleed{order:1; align-self:center; position:relative; overflow:hidden;}
-  .about-photo-bleed img{width:100%; height:auto; aspect-ratio:1600/1067; object-fit:cover; display:block;}
+  /* Same treatment as .hero-photo now, just mirrored — full row height, object-fit:cover,
+     true bleed to the left edge instead of the right. Client asked for About's photo to
+     match Hero's ("make it like first img"), so the earlier align-self:center + aspect-
+     ratio box (which kept the photo short and centered, to avoid cropping) is dropped in
+     favor of parity with Hero's fill/crop behavior. */
+  .about-photo-bleed{order:1; position:relative; overflow:hidden;}
+  .about-photo-bleed img{width:100%; height:100%; object-fit:cover; display:block;}
 
   /* --muted fails AA on --peach (4.37:1); --maroon clears it (~5.25:1) — see design.md Color note */
   .about-text p{color:var(--maroon); margin-bottom:24px; font-size:15.5px;}
@@ -399,7 +397,7 @@ const canonicalURL = "https://rajubhaidabeliwale.com/";
     .hero-text{padding:56px 32px 64px;}
     .about-bleed{grid-template-columns:1fr; min-height:0;}
     .about-text{padding:80px 32px 40px;}
-    .about-photo-bleed{order:-1; align-self:auto; padding:0 32px;}
+    .about-photo-bleed{order:-1; height:340px; padding:0 32px;}
     .book-grid{grid-template-columns:1fr;}
     .menu-spread{grid-template-columns:1fr; margin-top:48px;}
     .footer-grid{grid-template-columns:1fr; gap:40px;}
