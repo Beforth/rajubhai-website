@@ -33,21 +33,21 @@ Exactly these ten tokens, defined once in `:root` (`Layout.astro`) — unchanged
 
 ## Typography
 
-**Third font pairing now.** Zilla Slab+Karla (v1) → Fraunces+Bebas Neue+Karla (v2) → Fraunces+Big Shoulders Display+Plus Jakarta Sans (the previous round) → direct client feedback ("change the fonts dude wtf are these fonts") made clear the more editorial/trendy choices weren't landing. v5 drops down to two of the safest, most widely-liked webfonts available — **no quirky serif, no condensed display face, no italics anywhere** — on the theory that after three swaps, "obviously good and familiar" beats "distinctive but polarizing": `Poppins:wght@500;600;700;800` + `Inter:wght@400;500;600;700`.
+**Fourth font change, now down to one family.** Zilla Slab+Karla (v1) → Fraunces+Bebas Neue+Karla (v2) → Fraunces+Big Shoulders Display+Plus Jakarta Sans → Poppins+Inter (previous round) → client asked for "a professional font." Poppins' rounded geometric letterforms read as friendly/startup-y rather than serious, so it's gone too — **everything on the page is Inter now**, headings included: `Inter:wght@400;500;600;700;800`. One family, zero pairing risk, about as neutral and "professional software" as a webfont gets (this is the same face GitHub, Notion, Linear, and most serious SaaS products ship with).
 
-- **Poppins** — every heading, `em` emphasis, stat numbers, menu prices, menu category titles, pull-quote, crest wordmark, footer headings, book-card heading. A geometric sans that reads as clean and modern without being unfamiliar — doubles as both the "headline" face and the "display numerals" face that used to be a separate condensed font, which also means one fewer family to load.
-- **Inter** — body copy, nav, buttons, UI labels, menu item names/descriptions. About as safe and universally legible as a webfont gets.
-- **No italics.** Previously `em`, the pull-quote, menu category titles, and a few headings all leaned on italic serif/sans for emphasis. Poppins doesn't carry a genuinely distinct italic the way Fraunces did, so emphasis now comes from **weight + `--maroon` color** instead (`em{font-weight:700}`, headings drop to 600 where `em` sits inside them for slight contrast). Don't reintroduce `font-style:italic` on Poppins/Inter text without loading that specific italic weight first — an unloaded italic falls back to a browser-synthesized (faux) oblique, which looks worse than no italic at all.
+- **Inter** — literally everything: headings, `em` emphasis, stat numbers, menu prices, menu category titles, pull-quote, crest wordmark, footer headings, body copy, nav, buttons. Hierarchy now comes entirely from **size and weight** (400/500/600 for body-ish text, 700/800 for headings and display numbers), not from switching families.
+- **Still no italics** — same reasoning as before (Inter's italic wasn't loaded and a synthesized oblique looks worse than none), emphasis is weight + `--maroon` color only.
+- **If a future request asks to differentiate headings from body again**, reach for a *weight/size* solution before reaching for a second font family — the last three rounds of feedback all trended toward "simpler, safer, fewer distinct type styles," not more.
 
-| Element | Size | Family / weight |
+| Element | Size | Weight |
 |---|---|---|
-| Hero H1 | `clamp(52px, 6.2vw, 104px)` | Poppins 800 |
-| H2 | `clamp(34px, 5.2vw, 64px)` | Poppins 700 |
-| Menu category title | `clamp(19px, 1.8vw, 22px)` | Poppins 700 |
-| Pull-quote | `clamp(20px, 2.3vw, 25px)` | Poppins 600 |
-| Stat numbers | `clamp(40px, 4vw, 56px)` | Poppins 800 |
-| Menu prices | 16px | Poppins 700 |
-| Body | 15–17px | Inter 400 |
+| Hero H1 | `clamp(52px, 6.2vw, 104px)` | 800 |
+| H2 | `clamp(34px, 5.2vw, 64px)` | 700 |
+| Menu category title | `clamp(19px, 1.8vw, 22px)` | 700 |
+| Pull-quote | `clamp(20px, 2.3vw, 25px)` | 600 |
+| Stat numbers | `clamp(40px, 4vw, 56px)` | 800 |
+| Menu prices | 16px | 700 |
+| Body | 15–17px | 400 |
 
 `em` renders in `--maroon` (or `--gold`/`--peach` on dark sections) at a heavier weight than surrounding text — never italic, never bold-red.
 
@@ -55,7 +55,7 @@ Exactly these ten tokens, defined once in `:root` (`Layout.astro`) — unchanged
 
 ## Layout conventions — the v4 shape language
 
-- **Cards are back, but warm.** `border-radius: 18–20px` on every card (Menu category cards, Gallery tiles, Review cards, the Dine-In hours card), a soft warm-toned shadow (`rgba(43,23,18,...)`, never cool grey), and either a filled `--paper` background or a colored top/icon accent. This is the opposite instinct from v1/v2's sharp `1.5px solid var(--ink)` boxes — rounded and shadowed reads as inviting, sharp-and-hairlined reads as "editorial/minimal," which is exactly what the client didn't want this round.
+- **Cards are back, but warm.** `border-radius: 18–20px` on every card (Menu category cards, Gallery tiles, Review cards, the Dine-In hours card), a soft warm-toned shadow (`rgba(43,23,18,...)`, never cool grey) — **except Gallery tiles, which lost their shadow per direct feedback** and rely on rounded corners + tonal background contrast alone. Don't assume "shadow" is still a blanket rule; check each section's row in Sections below before copying a pattern.
 - **Every card lifts on hover, consistently.** `translateY(-6px)` + a deeper version of its own resting shadow — the same small interaction Gallery tiles already had, now applied to Menu category cards, Review cards, and the Dine-In hours card too, so hovering feels the same everywhere a card exists. Plain lift only, no rotation.
 - **A few more small hover details, all scale/lift/color only — never rotate:** every button's icon nudges right on hover now (was `.btn-primary`-only; extended to all variants — `.btn:hover .icon`), the header logo's crest scales up slightly and its inner ring turns red on hover, and an icon roundel (Menu category icons, About's point icons) scales up slightly whenever its parent card/row is hovered. Small, cheap, and consistent with the "no funky" motion policy — the rule for a new one: scale or color-shift only, tied to a real hover/focus target, never a loop.
 - **The sticky header now carries its own soft shadow** (`0 4px 20px rgba(43,23,18,.06)`) alongside its `2px solid var(--ink)` bottom edge — it was the one major surface with no depth once every card below it picked one up.
@@ -80,7 +80,7 @@ Line icons only, `stroke: currentColor; stroke-width: 1.5; fill: none`, defined 
 | [Hero.astro](src/components/Hero.astro) | Still the v3 `min-height:100vh` full-bleed split, but finished off per "hero can be better": the photo now carries a frosted caption pill (`.hero-photo-tag`, same `rgba(--ink,.55)` + `backdrop-filter:blur` device as Gallery's featured-tile caption) in its bottom-left corner instead of sitting bare, and the stat-strip has vertical hairline dividers between the three numbers (was gap-only spacing with just a top rule) for a more finished, considered feel. Both are static — no new motion on the photo. |
 | [About.astro](src/components/About.astro) | Unchanged — bold `--peach` block, full-bleed photo, flat paper pull-quote card, icon-roundel points. |
 | [Menu.astro](src/components/Menu.astro) | Rebuilt again: each category is now a rounded (`20px`), shadowed `.menu-cat` card in `--paper`, floating on the dark `--ink` section in a 3-column grid (1 column ≤980px). Each card has a colored icon roundel (`.menu-cat-icon`) matching its `--cat-accent`. Replaces v3's bare dot-leader spread, which read as too sparse for a "menu board." |
-| [Gallery.astro](src/components/Gallery.astro) | Each tile is a rounded (`18px`) `.g-card` with a soft shadow, `background:var(--paper)`, sitting on a `--paper-2`-tinted section. Sizing is still `aspect-ratio`-only on the `img` (unchanged hard-won mechanism from v1). Featured tile keeps its scrim-overlay caption. |
+| [Gallery.astro](src/components/Gallery.astro) | Each tile is a rounded (`18px`) `.g-card`, `background:var(--paper)`, sitting on a `--paper-2`-tinted section. **No box-shadow** (removed per client feedback — separation now comes from the rounded corners plus the paper-vs-paper-2 tonal contrast alone); hover is a plain `translateY(-6px)` lift, no shadow change either. This is the one place shadows were explicitly asked to go — other cards (Menu, Reviews, Dine-In) keep theirs, see Layout conventions. Sizing is still `aspect-ratio`-only on the `img` (unchanged hard-won mechanism from v1). Featured tile keeps its scrim-overlay caption. |
 | [DineIn.astro](src/components/DineIn.astro) | `book-card` is a rounded (`20px`), shadowed `--paper` card with a 5px `--orange` top edge — back to a real card (was a bare rule-line list in v3). |
 | [Reviews.astro](src/components/Reviews.astro) | Cards are rounded (`18px`) `--paper` cards with a 4px `--orange` top edge and a soft shadow (was border-right-only hairline separation in v3). Marquee mechanism unchanged. |
 | [OrderCta.astro](src/components/OrderCta.astro) | Unchanged. |
@@ -112,7 +112,8 @@ Unchanged — images pre-resized/converted to WebP via `cwebp` at build-prep tim
 
 - **Parallax is gone.** The Hero and About photos both drifted slightly on scroll (`data-parallax="0.04"`/`"0.05"`) — removed per direct client feedback ("reduce animations for imgs like parallax"). The `data-parallax` attributes, the CSS `[data-parallax]{will-change:transform}` hook, and the entire parallax `requestAnimationFrame` block in `Layout.astro`'s script were all deleted rather than left dormant — there's no infrastructure left to accidentally re-trigger. Photos are now fully static.
 - **Scroll-reveal**: `IntersectionObserver` (threshold 0.15), plain `opacity:0; translateY(24px)` → visible, staggered via `data-reveal="1..4"`. No rotation. Each `.menu-cat` carries its own `data-reveal` (cycling 1–3) rather than one wrapper around the whole spread, since it's a grid of independent cards, not a single list.
-- **Stat count-up, reviews marquee**: unchanged mechanics.
+- **Stat count-up**: unchanged mechanics.
+- **Reviews marquee — a real seamlessness bug fixed.** The auto-drift always duplicated the 6 review cards into 2 identical sets and wrapped the scroll offset at "one set's width" so the loop never visibly ends — that part was correct. But "one set's width" was computed as `track.scrollWidth / 2`, and `.reviews-track` has its own left/right padding (`padding:8px 4px 30px`) which gets counted in `scrollWidth` without being part of the repeating pattern — so the computed half was 8px short of the true repeat period, and the loop wrapped 8px early every cycle (small but real, a visible little jump). Fixed by measuring the actual DOM distance between the first card of set 1 and the first card of set 2 (`cards[half].offsetLeft - cards[0].offsetLeft`) instead of deriving it from the track's total width — immune to whatever padding the track has. **If you ever add padding to `.reviews-track` again, this is why `scrollWidth / 2` would silently drift out of sync — don't go back to it.**
 - **Hero underline, draws in once**: `em::after` under "Dabeliwale" used to be a static bar sitting behind the letters (a highlighter-marker effect, permanently there). Client feedback ("remove underline - make it more attractive like micro interaction") replaced it with a thin line *below* the text that animates `scaleX(0)→1` (`transform-origin:left`, 0.8s, 0.35s delay) the moment the hero text settles in — tied to the same `[data-reveal="1"].in-view` state the heading/paragraph already use, so it's one extra rule, not new JS. A one-time entrance moment, not a loop — reduced-motion shows it fully drawn immediately.
 - **`prefers-reduced-motion: reduce`**: scroll-reveal shows content instantly, stat counters skip to final values, the reviews marquee falls back to native scroll, the hero underline appears fully drawn with no transition.
 - **Rule of thumb, still in force:** no animation directly on food/product photography (there's no motion on photos at all now), and no *looping/decorative* motion for its own sake (spinning/tilting was tried and walked back, parallax too) — a single, purposeful entrance effect like the underline above is the kind of "micro interaction" that's welcome; a continuous or repeating one is not.
