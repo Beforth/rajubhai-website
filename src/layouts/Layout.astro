@@ -215,7 +215,9 @@ const canonicalURL = "https://rajubhaidabeliwale.com/";
   .stat-strip strong{display:block; font-family:'Inter',sans-serif; font-weight:800; font-size:clamp(40px,4vw,56px); color:var(--red); line-height:1; letter-spacing:-.01em; font-variant-numeric:tabular-nums;}
   .stat-strip span{font-size:11.5px; font-weight:600; letter-spacing:1.4px; text-transform:uppercase; color:var(--muted);}
 
-  .hero-photo{position:relative; overflow:hidden; background:linear-gradient(165deg,var(--maroon) 0%, var(--ink) 100%); min-height:360px;}
+  /* same right gutter as About's photo (and every other section's right edge) — was bleeding
+     flush to the true viewport edge with zero margin, same "too far right" issue. */
+  .hero-photo{position:relative; overflow:hidden; background:linear-gradient(165deg,var(--maroon) 0%, var(--ink) 100%); min-height:360px; padding-right:max(32px, calc((100vw - 1200px)/2 + 32px));}
   .hero-photo img{width:100%; height:100%; object-fit:cover; display:block;}
   /* a small frosted caption tag, the same device Gallery's featured tile uses for its
      overlay caption — gives the full-bleed photo a finished, labeled feel. Static, no
@@ -377,7 +379,7 @@ const canonicalURL = "https://rajubhaidabeliwale.com/";
   /* ================= RESPONSIVE ================= */
   @media (max-width:980px){
     .hero{grid-template-columns:1fr; min-height:0;}
-    .hero-photo{height:340px; order:-1;}
+    .hero-photo{height:340px; order:-1; padding:0 32px;}
     .hero-text{padding:56px 32px 64px;}
     .about-bleed{grid-template-columns:1fr; min-height:0;}
     .about-text{padding:80px 32px 40px;}
