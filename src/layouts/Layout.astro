@@ -239,7 +239,12 @@ const canonicalURL = "https://rajubhaidabeliwale.com/";
     padding-right:clamp(32px, 6vw, 80px);
     display:flex; flex-direction:column; justify-content:center;
   }
-  .about-photo-bleed{position:relative; overflow:hidden;}
+  /* right gutter matches the same formula .about-text uses for its left inset (and every
+     .container-based section uses for its own right edge) — the photo used to bleed flush
+     to the true viewport edge with zero margin, which read as "too far right" once every
+     other section's right edge was pulled in consistently. Padding here (not a narrower
+     grid track) so the peach background shows through as a deliberate margin, not a gap. */
+  .about-photo-bleed{position:relative; overflow:hidden; padding-right:max(32px, calc((100vw - 1200px)/2 + 32px));}
   .about-photo-bleed img{width:100%; height:100%; object-fit:cover; display:block;}
 
   /* --muted fails AA on --peach (4.37:1); --maroon clears it (~5.25:1) — see design.md Color note */
@@ -376,7 +381,7 @@ const canonicalURL = "https://rajubhaidabeliwale.com/";
     .hero-text{padding:56px 32px 64px;}
     .about-bleed{grid-template-columns:1fr; min-height:0;}
     .about-text{padding:80px 32px 40px;}
-    .about-photo-bleed{order:-1; height:320px;}
+    .about-photo-bleed{order:-1; height:320px; padding:0 32px;}
     .book-grid{grid-template-columns:1fr;}
     .menu-spread{grid-template-columns:1fr; margin-top:48px;}
     .footer-grid{grid-template-columns:1fr; gap:40px;}
