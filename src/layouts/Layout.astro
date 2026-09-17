@@ -290,6 +290,9 @@ const canonicalURL = "https://rajubhaidabeliwale.com/";
      accent color on the icon roundel, avoiding both the old sharp-cornered receipt look
      and the too-bare dot-leader list that followed it. */
   .menu-section{background:var(--ink); color:var(--paper); position:relative; border-top:1px solid rgba(251,246,239,.12); border-bottom:1px solid rgba(251,246,239,.12);}
+  .menu-section::before{content:''; position:absolute; inset:0; z-index:0; pointer-events:none; opacity:.14; filter:invert(1); background-image:url('/doodle.png'); background-position:center; background-size:cover;}
+  .menu-section::after{content:''; position:absolute; inset:0; z-index:0; pointer-events:none; background:radial-gradient(ellipse 800px 300px at 50% 8%, rgba(43,23,18,.5), rgba(43,23,18,0) 70%);}
+  .menu-section > .container{position:relative; z-index:1;}
   .menu-section .section-sub{color:#c9b3aa;}
   .menu-section .section-title{color:var(--paper);}
   .menu-section .section-title em{color:var(--peach);}
@@ -337,6 +340,8 @@ const canonicalURL = "https://rajubhaidabeliwale.com/";
 
   /* ================= BOOK TABLE ================= */
   .book-wrap{background:var(--peach); position:relative; overflow:hidden;}
+  .book-wrap::before{content:''; position:absolute; inset:0; z-index:0; pointer-events:none; opacity:.16; background-image:url('/doodle.png'); background-position:center; background-size:cover;}
+  .book-wrap > .container{position:relative; z-index:1;}
   .book-wrap .section-sub{color:var(--maroon);} /* --muted fails AA on --peach (4.37:1); --maroon clears it at ~5.25:1 */
   .book-grid{display:grid; grid-template-columns:1.2fr 1fr; gap:72px; align-items:center;}
   /* warm rounded card, soft shadow, colored top edge — sits forward off the peach block */
@@ -445,7 +450,9 @@ const canonicalURL = "https://rajubhaidabeliwale.com/";
     header{position:static; border-bottom:1px solid #000;}
     .hero{min-height:0; grid-template-columns:1fr;}
     .section{padding:32px 0;}
-    .menu-section{background:var(--paper) !important; color:var(--ink) !important; border:none !important;}
+    .menu-section{background:var(--paper) !important; background-image:none !important; color:var(--ink) !important; border:none !important;}
+    .menu-section::before{display:none !important;}
+    .menu-section::after{display:none !important;}
     .menu-section .section-title, .menu-section .section-title em, .menu-section .section-sub{color:var(--ink) !important;}
     .menu-spread{grid-template-columns:1fr;}
     .menu-cat{box-shadow:none; border:1px solid #000;}
