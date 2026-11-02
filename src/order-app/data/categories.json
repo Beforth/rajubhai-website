@@ -1,0 +1,44 @@
+[
+  {
+    "id": "dabeli",
+    "name": "Famous Dabeli",
+    "subtitle": "Kutch's Signature Dish",
+    "image": "/dabeli category.jpg",
+    "count": 7
+  },
+  {
+    "id": "chaat",
+    "name": "Mumbai & Kutch Chaat",
+    "subtitle": "Sev Puri, Bhel, Dahi Puri, Pani Puri",
+    "image": "/pani-puri.jpeg",
+    "count": 6
+  },
+  {
+    "id": "sandwiches",
+    "name": "Grilled Sandwiches",
+    "subtitle": "Butter Toasted 3-Tier & Club",
+    "image": "https://images.unsplash.com/photo-1528735602780-2552fd46c7af?auto=format&fit=crop&w=700&q=80",
+    "count": 5
+  },
+  {
+    "id": "sides",
+    "name": "Crispy Pav & Street Sides",
+    "subtitle": "Vada Pav, Masala Pav & Fries",
+    "image": "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=700&q=80",
+    "count": 4
+  },
+  {
+    "id": "beverages",
+    "name": "Beverages & Shakes",
+    "subtitle": "Cold Coco, Chaas & Kulhad Chai",
+    "image": "https://images.unsplash.com/photo-1541658016709-82535e94bc69?auto=format&fit=crop&w=700&q=80",
+    "count": 5
+  },
+  {
+    "id": "desserts",
+    "name": "Desi Sweets",
+    "subtitle": "Gulab Jamun, Matka Kulfi",
+    "image": "https://images.unsplash.com/photo-1589301760014-d929f3979dbc?auto=format&fit=crop&w=700&q=80",
+    "count": 3
+  }
+]

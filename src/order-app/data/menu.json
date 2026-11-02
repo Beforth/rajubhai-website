@@ -1,0 +1,607 @@
+[
+  {
+    "id": "dab-01",
+    "categoryId": "dabeli",
+    "name": "Original Rajubhai Special Dabeli",
+    "tagline": "The Legendary Recipe Since 1987",
+    "description": "Our timeless classic! Slow-simmered spiced potato mash stuffed in pav, drenched in sweet date-tamarind chutney, spicy red garlic chutney, fresh ruby pomegranate, roasted masala sing, and golden nylon sev.",
+    "price": 45,
+    "rating": 4.9,
+    "reviewCount": 2420,
+    "isVeg": true,
+    "isBestseller": true,
+    "spicyLevel": 2,
+    "image": "/dabeli-hero.png",
+    "sizes": [
+      { "name": "Single Pav", "price": 0 },
+      { "name": "Double Pav King Size", "price": 40 }
+    ],
+    "addons": [
+      { "id": "cheese", "name": "Extra Shredded Amul Cheese", "price": 20 },
+      { "id": "butter", "name": "Extra Amul Butter Tava Toss", "price": 15 },
+      { "id": "sing", "name": "Extra Masala Peanuts Cup", "price": 10 },
+      { "id": "anar", "name": "Fresh Pomegranate Topping", "price": 10 }
+    ]
+  },
+  {
+    "id": "dab-02",
+    "categoryId": "dabeli",
+    "name": "Amul Cheese Blast Dabeli",
+    "tagline": "Loaded with overflowing melted cheese",
+    "description": "A cheese lover's absolute heaven! Stuffed with our spiced masala mash, smothered inside and crowned with thick melted Amul cheese grilled crisp on iron tava.",
+    "price": 75,
+    "rating": 4.9,
+    "reviewCount": 1890,
+    "isVeg": true,
+    "isBestseller": true,
+    "spicyLevel": 2,
+    "image": "https://images.unsplash.com/photo-1550547660-d9450f859349?auto=format&fit=crop&w=700&q=80",
+    "sizes": [
+      { "name": "Regular", "price": 0 },
+      { "name": "Monster Double Cheese", "price": 45 }
+    ],
+    "addons": [
+      { "id": "garlic-chutney", "name": "Fiery Kutch Garlic Chutney", "price": 10 },
+      { "id": "sev", "name": "Extra Crispy Nylon Sev", "price": 10 }
+    ]
+  },
+  {
+    "id": "dab-03",
+    "categoryId": "dabeli",
+    "name": "Butter Tadka Kacchi Dabeli",
+    "tagline": "Traditional Mandvi, Kutch heritage style",
+    "description": "Authentic Mandvi recipe bathed in garlic tadka, secret clove-cinnamon masala, sweet tamarind pulp, crunchy peanuts, and coriander.",
+    "price": 55,
+    "rating": 4.8,
+    "reviewCount": 1150,
+    "isVeg": true,
+    "isBestseller": true,
+    "spicyLevel": 3,
+    "image": "https://images.unsplash.com/photo-1626777552726-4a6b54c97e46?auto=format&fit=crop&w=700&q=80",
+    "sizes": [
+      { "name": "Regular", "price": 0 }
+    ],
+    "addons": [
+      { "id": "cheese", "name": "Add Amul Cheese", "price": 20 },
+      { "id": "butter", "name": "Extra Butter Toss", "price": 15 }
+    ]
+  },
+  {
+    "id": "dab-04",
+    "categoryId": "dabeli",
+    "name": "Mayo Schezwan Fusion Dabeli",
+    "tagline": "Fiery Chinjabi street punch",
+    "description": "Spicy street fusion! Dabeli potato mix infused with creamy garlic mayonnaise and fiery Schezwan chutney, toasted golden in Amul butter.",
+    "price": 70,
+    "rating": 4.7,
+    "reviewCount": 840,
+    "isVeg": true,
+    "isBestseller": false,
+    "spicyLevel": 3,
+    "image": "https://images.unsplash.com/photo-1626777552726-4a6b54c97e46?auto=format&fit=crop&w=700&q=80",
+    "sizes": [
+      { "name": "Regular", "price": 0 }
+    ],
+    "addons": [
+      { "id": "cheese", "name": "Extra Amul Cheese", "price": 20 }
+    ]
+  },
+  {
+    "id": "dab-05",
+    "categoryId": "dabeli",
+    "name": "Dry Fruit Shahi Royal Dabeli",
+    "tagline": "Roasted cashews, almonds & raisins",
+    "description": "Rich aristocratic preparation topped with roasted cashew halves, sliced almonds, sweet raisins, tutti-frutti, and pomegranate seeds.",
+    "price": 90,
+    "rating": 4.9,
+    "reviewCount": 670,
+    "isVeg": true,
+    "isBestseller": false,
+    "spicyLevel": 1,
+    "image": "https://images.unsplash.com/photo-1626777552726-4a6b54c97e46?auto=format&fit=crop&w=700&q=80",
+    "sizes": [
+      { "name": "Regular", "price": 0 }
+    ],
+    "addons": [
+      { "id": "cheese", "name": "Add Amul Cheese", "price": 20 }
+    ]
+  },
+  {
+    "id": "dab-06",
+    "categoryId": "dabeli",
+    "name": "Jain Special Kacchi Dabeli",
+    "tagline": "Prepared strictly without Onion / Garlic",
+    "description": "Specially prepared using spiced raw banana (kela) mash with traditional Kutch spices, fresh pomegranate, masala sing, and pure chutneys.",
+    "price": 50,
+    "rating": 4.9,
+    "reviewCount": 1320,
+    "isVeg": true,
+    "isBestseller": false,
+    "spicyLevel": 2,
+    "image": "https://images.unsplash.com/photo-1626777552726-4a6b54c97e46?auto=format&fit=crop&w=700&q=80",
+    "sizes": [
+      { "name": "Regular", "price": 0 }
+    ],
+    "addons": [
+      { "id": "cheese", "name": "Add Amul Cheese", "price": 20 }
+    ]
+  },
+  {
+    "id": "dab-07",
+    "categoryId": "dabeli",
+    "name": "Peri Peri Crispy Dabeli",
+    "tagline": "Zesty African spice kick with desi flavours",
+    "description": "Crispy griddled pav seasoned with hot peri peri seasoning and stuffed with our signature spiced dabeli mixture.",
+    "price": 65,
+    "rating": 4.8,
+    "reviewCount": 780,
+    "isVeg": true,
+    "isBestseller": false,
+    "spicyLevel": 3,
+    "image": "https://images.unsplash.com/photo-1626777552726-4a6b54c97e46?auto=format&fit=crop&w=700&q=80",
+    "sizes": [
+      { "name": "Regular", "price": 0 }
+    ],
+    "addons": [
+      { "id": "cheese", "name": "Add Amul Cheese", "price": 20 }
+    ]
+  },
+  {
+    "id": "chaat-00",
+    "categoryId": "chaat",
+    "name": "Kolkata & Mumbai Pani Puri / Golgappa (8 Pcs)",
+    "tagline": "Crisp puris with spicy pudina pani & ragda",
+    "description": "Eight hollow crispy semolina puris stuffed with boiled ragda & potato mash, served with chilled spicy mint-coriander water and sweet date tamarind dip.",
+    "price": 50,
+    "rating": 4.9,
+    "reviewCount": 2840,
+    "isVeg": true,
+    "isBestseller": true,
+    "spicyLevel": 3,
+    "image": "/pani-puri.jpeg",
+    "sizes": [
+      { "name": "Regular (8 Pcs)", "price": 0 },
+      { "name": "Family Feast (16 Pcs)", "price": 45 }
+    ],
+    "addons": [
+      { "id": "extra-puri", "name": "Extra Sukha Puri (2 Pcs)", "price": 10 }
+    ]
+  },
+  {
+    "id": "chaat-01",
+    "categoryId": "chaat",
+    "name": "Delhi Style Sev Puri (6 Pcs)",
+    "tagline": "Crisp puris loaded with nylon sev & chutneys",
+    "description": "Crispy flat puris topped with diced potatoes, onions, chopped raw mango, mint-coriander chutney, sweet tamarind chutney, and a mountain of nylon sev.",
+    "price": 60,
+    "rating": 4.8,
+    "reviewCount": 1540,
+    "isVeg": true,
+    "isBestseller": true,
+    "spicyLevel": 2,
+    "image": "https://images.unsplash.com/photo-1601050690597-df0568f70950?auto=format&fit=crop&w=700&q=80",
+    "sizes": [
+      { "name": "1 Plate (6 pcs)", "price": 0 },
+      { "name": "Party Pack (12 pcs)", "price": 55 }
+    ],
+    "addons": [
+      { "id": "cheese", "name": "Extra Amul Cheese Grate", "price": 20 }
+    ]
+  },
+  {
+    "id": "chaat-02",
+    "categoryId": "chaat",
+    "name": "Special Dahi Puri Platter (6 Pcs)",
+    "tagline": "Chilled sweetened whipped curd explosion",
+    "description": "Gol gappa puris filled with boiled spiced potato & moong sprouts, drenched in creamy sweetened curd, sweet date chutney, and roasted cumin powder.",
+    "price": 75,
+    "rating": 4.9,
+    "reviewCount": 1680,
+    "isVeg": true,
+    "isBestseller": true,
+    "spicyLevel": 1,
+    "image": "/dahi-puri.jpg",
+    "sizes": [
+      { "name": "1 Plate (6 pcs)", "price": 0 }
+    ],
+    "addons": [
+      { "id": "dahi", "name": "Extra Sweet Dahi Cup", "price": 20 }
+    ]
+  },
+  {
+    "id": "chaat-03",
+    "categoryId": "chaat",
+    "name": "Chowpatty Bhelpuri Supreme",
+    "tagline": "Crisp puffed rice with tangy trio chutneys",
+    "description": "Golden puffed rice mixed with crushed papdi, masala peanuts, diced tomatoes, onions, fresh coriander, and raw mango slivers.",
+    "price": 55,
+    "rating": 4.7,
+    "reviewCount": 990,
+    "isVeg": true,
+    "isBestseller": false,
+    "spicyLevel": 2,
+    "image": "https://images.unsplash.com/photo-1601050690597-df0568f70950?auto=format&fit=crop&w=700&q=80",
+    "sizes": [
+      { "name": "Regular", "price": 0 }
+    ],
+    "addons": [
+      { "id": "cheese", "name": "Add Amul Cheese", "price": 20 }
+    ]
+  },
+  {
+    "id": "chaat-04",
+    "categoryId": "chaat",
+    "name": "Amritsari Samosa Chaat with Chole",
+    "tagline": "Crushed hot samosas in spiced chickpea gravy",
+    "description": "Two fresh golden samosas crushed on tava, smothered in rich spiced chole gravy, garnished with curd, pickled ginger, and tamarind drizzle.",
+    "price": 85,
+    "rating": 4.8,
+    "reviewCount": 1240,
+    "isVeg": true,
+    "isBestseller": true,
+    "spicyLevel": 3,
+    "image": "https://images.unsplash.com/photo-1601050690597-df0568f70950?auto=format&fit=crop&w=700&q=80",
+    "sizes": [
+      { "name": "Plate (2 Samosas)", "price": 0 }
+    ],
+    "addons": [
+      { "id": "pav", "name": "Extra Butter Pav (2 Pcs)", "price": 20 }
+    ]
+  },
+  {
+    "id": "chaat-05",
+    "categoryId": "chaat",
+    "name": "Crispy Ragda Pattice (2 Pcs)",
+    "tagline": "Pan-crisped golden potato patties with ragda",
+    "description": "Twin potato cutlets crisped in butter, laid on hot white pea curry (ragda), topped with date syrup, spicy coriander chutney, and onions.",
+    "price": 70,
+    "rating": 4.7,
+    "reviewCount": 810,
+    "isVeg": true,
+    "isBestseller": false,
+    "spicyLevel": 2,
+    "image": "https://images.unsplash.com/photo-1601050690597-df0568f70950?auto=format&fit=crop&w=700&q=80",
+    "sizes": [
+      { "name": "Plate", "price": 0 }
+    ],
+    "addons": []
+  },
+  {
+    "id": "chaat-06",
+    "categoryId": "chaat",
+    "name": "Rajubhai Papdi Chaat Deluxe",
+    "tagline": "Crunchy wheat wafers with potatoes & curd",
+    "description": "Crisp papdis layered with boiled potatoes, chickpeas, whipped sweet dahi, roasted cumin, and red chili flakes.",
+    "price": 65,
+    "rating": 4.8,
+    "reviewCount": 730,
+    "isVeg": true,
+    "isBestseller": false,
+    "spicyLevel": 1,
+    "image": "https://images.unsplash.com/photo-1601050690597-df0568f70950?auto=format&fit=crop&w=700&q=80",
+    "sizes": [
+      { "name": "Plate", "price": 0 }
+    ],
+    "addons": []
+  },
+  {
+    "id": "sand-01",
+    "categoryId": "sandwiches",
+    "name": "Rajubhai 3-Tier Club Sandwich",
+    "tagline": "Triple layer vegetable & cheese grill",
+    "description": "Three layers of butter-toasted bread loaded with cheese, spiced aloo mix, cucumber, beetroot, tomato, bell pepper, and our house mint chutney.",
+    "price": 140,
+    "rating": 4.9,
+    "reviewCount": 1540,
+    "isVeg": true,
+    "isBestseller": true,
+    "spicyLevel": 2,
+    "image": "https://images.unsplash.com/photo-1528735602780-2552fd46c7af?auto=format&fit=crop&w=700&q=80",
+    "sizes": [
+      { "name": "Regular (4 cut)", "price": 0 },
+      { "name": "Mega Feast (6 cut)", "price": 50 }
+    ],
+    "addons": [
+      { "id": "cheese", "name": "Double Amul Cheese", "price": 30 }
+    ]
+  },
+  {
+    "id": "sand-02",
+    "categoryId": "sandwiches",
+    "name": "Bombay Masala Toast Sandwich",
+    "tagline": "Crispy golden butter toast with potato filling",
+    "description": "Iconic Mumbai street style toasted sandwich with cumin potato masala, capsicum, onion, toasted golden in Amul butter.",
+    "price": 95,
+    "rating": 4.7,
+    "reviewCount": 940,
+    "isVeg": true,
+    "isBestseller": true,
+    "spicyLevel": 2,
+    "image": "https://images.unsplash.com/photo-1553909489-cd47e0907980?auto=format&fit=crop&w=700&q=80",
+    "sizes": [
+      { "name": "Regular", "price": 0 }
+    ],
+    "addons": [
+      { "id": "cheese", "name": "Add Amul Cheese", "price": 25 }
+    ]
+  },
+  {
+    "id": "sand-03",
+    "categoryId": "sandwiches",
+    "name": "Cheese Chilli Garlic Toast",
+    "tagline": "Gooey melted cheese with chopped green chilies",
+    "description": "Gooey melted cheese spiked with chopped green chillies, garlic herb butter, and oregano on crispy toast.",
+    "price": 120,
+    "rating": 4.8,
+    "reviewCount": 710,
+    "isVeg": true,
+    "isBestseller": false,
+    "spicyLevel": 3,
+    "image": "https://images.unsplash.com/photo-1619096252214-ef06c45683e3?auto=format&fit=crop&w=700&q=80",
+    "sizes": [
+      { "name": "Regular", "price": 0 }
+    ],
+    "addons": []
+  },
+  {
+    "id": "sand-04",
+    "categoryId": "sandwiches",
+    "name": "Paneer Makhani Grilled Sandwich",
+    "tagline": "Rich butter gravy paneer & bell peppers",
+    "description": "Fresh cottage cheese paneer cubes simmered in creamy makhani gravy with capsicum slices, grilled in pure butter.",
+    "price": 160,
+    "rating": 4.8,
+    "reviewCount": 630,
+    "isVeg": true,
+    "isBestseller": false,
+    "spicyLevel": 2,
+    "image": "https://images.unsplash.com/photo-1509722747041-616f39b57569?auto=format&fit=crop&w=700&q=80",
+    "sizes": [
+      { "name": "Regular", "price": 0 }
+    ],
+    "addons": [
+      { "id": "cheese", "name": "Add Amul Cheese", "price": 30 }
+    ]
+  },
+  {
+    "id": "sand-05",
+    "categoryId": "sandwiches",
+    "name": "Chocolate Cheese Sweet Sandwich",
+    "tagline": "Decadent melted chocolate & mild cheese",
+    "description": "Warm melted chocolate hazelnut spread with mild cheese on toasted crust, served with chocolate drizzle.",
+    "price": 130,
+    "rating": 4.7,
+    "reviewCount": 460,
+    "isVeg": true,
+    "isBestseller": false,
+    "spicyLevel": 0,
+    "image": "https://images.unsplash.com/photo-1540420773420-3366772f4999?auto=format&fit=crop&w=700&q=80",
+    "sizes": [
+      { "name": "Regular", "price": 0 }
+    ],
+    "addons": []
+  },
+  {
+    "id": "side-01",
+    "categoryId": "sides",
+    "name": "Mumbai Special Vada Pav",
+    "tagline": "Crisp spiced batata vada in soft pav",
+    "description": "Mustard spiced potato ball fried golden, tucked in fresh bread with spicy dry garlic coconut thecha and green chili.",
+    "price": 30,
+    "rating": 4.8,
+    "reviewCount": 1820,
+    "isVeg": true,
+    "isBestseller": true,
+    "spicyLevel": 3,
+    "image": "https://images.unsplash.com/photo-1626777552726-4a6b54c97e46?auto=format&fit=crop&w=700&q=80",
+    "sizes": [
+      { "name": "Single Vada Pav", "price": 0 }
+    ],
+    "addons": [
+      { "id": "cheese", "name": "Add Amul Cheese", "price": 15 },
+      { "id": "butter", "name": "Butter Grill Pav", "price": 10 }
+    ]
+  },
+  {
+    "id": "side-02",
+    "categoryId": "sides",
+    "name": "Extra Masala Pav (2 Pcs)",
+    "tagline": "Butter griddled with spicy bhaji gravy",
+    "description": "Twin pav buns pan-toasted on iron tava with tomato-garlic masala butter, coriander, and lemon splash.",
+    "price": 50,
+    "rating": 4.7,
+    "reviewCount": 420,
+    "isVeg": true,
+    "isBestseller": false,
+    "spicyLevel": 2,
+    "image": "https://images.unsplash.com/photo-1601050690597-df0568f70950?auto=format&fit=crop&w=700&q=80",
+    "sizes": [
+      { "name": "Pair (2 pcs)", "price": 0 }
+    ],
+    "addons": [
+      { "id": "cheese", "name": "Add Amul Cheese", "price": 20 }
+    ]
+  },
+  {
+    "id": "side-03",
+    "categoryId": "sides",
+    "name": "Peri Peri French Fries",
+    "tagline": "Crispy golden potato batons with peri seasoning",
+    "description": "Crispy fried fries tossed liberally in fiery zesty peri-peri spice dust.",
+    "price": 85,
+    "rating": 4.7,
+    "reviewCount": 590,
+    "isVeg": true,
+    "isBestseller": false,
+    "spicyLevel": 2,
+    "image": "https://images.unsplash.com/photo-1576107232684-1279f3908594?auto=format&fit=crop&w=700&q=80",
+    "sizes": [
+      { "name": "Regular", "price": 0 },
+      { "name": "Large Tub", "price": 35 }
+    ],
+    "addons": []
+  },
+  {
+    "id": "side-04",
+    "categoryId": "sides",
+    "name": "Cheese Loaded Fries",
+    "tagline": "Drenched in hot liquid cheese sauce",
+    "description": "Golden fries blanketed with creamy cheese sauce and jalapeno herbs.",
+    "price": 120,
+    "rating": 4.8,
+    "reviewCount": 460,
+    "isVeg": true,
+    "isBestseller": false,
+    "spicyLevel": 1,
+    "image": "https://images.unsplash.com/photo-1585109649139-366815a0d713?auto=format&fit=crop&w=700&q=80",
+    "sizes": [
+      { "name": "Regular", "price": 0 }
+    ],
+    "addons": []
+  },
+  {
+    "id": "bev-01",
+    "categoryId": "beverages",
+    "name": "Gujarat Special Cold Coco Shake",
+    "tagline": "Velvety thick Gujarati chocolate elixir",
+    "description": "Surat style ultra-thick cold cocoa drink crafted with Dutch cocoa, whole milk, condensed milk, served chilled with choco chips.",
+    "price": 80,
+    "rating": 4.9,
+    "reviewCount": 1390,
+    "isVeg": true,
+    "isBestseller": true,
+    "spicyLevel": 0,
+    "image": "https://images.unsplash.com/photo-1541658016709-82535e94bc69?auto=format&fit=crop&w=700&q=80",
+    "sizes": [
+      { "name": "Regular (300ml)", "price": 0 },
+      { "name": "Monster Thick (500ml)", "price": 35 }
+    ],
+    "addons": []
+  },
+  {
+    "id": "bev-02",
+    "categoryId": "beverages",
+    "name": "Kesar Badam Thandai Milkshake",
+    "tagline": "Rich saffron & crushed almond cooler",
+    "description": "Chilled milk blended with pure saffron strands, crushed almonds, pistachios, cardamom, and rose water.",
+    "price": 90,
+    "rating": 4.9,
+    "reviewCount": 890,
+    "isVeg": true,
+    "isBestseller": true,
+    "spicyLevel": 0,
+    "image": "https://images.unsplash.com/photo-1572490122747-3968b75cc699?auto=format&fit=crop&w=700&q=80",
+    "sizes": [
+      { "name": "Regular (300ml)", "price": 0 }
+    ],
+    "addons": []
+  },
+  {
+    "id": "bev-03",
+    "categoryId": "beverages",
+    "name": "Masala Chaas (Spiced Buttermilk)",
+    "tagline": "Refreshing desi curd digestif",
+    "description": "Churned cold buttermilk tempered with roasted cumin, rock salt, fresh mint, and ginger extract.",
+    "price": 30,
+    "rating": 4.8,
+    "reviewCount": 1020,
+    "isVeg": true,
+    "isBestseller": false,
+    "spicyLevel": 1,
+    "image": "https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?auto=format&fit=crop&w=700&q=80",
+    "sizes": [
+      { "name": "Glass (300ml)", "price": 0 }
+    ],
+    "addons": []
+  },
+  {
+    "id": "bev-04",
+    "categoryId": "beverages",
+    "name": "Kulhad Masala Chai",
+    "tagline": "Brewed with ginger, cardamom & lemongrass",
+    "description": "Strong Assam tea boiled with crushed ginger, cardamom, and lemongrass, served steaming hot in an earthen clay kulhad.",
+    "price": 25,
+    "rating": 4.9,
+    "reviewCount": 1580,
+    "isVeg": true,
+    "isBestseller": false,
+    "spicyLevel": 1,
+    "image": "https://images.unsplash.com/photo-1544787219-7f47ccb76574?auto=format&fit=crop&w=700&q=80",
+    "sizes": [
+      { "name": "Kulhad (150ml)", "price": 0 }
+    ],
+    "addons": []
+  },
+  {
+    "id": "bev-05",
+    "categoryId": "beverages",
+    "name": "Fresh Nimbu Shikanji Soda",
+    "tagline": "Zesty Indian lemonade with soda",
+    "description": "Freshly squeezed lemon juice, black salt, secret roasted masala, and crushed mint with chilled sparkling soda.",
+    "price": 40,
+    "rating": 4.7,
+    "reviewCount": 680,
+    "isVeg": true,
+    "isBestseller": false,
+    "spicyLevel": 0,
+    "image": "https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?auto=format&fit=crop&w=700&q=80",
+    "sizes": [
+      { "name": "Regular (300ml)", "price": 0 }
+    ],
+    "addons": []
+  },
+  {
+    "id": "des-01",
+    "categoryId": "desserts",
+    "name": "Hot Gulab Jamun with Rabdi",
+    "tagline": "Khoya dumplings soaked in saffron syrup with malai rabdi",
+    "description": "Two warm golden milk solid dumplings soaked in cardamom saffron syrup, rested on a bed of chilled thick Malai Rabdi.",
+    "price": 85,
+    "rating": 4.9,
+    "reviewCount": 940,
+    "isVeg": true,
+    "isBestseller": true,
+    "spicyLevel": 0,
+    "image": "https://images.unsplash.com/photo-1589301760014-d929f3979dbc?auto=format&fit=crop&w=700&q=80",
+    "sizes": [
+      { "name": "Portion (2 pcs)", "price": 0 }
+    ],
+    "addons": []
+  },
+  {
+    "id": "des-02",
+    "categoryId": "desserts",
+    "name": "Matka Kulfi Special",
+    "tagline": "Slow-reduced earthen pot kulfi",
+    "description": "Traditional earthen pot kulfi infused with cardamom, saffron, pistachios, and almonds.",
+    "price": 60,
+    "rating": 4.8,
+    "reviewCount": 790,
+    "isVeg": true,
+    "isBestseller": false,
+    "spicyLevel": 0,
+    "image": "https://images.unsplash.com/photo-1501443762994-82bd5dace89a?auto=format&fit=crop&w=700&q=80",
+    "sizes": [
+      { "name": "1 Matka", "price": 0 }
+    ],
+    "addons": []
+  },
+  {
+    "id": "des-03",
+    "categoryId": "desserts",
+    "name": "Royal Falooda Delight",
+    "tagline": "Rose syrup, sabja seeds, kulfi & vermicelli",
+    "description": "Layers of aromatic rose syrup, soaked basil seeds, thin vermicelli noodles, chilled milk topped with a scoop of kulfi ice cream.",
+    "price": 110,
+    "rating": 4.8,
+    "reviewCount": 720,
+    "isVeg": true,
+    "isBestseller": false,
+    "spicyLevel": 0,
+    "image": "https://images.unsplash.com/photo-1563805042-7684c019e1cb?auto=format&fit=crop&w=700&q=80",
+    "sizes": [
+      { "name": "Tall Glass", "price": 0 }
+    ],
+    "addons": []
+  }
+]

@@ -1,0 +1,134 @@
+/* Annapurna's Rajubhai Dabeliwale - Authentic Brand Palette derived from color pallete.pdf */
+.order-app {
+  /* Website palette (see design.md): the app uses the same ten tokens, nothing new. */
+  --brand-red: #FF0917;
+  --brand-yellow: #FFDF54;
+  --brand-peach: #FFD8B4;
+  --brand-orange: #F67D00;
+  --brand-maroon: #904137;
+
+  /* Semantic UI Tokens */
+  --primary: var(--brand-red);
+  --primary-hover: var(--brand-maroon);
+  --secondary: var(--brand-orange);
+  --accent-yellow: var(--brand-yellow);
+  --accent-maroon: var(--brand-maroon);
+  --accent-peach: var(--brand-peach);
+
+  /* Surfaces: paper-2 page, paper cards (the site's gallery + card pairing) */
+  --bg-page: #F4EADC;
+  --bg-surface: #FBF6EF;
+  --bg-soft: #F4EADC;
+  --bg-card: #FBF6EF;
+  --bg-maroon-dark: #2B1712;
+
+  /* Text */
+  --text-dark: #2B1712;
+  --text-muted: #7a5f56;
+  --text-light: #7a5f56;
+  --text-white: #FBF6EF;
+
+  /* Lines and warm shadows */
+  --border-subtle: rgba(43, 23, 18, 0.14);
+  --border-brand: rgba(43, 23, 18, 0.14);
+  --border-focus: var(--brand-red);
+
+  --shadow-sm: 0 2px 8px rgba(43, 23, 18, 0.06);
+  --shadow-md: 0 8px 20px rgba(43, 23, 18, 0.1);
+  --shadow-lg: 0 16px 32px rgba(43, 23, 18, 0.14);
+  --shadow-modal: 0 22px 44px rgba(43, 23, 18, 0.28);
+
+  /* Radii: cards 18-20px like the site */
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+  --radius-xl: 28px;
+  --radius-full: 9999px;
+
+  /* One font family, like the site */
+  --font-sans: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-serif: var(--font-sans);
+}
+
+:where(.order-app, .order-app *) {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.order-app {
+  font-family: var(--font-sans);
+  background-color: var(--bg-page);
+  color: var(--text-dark);
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  min-height: 100vh;
+  overflow-x: clip; /* not hidden: that would break the sticky category list and cart */
+}
+
+:where(.order-app) h1, :where(.order-app) h2, :where(.order-app) h3, :where(.order-app) h4, :where(.order-app) h5, :where(.order-app) h6 {
+  font-family: var(--font-serif);
+  color: var(--text-dark);
+  font-weight: 700;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+}
+
+:where(.order-app) a {
+  color: inherit;
+  text-decoration: none;
+}
+
+:where(.order-app) button {
+  cursor: pointer;
+  border: none;
+  background: none;
+  font-family: inherit;
+}
+
+:where(.order-app) input, :where(.order-app) select, :where(.order-app) textarea {
+  font-family: inherit;
+  color: var(--text-dark);
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-page);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--brand-maroon);
+  border-radius: var(--radius-full);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--brand-red);
+}
+
+/* Crisp non-glowing animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes popIn {
+  0% { transform: scale(0.96); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes slideInRight {
+  from { transform: translateX(100%); }
+  to { transform: translateX(0); }
+}
+
+.animate-pop {
+  animation: popIn 0.22s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-fade {
+  animation: fadeIn 0.18s ease-out forwards;
+}

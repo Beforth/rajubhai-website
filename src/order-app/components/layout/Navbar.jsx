@@ -1,0 +1,286 @@
+import React, { useState } from 'react';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
+import { ShoppingBag, User, Phone, Menu as MenuIcon, X, Sparkles, Clock } from 'lucide-react';
+import { useCart } from '../../context/CartContext';
+import { useAuth } from '../../context/AuthContext';
+import restaurantData from '../../data/restaurant.json';
+
+export const Navbar = () => {
+  const { itemCount, grandTotal, setIsCartDrawerOpen } = useCart();
+  const { user, isAuthenticated } = useAuth();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const navigate = useNavigate();
+
+  return (
+    <div
+      role="navigation"
+      aria-label="Ordering"
+      style={{
+        position: 'relative',
+        zIndex: 900,
+        backgroundColor: 'var(--bg-card)',
+        borderBottom: '2px solid rgba(255, 9, 23, 0.15)',
+        boxShadow: '0 4px 18px rgba(43, 23, 18, 0.06)',
+      }}
+    >
+      {/* Top Brand Notification Bar */}
+      <div
+        style={{
+          backgroundColor: 'var(--bg-maroon-dark)',
+          color: 'var(--text-white)',
+          padding: '6px 0',
+          fontSize: '0.8rem',
+          fontWeight: 600,
+        }}
+      >
+        <div
+          style={{
+            maxWidth: '1400px',
+            margin: '0 auto',
+            padding: '0 20px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            flexWrap: 'wrap',
+            gap: 8,
+          }}
+        >
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+            <span
+              style={{
+                backgroundColor: 'var(--brand-yellow)',
+                color: 'var(--brand-maroon)',
+                fontSize: '0.72rem',
+                fontWeight: 800,
+                padding: '2px 8px',
+                borderRadius: 'var(--radius-full)',
+                textTransform: 'uppercase',
+              }}
+            >
+              Since 1987
+            </span>
+            <span style={{ opacity: 0.95 }}>
+              Kitchen Open • {restaurantData.operatingHoursDisplay}
+            </span>
+          </div>
+
+          <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+            <span style={{ opacity: 0.85, fontSize: '0.78rem' }}>
+              FSSAI Lic: {restaurantData.fssai}
+            </span>
+            <a
+              href={`tel:${restaurantData.contactPhone}`}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: 5,
+                color: 'var(--brand-yellow)',
+                fontWeight: 700,
+              }}
+            >
+              <Phone size={13} />
+              <span>{restaurantData.contactPhone}</span>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      {/* Main Navbar Row */}
+      <div
+        style={{
+          maxWidth: '1400px',
+          margin: '0 auto',
+          padding: '0 20px',
+          height: '78px',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+        }}
+      >
+        {/* Center Desktop Navigation */}
+        <nav
+          style={{
+            display: 'none',
+            alignItems: 'center',
+            gap: '8px',
+            backgroundColor: 'var(--bg-soft)',
+            padding: '5px 8px',
+            borderRadius: 'var(--radius-full)',
+            border: '1px solid var(--border-subtle)',
+          }}
+          className="desktop-nav-menu"
+        >
+          <NavLink
+            to="/"
+            end
+            style={({ isActive }) => ({
+              padding: '8px 20px',
+              borderRadius: 'var(--radius-full)',
+              fontSize: '0.92rem',
+              fontWeight: 700,
+              color: isActive ? 'var(--text-white)' : 'var(--brand-maroon)',
+              backgroundColor: isActive ? 'var(--brand-red)' : 'transparent',
+              transition: 'all 0.2s ease',
+            })}
+          >
+            Order Menu
+          </NavLink>
+          <NavLink
+            to="/orders"
+            style={({ isActive }) => ({
+              padding: '8px 20px',
+              borderRadius: 'var(--radius-full)',
+              fontSize: '0.92rem',
+              fontWeight: 700,
+              color: isActive ? 'var(--text-white)' : 'var(--brand-maroon)',
+              backgroundColor: isActive ? 'var(--brand-red)' : 'transparent',
+              transition: 'all 0.2s ease',
+            })}
+          >
+            Track Order
+          </NavLink>
+        </nav>
+
+        {/* Right Action Buttons */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+          {isAuthenticated ? (
+            <Link
+              to="/profile"
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: 8,
+                backgroundColor: 'var(--bg-soft)',
+                color: 'var(--brand-maroon)',
+                padding: '9px 18px',
+                borderRadius: 'var(--radius-full)',
+                fontWeight: 700,
+                fontSize: '0.9rem',
+                border: '1px solid var(--border-subtle)',
+              }}
+            >
+              <User size={16} color="var(--brand-red)" />
+              <span>{user?.name?.split(' ')[0] || 'Profile'}</span>
+            </Link>
+          ) : (
+            <Link
+              to="/login"
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: 6,
+                backgroundColor: 'transparent',
+                color: 'var(--brand-maroon)',
+                border: '1.5px solid var(--brand-maroon)',
+                padding: '8px 18px',
+                borderRadius: 'var(--radius-full)',
+                fontWeight: 700,
+                fontSize: '0.9rem',
+                transition: 'all 0.2s',
+              }}
+            >
+              <User size={16} />
+              <span>Login</span>
+            </Link>
+          )}
+
+          {/* High-visibility Cart Trigger Button */}
+          <button
+            onClick={() => setIsCartDrawerOpen(true)}
+            style={{
+              backgroundColor: 'var(--brand-red)',
+              color: 'var(--text-white)',
+              padding: '10px 20px',
+              borderRadius: 'var(--radius-full)',
+              display: 'flex',
+              alignItems: 'center',
+              gap: 10,
+              fontWeight: 800,
+              fontSize: '0.92rem',
+              boxShadow: '0 4px 14px rgba(255, 9, 23, 0.35)',
+              transition: 'all 0.2s ease',
+            }}
+            aria-label="View Cart"
+          >
+            <ShoppingBag size={18} />
+            <span>Cart</span>
+            {itemCount > 0 && (
+              <span
+                style={{
+                  backgroundColor: 'var(--brand-yellow)',
+                  color: 'var(--brand-maroon)',
+                  fontSize: '0.78rem',
+                  fontWeight: 900,
+                  borderRadius: 'var(--radius-full)',
+                  padding: '2px 8px',
+                }}
+              >
+                {itemCount}
+              </span>
+            )}
+          </button>
+
+          {/* Mobile hamburger */}
+          <button
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              color: 'var(--brand-maroon)',
+              padding: 6,
+            }}
+            className="mobile-hamburger-btn"
+            aria-label="Toggle Navigation"
+          >
+            {mobileMenuOpen ? <X size={26} /> : <MenuIcon size={26} />}
+          </button>
+        </div>
+      </div>
+
+      {/* Mobile Drawer Menu */}
+      {mobileMenuOpen && (
+        <div
+          style={{
+            backgroundColor: 'var(--bg-card)',
+            borderTop: '1px solid var(--border-subtle)',
+            padding: '16px 20px',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: 14,
+            boxShadow: 'var(--shadow-md)',
+          }}
+        >
+          <Link
+            to="/"
+            onClick={() => setMobileMenuOpen(false)}
+            style={{ fontWeight: 700, fontSize: '1rem', color: 'var(--brand-maroon)', padding: '6px 0' }}
+          >
+            Full Menu & Order
+          </Link>
+          <Link
+            to="/orders"
+            onClick={() => setMobileMenuOpen(false)}
+            style={{ fontWeight: 700, fontSize: '1rem', color: 'var(--brand-maroon)', padding: '6px 0' }}
+          >
+            Track Active Order
+          </Link>
+          <Link
+            to={isAuthenticated ? '/profile' : '/login'}
+            onClick={() => setMobileMenuOpen(false)}
+            style={{ fontWeight: 700, fontSize: '1rem', color: 'var(--brand-red)', padding: '6px 0' }}
+          >
+            {isAuthenticated ? 'My Profile & Addresses' : 'Login / Register'}
+          </Link>
+        </div>
+      )}
+
+      <style>{`
+        @media (min-width: 860px) {
+          .desktop-nav-menu { display: flex !important; }
+          .mobile-hamburger-btn { display: none !important; }
+        }
+      `}</style>
+    </div>
+  );
+};
