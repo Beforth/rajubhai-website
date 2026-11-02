@@ -142,3 +142,12 @@ npm run dev
 npm run build
 ```
 The local server will start at `http://localhost:5173`.
+
+## Routing and deployment
+
+- Fixed routes (`/order`, `/menu`, `/cart`, `/checkout`, `/login`, `/orders`, `/profile`) are built as static pages. `/order/order-status/:id` and unknown paths need the host fallback in `public/_redirects` (`/order/*  /order/index.html  200`, Netlify/Cloudflare Pages syntax). Other hosts need the equivalent rule. In `astro dev` the fallback is handled by a small integration in `astro.config.mjs`.
+- App styles are scoped under `.order-app` (`src/order-app/styles/theme.css`). The site header and footer wrap the app; the app's own navbar is a secondary bar and its footer is not rendered.
+
+## Next step
+
+Replacing the mock data in `src/order-app/services/api.js` with real POS endpoints is a separate spec.

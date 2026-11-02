@@ -1,5 +1,5 @@
 /* Annapurna's Rajubhai Dabeliwale - Authentic Brand Palette derived from color pallete.pdf */
-:root {
+.order-app {
   /* THE PDF COLOR PALETTE (Exact Brand Shades) */
   --brand-red: #E51A1B;       /* Iconic Red from the Logo & palette stripe 1 */
   --brand-yellow: #FFD54F;    /* Rich Golden Yellow from palette stripe 2 */
@@ -50,14 +50,14 @@
   --font-serif: 'Poppins', var(--font-sans);
 }
 
-* {
+:where(.order-app, .order-app *) {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
   -webkit-tap-highlight-color: transparent;
 }
 
-body {
+.order-app {
   font-family: var(--font-sans);
   background-color: var(--bg-page);
   color: var(--text-dark);
@@ -68,26 +68,26 @@ body {
   overflow-x: hidden;
 }
 
-h1, h2, h3, h4, h5, h6 {
+:where(.order-app) h1, :where(.order-app) h2, :where(.order-app) h3, :where(.order-app) h4, :where(.order-app) h5, :where(.order-app) h6 {
   font-family: var(--font-serif);
   color: var(--brand-maroon);
   font-weight: 700;
   line-height: 1.25;
 }
 
-a {
+:where(.order-app) a {
   color: inherit;
   text-decoration: none;
 }
 
-button {
+:where(.order-app) button {
   cursor: pointer;
   border: none;
   background: none;
   font-family: inherit;
 }
 
-input, select, textarea {
+:where(.order-app) input, :where(.order-app) select, :where(.order-app) textarea {
   font-family: inherit;
   color: var(--text-dark);
 }

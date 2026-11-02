@@ -1,7 +1,6 @@
 import React from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { Navbar } from './components/layout/Navbar';
-import { Footer } from './components/layout/Footer';
 import { CartDrawer } from './components/cart/CartDrawer';
 import { StickyMobileCartBar } from './components/cart/StickyMobileCartBar';
 
@@ -16,7 +15,7 @@ import { OrdersProfile } from './pages/OrdersProfile';
 
 export function App() {
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh', backgroundColor: 'var(--bg-main)' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', backgroundColor: 'var(--bg-main)' }}>
       {/* Global Navigation */}
       <Navbar />
 
@@ -40,9 +39,6 @@ export function App() {
 
       {/* Mobile Sticky Order Bar */}
       <StickyMobileCartBar />
-
-      {/* Footer */}
-      <Footer />
     </div>
   );
 }

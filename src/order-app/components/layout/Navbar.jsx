@@ -12,10 +12,11 @@ export const Navbar = () => {
   const navigate = useNavigate();
 
   return (
-    <header
+    <div
+      role="navigation"
+      aria-label="Ordering"
       style={{
-        position: 'sticky',
-        top: 0,
+        position: 'relative',
         zIndex: 900,
         backgroundColor: '#FFFFFF',
         borderBottom: '2px solid rgba(229, 26, 27, 0.15)',
@@ -96,45 +97,6 @@ export const Navbar = () => {
           justifyContent: 'space-between',
         }}
       >
-        {/* Brand Logo & Tagline */}
-        <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
-          <img
-            src="/logo.png"
-            alt="Annapurna's Rajubhai Dabeliwale Logo"
-            style={{
-              width: 52,
-              height: 52,
-              objectFit: 'contain',
-              flexShrink: 0,
-            }}
-          />
-
-          <div>
-            <div
-              style={{
-                fontSize: '1.28rem',
-                fontWeight: 900,
-                color: 'var(--brand-red)',
-                lineHeight: 1.15,
-                letterSpacing: '-0.4px',
-              }}
-            >
-              Annapurna’s Rajubhai
-            </div>
-            <div
-              style={{
-                fontSize: '0.74rem',
-                fontWeight: 800,
-                color: 'var(--brand-maroon)',
-                letterSpacing: '0.8px',
-                textTransform: 'uppercase',
-              }}
-            >
-              Dabeliwale • <span style={{ color: 'var(--brand-orange)', fontStyle: 'italic', textTransform: 'none', fontWeight: 700 }}>Taste The Real</span>
-            </div>
-          </div>
-        </Link>
-
         {/* Center Desktop Navigation */}
         <nav
           style={{
@@ -339,6 +301,6 @@ export const Navbar = () => {
           .mobile-hamburger-btn { display: none !important; }
         }
       `}</style>
-    </header>
+    </div>
   );
 };
