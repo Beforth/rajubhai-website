@@ -12,7 +12,7 @@ export function getStaticPaths() {
 }
 ---
 <Layout title="Order Online | Rajubhai Dabeliwale">
-  <Header showCall={false} />
+  <Header />
   <main>
     <OrderApp client:only="react">
       <div slot="fallback" class="order-loading" role="status" aria-live="polite">
