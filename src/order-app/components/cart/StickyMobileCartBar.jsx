@@ -17,6 +17,7 @@ export const StickyMobileCartBar = () => {
 
   return (
     <div
+      className={location.pathname === '/' ? 'cart-bar-home' : undefined}
       style={{
         position: 'fixed',
         bottom: '20px',

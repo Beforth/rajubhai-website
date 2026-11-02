@@ -35,7 +35,18 @@ export const CartProvider = ({ children }) => {
 
   const [appliedCoupon, setAppliedCoupon] = useState(null);
   const [orderType, setOrderType] = useState('delivery'); // 'delivery' | 'pickup' | 'dinein'
-  const [isCartDrawerOpen, setIsCartDrawerOpen] = useState(false);
+  const [isCartDrawerOpen, setDrawerOpen] = useState(false);
+
+  // Where the in-page cart panel is visible (wide screens on the order page) it stands in
+  // for the drawer: opening the drawer just brings the panel into view instead.
+  const setIsCartDrawerOpen = (open) => {
+    const panel = document.querySelector('[data-cart-panel]');
+    if (open && panel && panel.offsetParent !== null) {
+      panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      return;
+    }
+    setDrawerOpen(open);
+  };
 
   // Sync cart items to localStorage whenever they change
   useEffect(() => {

@@ -151,3 +151,7 @@ The local server will start at `http://localhost:5173`.
 ## Next step
 
 Replacing the mock data in `src/order-app/services/api.js` with real POS endpoints is a separate spec.
+
+## Order page layout
+
+`/order` is the ordering page (`pages/OrderHome.jsx`): categories on the left, the selected category's dishes in the middle, and the cart on the right (`CartPanel`, from 1280px wide). Below 1280px the cart is the slide-in drawer, opened from the bottom bar or the navbar. The selected category lives in the URL (`?category=chaat`); `/order/menu` redirects here and keeps the query. The old marketing home page and `/menu` page were removed; the brand story lives on the main website.

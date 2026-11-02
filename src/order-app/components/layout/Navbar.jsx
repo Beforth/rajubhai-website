@@ -112,20 +112,7 @@ export const Navbar = () => {
         >
           <NavLink
             to="/"
-            style={({ isActive }) => ({
-              padding: '8px 20px',
-              borderRadius: 'var(--radius-full)',
-              fontSize: '0.92rem',
-              fontWeight: 700,
-              color: isActive ? '#FFFFFF' : 'var(--brand-maroon)',
-              backgroundColor: isActive ? 'var(--brand-red)' : 'transparent',
-              transition: 'all 0.2s ease',
-            })}
-          >
-            Home
-          </NavLink>
-          <NavLink
-            to="/menu"
+            end
             style={({ isActive }) => ({
               padding: '8px 20px',
               borderRadius: 'var(--radius-full)',
@@ -266,13 +253,6 @@ export const Navbar = () => {
         >
           <Link
             to="/"
-            onClick={() => setMobileMenuOpen(false)}
-            style={{ fontWeight: 700, fontSize: '1rem', color: 'var(--brand-maroon)', padding: '6px 0' }}
-          >
-            Home
-          </Link>
-          <Link
-            to="/menu"
             onClick={() => setMobileMenuOpen(false)}
             style={{ fontWeight: 700, fontSize: '1rem', color: 'var(--brand-maroon)', padding: '6px 0' }}
           >

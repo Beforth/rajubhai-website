@@ -1,17 +1,19 @@
 import React from 'react';
-import { Routes, Route, Navigate } from 'react-router-dom';
+import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { Navbar } from './components/layout/Navbar';
 import { CartDrawer } from './components/cart/CartDrawer';
 import { StickyMobileCartBar } from './components/cart/StickyMobileCartBar';
 
 // Pages
-import { Home } from './pages/Home';
-import { Menu } from './pages/Menu';
+import { OrderHome } from './pages/OrderHome';
 import { CartPage } from './pages/CartPage';
 import { Checkout } from './pages/Checkout';
 import { OrderTracking } from './pages/OrderTracking';
 import { Login } from './pages/Login';
 import { OrdersProfile } from './pages/OrdersProfile';
+
+// The old /menu page is now the order home; keep ?category= links working.
+const MenuRedirect = () => <Navigate to={{ pathname: '/', search: useLocation().search }} replace />;
 
 export function App() {
   return (
@@ -22,8 +24,8 @@ export function App() {
       {/* Main Content Area */}
       <main style={{ flex: 1 }}>
         <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/menu" element={<Menu />} />
+          <Route path="/" element={<OrderHome />} />
+          <Route path="/menu" element={<MenuRedirect />} />
           <Route path="/cart" element={<CartPage />} />
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/order-status/:orderId" element={<OrderTracking />} />
