@@ -189,8 +189,9 @@ export const Checkout = () => {
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '12px' }}>
                   {[
                     { id: 'delivery', label: 'Door Delivery', icon: Bike },
-                    { id: 'pickup', label: 'Takeaway Counter', icon: Store },
-                    { id: 'dinein', label: 'Dine-In Table', icon: UtensilsCrossed },
+                    // Takeaway and Dine-In are switched off for now; uncomment to bring them back.
+                    // { id: 'pickup', label: 'Takeaway Counter', icon: Store },
+                    // { id: 'dinein', label: 'Dine-In Table', icon: UtensilsCrossed },
                   ].map((mode) => {
                     const isSelected = orderType === mode.id;
                     const Icon = mode.icon;

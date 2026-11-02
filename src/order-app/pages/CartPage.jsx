@@ -100,8 +100,9 @@ export const CartPage = () => {
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '10px' }}>
               {[
                 { id: 'delivery', label: 'Door Delivery' },
-                { id: 'pickup', label: 'Takeaway' },
-                { id: 'dinein', label: 'Dine-In Table' },
+                // Takeaway and Dine-In are switched off for now; uncomment to bring them back.
+                // { id: 'pickup', label: 'Takeaway' },
+                // { id: 'dinein', label: 'Dine-In Table' },
               ].map((type) => {
                 const isSelected = orderType === type.id;
                 return (
