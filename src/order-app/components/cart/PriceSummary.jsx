@@ -160,37 +160,6 @@ export const PriceSummary = ({ showCouponSection = true, compact = false }) => {
               </button>
             </form>
           )}
-
-          <div style={{ display: 'flex', gap: '8px', marginTop: '10px', flexWrap: 'wrap' }}>
-            <span
-              onClick={() => setCouponInput('RAJUBHAI1987')}
-              style={{
-                fontSize: '0.74rem',
-                backgroundColor: 'var(--brand-yellow)',
-                color: 'var(--brand-maroon)',
-                fontWeight: 800,
-                padding: '3px 10px',
-                borderRadius: 'var(--radius-full)',
-                cursor: 'pointer',
-              }}
-            >
-              RAJUBHAI1987 (20% OFF)
-            </span>
-            <span
-              onClick={() => setCouponInput('FREESHIP')}
-              style={{
-                fontSize: '0.74rem',
-                backgroundColor: 'var(--bg-soft)',
-                color: 'var(--brand-maroon)',
-                fontWeight: 800,
-                padding: '3px 10px',
-                borderRadius: 'var(--radius-full)',
-                cursor: 'pointer',
-              }}
-            >
-              FREESHIP
-            </span>
-          </div>
         </div>
       )}
 
