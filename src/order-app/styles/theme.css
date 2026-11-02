@@ -1,53 +1,53 @@
 /* Annapurna's Rajubhai Dabeliwale - Authentic Brand Palette derived from color pallete.pdf */
 .order-app {
-  /* THE PDF COLOR PALETTE (Exact Brand Shades) */
-  --brand-red: #E51A1B;       /* Iconic Red from the Logo & palette stripe 1 */
-  --brand-yellow: #FFD54F;    /* Rich Golden Yellow from palette stripe 2 */
-  --brand-peach: #FFD8B4;     /* Warm Creamy Peach from palette stripe 3 */
-  --brand-orange: #F57C00;    /* Vibrant Spiced Orange from palette stripe 4 */
-  --brand-maroon: #853A30;    /* Deep Red-Brown / Maroon / Footer & Heading Shade from stripe 5 */
+  /* Website palette (see design.md): the app uses the same ten tokens, nothing new. */
+  --brand-red: #FF0917;
+  --brand-yellow: #FFDF54;
+  --brand-peach: #FFD8B4;
+  --brand-orange: #F67D00;
+  --brand-maroon: #904137;
 
   /* Semantic UI Tokens */
   --primary: var(--brand-red);
-  --primary-hover: #C91415;
+  --primary-hover: var(--brand-maroon);
   --secondary: var(--brand-orange);
   --accent-yellow: var(--brand-yellow);
   --accent-maroon: var(--brand-maroon);
   --accent-peach: var(--brand-peach);
 
-  /* Backgrounds & Surfaces */
-  --bg-page: #FFFBF7;         /* Delicate warm ivory background with ample breathing room */
-  --bg-surface: #FFFFFF;
-  --bg-soft: #FFF4E8;         /* Peach-tinted soft card background */
-  --bg-card: #FFFFFF;
-  --bg-maroon-dark: #6D2E26;   /* Deep rich footer & premium elements */
+  /* Surfaces: paper-2 page, paper cards (the site's gallery + card pairing) */
+  --bg-page: #F4EADC;
+  --bg-surface: #FBF6EF;
+  --bg-soft: #F4EADC;
+  --bg-card: #FBF6EF;
+  --bg-maroon-dark: #2B1712;
 
-  /* Text Colors */
-  --text-dark: #271714;       /* Deep rich dark for ultra-crisp reading */
-  --text-muted: #6B5652;      /* Warm muted text */
-  --text-light: #9B8783;
-  --text-white: #FFFFFF;
+  /* Text */
+  --text-dark: #2B1712;
+  --text-muted: #7a5f56;
+  --text-light: #7a5f56;
+  --text-white: #FBF6EF;
 
-  /* Clean, crisp non-glowing borders & shadows */
-  --border-subtle: #EEDFD5;
-  --border-brand: rgba(133, 58, 48, 0.16);
+  /* Lines and warm shadows */
+  --border-subtle: rgba(43, 23, 18, 0.14);
+  --border-brand: rgba(43, 23, 18, 0.14);
   --border-focus: var(--brand-red);
 
-  --shadow-sm: 0 1px 4px rgba(0, 0, 0, 0.04);
-  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.06);
-  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.08);
-  --shadow-modal: 0 16px 40px rgba(0, 0, 0, 0.18);
+  --shadow-sm: 0 2px 8px rgba(43, 23, 18, 0.06);
+  --shadow-md: 0 8px 20px rgba(43, 23, 18, 0.1);
+  --shadow-lg: 0 16px 32px rgba(43, 23, 18, 0.14);
+  --shadow-modal: 0 22px 44px rgba(43, 23, 18, 0.28);
 
-  /* Radii */
+  /* Radii: cards 18-20px like the site */
   --radius-sm: 8px;
   --radius-md: 14px;
   --radius-lg: 20px;
   --radius-xl: 28px;
   --radius-full: 9999px;
 
-  /* Fonts */
-  --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  --font-serif: 'Poppins', var(--font-sans);
+  /* One font family, like the site */
+  --font-sans: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-serif: var(--font-sans);
 }
 
 :where(.order-app, .order-app *) {
@@ -65,14 +65,15 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   min-height: 100vh;
-  overflow-x: hidden;
+  overflow-x: clip; /* not hidden: that would break the sticky category list and cart */
 }
 
 :where(.order-app) h1, :where(.order-app) h2, :where(.order-app) h3, :where(.order-app) h4, :where(.order-app) h5, :where(.order-app) h6 {
   font-family: var(--font-serif);
-  color: var(--brand-maroon);
+  color: var(--text-dark);
   font-weight: 700;
   line-height: 1.25;
+  letter-spacing: -0.01em;
 }
 
 :where(.order-app) a {
@@ -101,11 +102,11 @@
   background: var(--bg-page);
 }
 ::-webkit-scrollbar-thumb {
-  background: var(--brand-peach);
+  background: var(--brand-maroon);
   border-radius: var(--radius-full);
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--brand-orange);
+  background: var(--brand-red);
 }
 
 /* Crisp non-glowing animations */

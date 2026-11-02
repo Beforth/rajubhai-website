@@ -47,7 +47,7 @@ export const PriceSummary = ({ showCouponSection = true }) => {
   return (
     <div
       style={{
-        backgroundColor: '#FFFFFF',
+        backgroundColor: 'var(--bg-card)',
         borderRadius: 'var(--radius-lg)',
         padding: '24px',
         border: '1.5px solid var(--border-subtle)',
@@ -141,7 +141,7 @@ export const PriceSummary = ({ showCouponSection = true }) => {
                 disabled={loadingCoupon || !couponInput.trim()}
                 style={{
                   backgroundColor: 'var(--brand-maroon)',
-                  color: '#FFFFFF',
+                  color: 'var(--text-white)',
                   padding: '10px 20px',
                   borderRadius: 'var(--radius-full)',
                   fontWeight: 800,

@@ -155,3 +155,7 @@ Replacing the mock data in `src/order-app/services/api.js` with real POS endpoin
 ## Order page layout
 
 `/order` is the ordering page (`pages/OrderHome.jsx`): categories on the left, the selected category's dishes in the middle, and the cart on the right (`CartPanel`, from 1280px wide). Below 1280px the cart is the slide-in drawer, opened from the bottom bar or the navbar. The selected category lives in the URL (`?category=chaat`); `/order/menu` redirects here and keeps the query. The old marketing home page and `/menu` page were removed; the brand story lives on the main website.
+
+## Theme
+
+The app uses the website's design tokens, nothing new: `src/order-app/styles/theme.css` maps `--brand-*`, `--bg-*`, `--text-*` and the shadows onto the site's ten colours (`design.md`), with Inter as the only font. Cards are `--paper` on a `--paper-2` page, buttons are the site's uppercase pill (red, maroon on hover), and shadows are warm brown, never black. Add new colours there, not as hex values in components.

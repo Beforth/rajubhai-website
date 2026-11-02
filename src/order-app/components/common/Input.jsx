@@ -32,7 +32,7 @@ export const Input = ({
           position: 'relative',
           display: 'flex',
           alignItems: 'center',
-          backgroundColor: '#FFFFFF',
+          backgroundColor: 'var(--bg-card)',
           border: error ? '1.5px solid var(--red)' : '1.5px solid var(--border-light)',
           borderRadius: 'var(--radius-md)',
           transition: 'border-color 0.2s ease, box-shadow 0.2s ease',

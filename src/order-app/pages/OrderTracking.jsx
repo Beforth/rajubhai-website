@@ -61,14 +61,14 @@ export const OrderTracking = () => {
       {/* Top Banner Confirmation */}
       <div
         style={{
-          backgroundColor: '#FFFFFF',
+          backgroundColor: 'var(--bg-card)',
           borderRadius: 'var(--radius-xl)',
           padding: 'clamp(24px, 4vw, 40px)',
           border: '1.5px solid var(--border-subtle)',
           boxShadow: 'var(--shadow-md)',
           marginBottom: '32px',
           textAlign: 'center',
-          background: 'linear-gradient(180deg, #FFFFFF 0%, var(--bg-soft) 100%)',
+          background: 'linear-gradient(180deg, var(--bg-card) 0%, var(--bg-soft) 100%)',
         }}
       >
         <div
@@ -82,7 +82,7 @@ export const OrderTracking = () => {
             alignItems: 'center',
             justifyContent: 'center',
             marginBottom: '12px',
-            boxShadow: '0 4px 16px rgba(255, 213, 79, 0.4)',
+            boxShadow: '0 4px 16px rgba(255, 223, 84, 0.4)',
           }}
         >
           <CheckCircle size={38} color="var(--brand-red)" strokeWidth={2.5} />
@@ -116,7 +116,7 @@ export const OrderTracking = () => {
         <div
           className="receipt-paper"
           style={{
-            backgroundColor: '#FFFFFF',
+            backgroundColor: 'var(--bg-card)',
             borderRadius: 'var(--radius-lg)',
             padding: '28px',
             border: '1.5px solid var(--border-subtle)',
@@ -260,7 +260,7 @@ export const OrderTracking = () => {
         <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
           <div
             style={{
-              backgroundColor: '#FFFFFF',
+              backgroundColor: 'var(--bg-card)',
               borderRadius: 'var(--radius-lg)',
               padding: '24px',
               border: '1.5px solid var(--border-subtle)',

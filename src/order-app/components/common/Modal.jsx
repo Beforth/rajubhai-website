@@ -31,7 +31,7 @@ export const Modal = ({
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: 'rgba(42, 23, 19, 0.65)',
+        backgroundColor: 'rgba(43, 23, 18, 0.65)',
         backdropFilter: 'blur(3px)',
         padding: '16px',
         animation: 'fadeIn 0.2s ease-out',
@@ -40,14 +40,14 @@ export const Modal = ({
     >
       <div
         style={{
-          backgroundColor: '#FFFFFF',
+          backgroundColor: 'var(--bg-card)',
           borderRadius: 'var(--radius-lg)',
           width: '100%',
           maxWidth,
           maxHeight: '90vh',
           display: 'flex',
           flexDirection: 'column',
-          boxShadow: '0 20px 40px rgba(0,0,0,0.25)',
+          boxShadow: '0 20px 40px rgba(43, 23, 18,0.25)',
           overflow: 'hidden',
           position: 'relative',
         }}

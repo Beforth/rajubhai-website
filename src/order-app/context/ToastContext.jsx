@@ -60,7 +60,7 @@ export const ToastProvider = ({ children }) => {
                 border,
                 padding: '12px 18px',
                 borderRadius: 'var(--radius-md)',
-                boxShadow: '0 8px 24px rgba(0,0,0,0.25)',
+                boxShadow: '0 8px 24px rgba(43, 23, 18,0.25)',
                 fontSize: '0.92rem',
                 fontWeight: 600,
                 display: 'flex',

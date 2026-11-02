@@ -87,7 +87,7 @@ export const CartPage = () => {
           {/* Order Type Switcher */}
           <div
             style={{
-              backgroundColor: '#FFFFFF',
+              backgroundColor: 'var(--bg-card)',
               borderRadius: 'var(--radius-lg)',
               padding: '20px',
               border: '1.5px solid var(--border-subtle)',
@@ -115,7 +115,7 @@ export const CartPage = () => {
                       fontSize: '0.88rem',
                       textAlign: 'center',
                       backgroundColor: isSelected ? 'var(--brand-red)' : 'var(--bg-soft)',
-                      color: isSelected ? '#FFFFFF' : 'var(--brand-maroon)',
+                      color: isSelected ? 'var(--text-white)' : 'var(--brand-maroon)',
                       border: isSelected ? '1.5px solid var(--brand-red)' : '1px solid var(--border-subtle)',
                       transition: 'all 0.15s',
                     }}
@@ -130,7 +130,7 @@ export const CartPage = () => {
           {/* Cart Items List */}
           <div
             style={{
-              backgroundColor: '#FFFFFF',
+              backgroundColor: 'var(--bg-card)',
               borderRadius: 'var(--radius-lg)',
               padding: '24px',
               border: '1.5px solid var(--border-subtle)',

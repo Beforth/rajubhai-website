@@ -40,10 +40,10 @@ export const CategoryTabs = ({
           fontWeight: 600,
           fontSize: '0.88rem',
           transition: 'all 0.2s ease',
-          backgroundColor: activeCategory === 'all' ? 'var(--text-primary)' : '#FFFFFF',
-          color: activeCategory === 'all' ? '#FFFFFF' : 'var(--text-secondary)',
+          backgroundColor: activeCategory === 'all' ? 'var(--text-primary)' : 'var(--bg-card)',
+          color: activeCategory === 'all' ? 'var(--text-white)' : 'var(--text-secondary)',
           border: activeCategory === 'all' ? '1px solid var(--text-primary)' : '1px solid var(--border-light)',
-          boxShadow: activeCategory === 'all' ? '0 2px 8px rgba(0,0,0,0.12)' : 'none',
+          boxShadow: activeCategory === 'all' ? '0 2px 8px rgba(43, 23, 18,0.12)' : 'none',
         }}
       >
         <Utensils size={15} />
@@ -68,13 +68,13 @@ export const CategoryTabs = ({
               fontWeight: 600,
               fontSize: '0.88rem',
               transition: 'all 0.2s ease',
-              backgroundColor: isActive ? 'var(--text-primary)' : '#FFFFFF',
-              color: isActive ? '#FFFFFF' : 'var(--text-secondary)',
+              backgroundColor: isActive ? 'var(--text-primary)' : 'var(--bg-card)',
+              color: isActive ? 'var(--text-white)' : 'var(--text-secondary)',
               border: isActive ? '1px solid var(--text-primary)' : '1px solid var(--border-light)',
-              boxShadow: isActive ? '0 2px 8px rgba(0,0,0,0.12)' : 'none',
+              boxShadow: isActive ? '0 2px 8px rgba(43, 23, 18,0.12)' : 'none',
             }}
           >
-            <IconComponent size={15} color={isActive ? '#FFFFFF' : 'var(--orange)'} />
+            <IconComponent size={15} color={isActive ? 'var(--text-white)' : 'var(--orange)'} />
             <span>{cat.name}</span>
             <span
               style={{

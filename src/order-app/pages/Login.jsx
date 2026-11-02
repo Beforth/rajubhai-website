@@ -64,9 +64,9 @@ export const Login = () => {
         style={{
           width: '100%',
           maxWidth: '960px',
-          backgroundColor: '#FFFFFF',
+          backgroundColor: 'var(--bg-card)',
           borderRadius: 'var(--radius-xl)',
-          boxShadow: '0 20px 50px rgba(133, 58, 48, 0.12)',
+          boxShadow: '0 20px 50px rgba(43, 23, 18, 0.12)',
           border: '1.5px solid var(--border-subtle)',
           overflow: 'hidden',
           display: 'grid',
@@ -76,8 +76,8 @@ export const Login = () => {
         {/* Left Side: Aesthetic Brand Card with Street-Food Story & Images */}
         <div
           style={{
-            background: 'linear-gradient(145deg, var(--bg-maroon-dark) 0%, #4D1A14 100%)',
-            color: '#FFFFFF',
+            background: 'linear-gradient(145deg, var(--bg-maroon-dark) 0%, #2B1712 100%)',
+            color: 'var(--text-white)',
             padding: 'clamp(32px, 5vw, 48px)',
             display: 'flex',
             flexDirection: 'column',
@@ -95,7 +95,7 @@ export const Login = () => {
               width: 180,
               height: 180,
               borderRadius: '50%',
-              backgroundColor: 'rgba(255, 213, 79, 0.08)',
+              backgroundColor: 'rgba(255, 223, 84, 0.08)',
               pointerEvents: 'none',
             }}
           />
@@ -114,7 +114,7 @@ export const Login = () => {
                 }}
               />
               <div>
-                <h3 style={{ color: '#FFFFFF', fontSize: '1.25rem', margin: 0, fontWeight: 900 }}>
+                <h3 style={{ color: 'var(--text-white)', fontSize: '1.25rem', margin: 0, fontWeight: 900 }}>
                   Annapurna’s Rajubhai
                 </h3>
                 <span style={{ color: 'var(--brand-yellow)', fontSize: '0.74rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.8px' }}>
@@ -123,7 +123,7 @@ export const Login = () => {
               </div>
             </div>
 
-            <h2 style={{ fontSize: '1.8rem', color: '#FFFFFF', lineHeight: 1.25, marginBottom: 14, fontWeight: 900 }}>
+            <h2 style={{ fontSize: '1.8rem', color: 'var(--text-white)', lineHeight: 1.25, marginBottom: 14, fontWeight: 900 }}>
               Taste 39+ Years of Culinary Heritage.
             </h2>
             <p style={{ color: 'var(--brand-peach)', fontSize: '0.94rem', lineHeight: 1.6, marginBottom: 24 }}>

@@ -32,10 +32,10 @@ export const StickyMobileCartBar = () => {
         onClick={() => setIsCartDrawerOpen(true)}
         style={{
           backgroundColor: 'var(--brand-red)',
-          color: '#FFFFFF',
+          color: 'var(--text-white)',
           padding: '14px 22px',
           borderRadius: 'var(--radius-full)',
-          boxShadow: '0 8px 28px rgba(229, 26, 27, 0.45)',
+          boxShadow: '0 8px 28px rgba(255, 9, 23, 0.45)',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',

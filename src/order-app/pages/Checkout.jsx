@@ -125,7 +125,7 @@ export const Checkout = () => {
           particleCount: 100,
           spread: 80,
           origin: { y: 0.6 },
-          colors: ['#E51A1B', '#FFD54F', '#F57C00', '#853A30'],
+          colors: ['#FF0917', '#FFDF54', '#F67D00', '#904137'],
         });
       } catch (e) {}
 
@@ -175,7 +175,7 @@ export const Checkout = () => {
               {/* 1. Dining Mode */}
               <div
                 style={{
-                  backgroundColor: '#FFFFFF',
+                  backgroundColor: 'var(--bg-card)',
                   borderRadius: 'var(--radius-lg)',
                   padding: '24px',
                   border: '1.5px solid var(--border-subtle)',
@@ -207,7 +207,7 @@ export const Checkout = () => {
                           alignItems: 'center',
                           gap: 10,
                           textAlign: 'center',
-                          backgroundColor: isSelected ? 'var(--bg-soft)' : '#FFFFFF',
+                          backgroundColor: isSelected ? 'var(--bg-soft)' : 'var(--bg-card)',
                           border: isSelected ? '2px solid var(--brand-red)' : '1px solid var(--border-subtle)',
                           color: isSelected ? 'var(--brand-red)' : 'var(--brand-maroon)',
                           fontWeight: 800,
@@ -226,7 +226,7 @@ export const Checkout = () => {
               {/* 2. Contact & Address */}
               <div
                 style={{
-                  backgroundColor: '#FFFFFF',
+                  backgroundColor: 'var(--bg-card)',
                   borderRadius: 'var(--radius-lg)',
                   padding: '24px',
                   border: '1.5px solid var(--border-subtle)',
@@ -328,7 +328,7 @@ export const Checkout = () => {
               {/* 3. Payment Method */}
               <div
                 style={{
-                  backgroundColor: '#FFFFFF',
+                  backgroundColor: 'var(--bg-card)',
                   borderRadius: 'var(--radius-lg)',
                   padding: '24px',
                   border: '1.5px solid var(--border-subtle)',
@@ -357,7 +357,7 @@ export const Checkout = () => {
                           justifyContent: 'space-between',
                           padding: '16px',
                           borderRadius: 'var(--radius-md)',
-                          backgroundColor: isSelected ? 'var(--bg-soft)' : '#FFFFFF',
+                          backgroundColor: isSelected ? 'var(--bg-soft)' : 'var(--bg-card)',
                           border: isSelected ? '2px solid var(--brand-red)' : '1px solid var(--border-subtle)',
                           cursor: 'pointer',
                           transition: 'all 0.15s ease',
@@ -462,7 +462,7 @@ export const Checkout = () => {
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  boxShadow: '0 4px 16px rgba(255, 213, 79, 0.4)',
+                  boxShadow: '0 4px 16px rgba(255, 223, 84, 0.4)',
                   marginBottom: 12,
                 }}
               >

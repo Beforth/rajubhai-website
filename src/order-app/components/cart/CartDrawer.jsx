@@ -64,7 +64,7 @@ export const CartDrawer = () => {
           <div style={{ flex: 1, padding: '16px 20px', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: 16 }}>
             <div
               style={{
-                backgroundColor: '#FFFFFF',
+                backgroundColor: 'var(--bg-card)',
                 borderRadius: 'var(--radius-lg)',
                 padding: '16px 18px',
                 border: '1px solid var(--border-subtle)',
@@ -96,8 +96,8 @@ export const CartDrawer = () => {
             style={{
               padding: '16px 20px',
               borderTop: '2px solid var(--border-subtle)',
-              backgroundColor: '#FFFFFF',
-              boxShadow: '0 -6px 20px rgba(133, 58, 48, 0.08)',
+              backgroundColor: 'var(--bg-card)',
+              boxShadow: '0 -6px 20px rgba(43, 23, 18, 0.08)',
             }}
           >
             <div
@@ -123,7 +123,7 @@ export const CartDrawer = () => {
                 style={{
                   padding: '13px 26px',
                   fontSize: '1rem',
-                  boxShadow: '0 4px 16px rgba(229, 26, 27, 0.35)',
+                  boxShadow: '0 4px 16px rgba(255, 9, 23, 0.35)',
                 }}
               >
                 <span>Proceed to Checkout</span>

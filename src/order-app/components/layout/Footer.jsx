@@ -8,7 +8,7 @@ export const Footer = () => {
     <footer
       style={{
         backgroundColor: 'var(--bg-maroon-dark)',
-        color: '#FFFFFF',
+        color: 'var(--text-white)',
         paddingTop: '64px',
         paddingBottom: '90px',
         borderTop: '4px solid var(--brand-red)',
@@ -43,7 +43,7 @@ export const Footer = () => {
                 }}
               />
               <div>
-                <h3 style={{ color: '#FFFFFF', fontSize: '1.2rem', margin: 0, fontWeight: 900 }}>
+                <h3 style={{ color: 'var(--text-white)', fontSize: '1.2rem', margin: 0, fontWeight: 900 }}>
                   Annapurna’s Rajubhai
                 </h3>
                 <div style={{ color: 'var(--brand-yellow)', fontSize: '0.72rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.5px' }}>
@@ -67,7 +67,7 @@ export const Footer = () => {
                 display: 'inline-flex',
                 alignItems: 'center',
                 gap: 8,
-                backgroundColor: 'rgba(255, 213, 79, 0.15)',
+                backgroundColor: 'rgba(255, 223, 84, 0.15)',
                 border: '1px solid var(--brand-yellow)',
                 padding: '6px 14px',
                 borderRadius: 'var(--radius-full)',
@@ -173,7 +173,7 @@ export const Footer = () => {
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
                 <Phone size={16} color="var(--brand-yellow)" />
-                <a href={`tel:${restaurantData.contactPhone}`} style={{ color: '#FFFFFF', fontWeight: 700 }}>
+                <a href={`tel:${restaurantData.contactPhone}`} style={{ color: 'var(--text-white)', fontWeight: 700 }}>
                   {restaurantData.contactPhone}
                 </a>
               </div>

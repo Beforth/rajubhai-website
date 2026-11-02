@@ -31,11 +31,11 @@ export const QuantityStepper = ({
       style={{
         display: 'inline-flex',
         alignItems: 'center',
-        backgroundColor: '#FFFFFF',
+        backgroundColor: 'var(--bg-card)',
         border: '1.5px solid var(--brand-red)',
         borderRadius: 'var(--radius-full)',
         overflow: 'hidden',
-        boxShadow: '0 2px 6px rgba(229, 26, 27, 0.12)',
+        boxShadow: '0 2px 6px rgba(255, 9, 23, 0.12)',
       }}
     >
       <button
@@ -46,7 +46,7 @@ export const QuantityStepper = ({
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          backgroundColor: '#FFFFFF',
+          backgroundColor: 'var(--bg-card)',
           transition: 'background-color 0.15s ease',
         }}
         aria-label="Decrease quantity"
@@ -71,7 +71,7 @@ export const QuantityStepper = ({
         onClick={handleIncrement}
         style={{
           padding: isSmall ? '4px 8px' : '6px 12px',
-          color: '#FFFFFF',
+          color: 'var(--text-white)',
           backgroundColor: 'var(--brand-red)',
           display: 'flex',
           alignItems: 'center',

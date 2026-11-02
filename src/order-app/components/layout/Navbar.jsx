@@ -18,16 +18,16 @@ export const Navbar = () => {
       style={{
         position: 'relative',
         zIndex: 900,
-        backgroundColor: '#FFFFFF',
-        borderBottom: '2px solid rgba(229, 26, 27, 0.15)',
-        boxShadow: '0 4px 18px rgba(133, 58, 48, 0.06)',
+        backgroundColor: 'var(--bg-card)',
+        borderBottom: '2px solid rgba(255, 9, 23, 0.15)',
+        boxShadow: '0 4px 18px rgba(43, 23, 18, 0.06)',
       }}
     >
       {/* Top Brand Notification Bar */}
       <div
         style={{
-          backgroundColor: 'var(--brand-maroon)',
-          color: '#FFFFFF',
+          backgroundColor: 'var(--bg-maroon-dark)',
+          color: 'var(--text-white)',
           padding: '6px 0',
           fontSize: '0.8rem',
           fontWeight: 600,
@@ -118,7 +118,7 @@ export const Navbar = () => {
               borderRadius: 'var(--radius-full)',
               fontSize: '0.92rem',
               fontWeight: 700,
-              color: isActive ? '#FFFFFF' : 'var(--brand-maroon)',
+              color: isActive ? 'var(--text-white)' : 'var(--brand-maroon)',
               backgroundColor: isActive ? 'var(--brand-red)' : 'transparent',
               transition: 'all 0.2s ease',
             })}
@@ -132,7 +132,7 @@ export const Navbar = () => {
               borderRadius: 'var(--radius-full)',
               fontSize: '0.92rem',
               fontWeight: 700,
-              color: isActive ? '#FFFFFF' : 'var(--brand-maroon)',
+              color: isActive ? 'var(--text-white)' : 'var(--brand-maroon)',
               backgroundColor: isActive ? 'var(--brand-red)' : 'transparent',
               transition: 'all 0.2s ease',
             })}
@@ -189,7 +189,7 @@ export const Navbar = () => {
             onClick={() => setIsCartDrawerOpen(true)}
             style={{
               backgroundColor: 'var(--brand-red)',
-              color: '#FFFFFF',
+              color: 'var(--text-white)',
               padding: '10px 20px',
               borderRadius: 'var(--radius-full)',
               display: 'flex',
@@ -197,7 +197,7 @@ export const Navbar = () => {
               gap: 10,
               fontWeight: 800,
               fontSize: '0.92rem',
-              boxShadow: '0 4px 14px rgba(229, 26, 27, 0.35)',
+              boxShadow: '0 4px 14px rgba(255, 9, 23, 0.35)',
               transition: 'all 0.2s ease',
             }}
             aria-label="View Cart"
@@ -242,7 +242,7 @@ export const Navbar = () => {
       {mobileMenuOpen && (
         <div
           style={{
-            backgroundColor: '#FFFFFF',
+            backgroundColor: 'var(--bg-card)',
             borderTop: '1px solid var(--border-subtle)',
             padding: '16px 20px',
             display: 'flex',

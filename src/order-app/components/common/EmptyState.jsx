@@ -29,7 +29,7 @@ export const EmptyState = ({
           width: 72,
           height: 72,
           borderRadius: '50%',
-          backgroundColor: '#FFFFFF',
+          backgroundColor: 'var(--bg-card)',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',

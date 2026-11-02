@@ -90,7 +90,7 @@ export const OrderStatusStepper = ({ currentStatus = 'Placed', orderType = 'deli
                     ? 'var(--red)'
                     : isDone
                     ? 'var(--orange)'
-                    : '#FFFFFF',
+                    : 'var(--bg-card)',
                   color: isCurrent || isDone ? 'var(--white)' : 'var(--brown)',
                   border: isCurrent || isDone ? 'none' : '2px solid var(--peach)',
                   boxShadow: isCurrent ? '0 0 0 4px rgba(255, 9, 23, 0.2)' : 'none',

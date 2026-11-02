@@ -69,7 +69,7 @@ export const MenuItemCard = ({ item, onSelectCustomization }) => {
             gap: 6,
           }}
         >
-          <span className="veg-stamp" style={{ boxShadow: '0 2px 6px rgba(0,0,0,0.12)' }}>
+          <span className="veg-stamp" style={{ boxShadow: '0 2px 6px rgba(43, 23, 18,0.12)' }}>
             <span className="veg-stamp-dot" />
           </span>
 
@@ -82,7 +82,7 @@ export const MenuItemCard = ({ item, onSelectCustomization }) => {
                 fontWeight: 900,
                 padding: '3px 10px',
                 borderRadius: 'var(--radius-full)',
-                boxShadow: '0 2px 8px rgba(0,0,0,0.12)',
+                boxShadow: '0 2px 8px rgba(43, 23, 18,0.12)',
                 letterSpacing: '0.3px',
               }}
             >
@@ -97,8 +97,8 @@ export const MenuItemCard = ({ item, onSelectCustomization }) => {
             position: 'absolute',
             bottom: 10,
             right: 12,
-            backgroundColor: 'rgba(39, 23, 20, 0.88)',
-            color: '#FFFFFF',
+            backgroundColor: 'rgba(43, 23, 18, 0.88)',
+            color: 'var(--text-white)',
             padding: '3px 9px',
             borderRadius: 'var(--radius-full)',
             fontSize: '0.76rem',
@@ -221,7 +221,7 @@ export const MenuItemCard = ({ item, onSelectCustomization }) => {
                 <button
                   onClick={handleAddClick}
                   style={{
-                    backgroundColor: '#FFFFFF',
+                    backgroundColor: 'var(--bg-card)',
                     border: '2px solid var(--brand-red)',
                     color: 'var(--brand-red)',
                     padding: '8px 20px',
@@ -232,14 +232,14 @@ export const MenuItemCard = ({ item, onSelectCustomization }) => {
                     alignItems: 'center',
                     gap: 6,
                     transition: 'all 0.18s ease',
-                    boxShadow: '0 2px 8px rgba(229, 26, 27, 0.12)',
+                    boxShadow: '0 2px 8px rgba(255, 9, 23, 0.12)',
                   }}
                   onMouseEnter={(e) => {
                     e.currentTarget.style.backgroundColor = 'var(--brand-red)';
-                    e.currentTarget.style.color = '#FFFFFF';
+                    e.currentTarget.style.color = 'var(--text-white)';
                   }}
                   onMouseLeave={(e) => {
-                    e.currentTarget.style.backgroundColor = '#FFFFFF';
+                    e.currentTarget.style.backgroundColor = 'var(--bg-card)';
                     e.currentTarget.style.color = 'var(--brand-red)';
                   }}
                 >

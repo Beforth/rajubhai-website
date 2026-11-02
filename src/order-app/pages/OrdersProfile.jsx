@@ -84,7 +84,7 @@ export const OrdersProfile = () => {
       {/* Profile Header card */}
       <div
         style={{
-          backgroundColor: '#FFFFFF',
+          backgroundColor: 'var(--bg-card)',
           borderRadius: 'var(--radius-lg)',
           padding: '28px',
           border: '1.5px solid var(--border-subtle)',
@@ -189,7 +189,7 @@ export const OrdersProfile = () => {
                 <div
                   key={ord.orderId}
                   style={{
-                    backgroundColor: '#FFFFFF',
+                    backgroundColor: 'var(--bg-card)',
                     borderRadius: 'var(--radius-lg)',
                     padding: '22px',
                     border: '1.5px solid var(--border-subtle)',
@@ -224,7 +224,7 @@ export const OrdersProfile = () => {
                       <span
                         style={{
                           backgroundColor: ord.status === 'Delivered' ? '#2e7d32' : 'var(--brand-orange)',
-                          color: '#FFFFFF',
+                          color: 'var(--text-white)',
                           padding: '4px 12px',
                           borderRadius: 'var(--radius-full)',
                           fontSize: '0.76rem',
@@ -309,7 +309,7 @@ export const OrdersProfile = () => {
                 <div
                   key={addr.id}
                   style={{
-                    backgroundColor: '#FFFFFF',
+                    backgroundColor: 'var(--bg-card)',
                     borderRadius: 'var(--radius-md)',
                     padding: '18px',
                     border: '1.5px solid var(--border-subtle)',
@@ -375,7 +375,7 @@ export const OrdersProfile = () => {
                     fontSize: '0.85rem',
                     fontWeight: 800,
                     backgroundColor: addressTag === t ? 'var(--brand-red)' : 'var(--bg-soft)',
-                    color: addressTag === t ? '#FFFFFF' : 'var(--brand-maroon)',
+                    color: addressTag === t ? 'var(--text-white)' : 'var(--brand-maroon)',
                   }}
                 >
                   {t}
