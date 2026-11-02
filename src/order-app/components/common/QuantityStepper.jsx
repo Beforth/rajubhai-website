@@ -25,42 +25,48 @@ export const QuantityStepper = ({
   };
 
   const isSmall = size === 'sm';
+  const buttonSize = isSmall ? 24 : 30;
+  const iconSize = isSmall ? 13 : 16;
+
+  // Round buttons inside a padded pill, so the filled "+" never touches or gets clipped by the outline.
+  const buttonStyle = {
+    width: buttonSize,
+    height: buttonSize,
+    borderRadius: '50%',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexShrink: 0,
+    transition: 'background-color 0.15s ease',
+  };
 
   return (
     <div
       style={{
         display: 'inline-flex',
         alignItems: 'center',
+        gap: isSmall ? 2 : 4,
+        padding: 3,
         backgroundColor: 'var(--bg-card)',
         border: '1.5px solid var(--brand-red)',
         borderRadius: 'var(--radius-full)',
-        overflow: 'hidden',
-        boxShadow: '0 2px 6px rgba(255, 9, 23, 0.12)',
       }}
     >
       <button
+        type="button"
         onClick={handleDecrement}
-        style={{
-          padding: isSmall ? '4px 8px' : '6px 12px',
-          color: 'var(--brand-red)',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          backgroundColor: 'var(--bg-card)',
-          transition: 'background-color 0.15s ease',
-        }}
+        style={{ ...buttonStyle, color: 'var(--brand-red)', backgroundColor: 'transparent' }}
         aria-label="Decrease quantity"
       >
-        <Minus size={isSmall ? 13 : 16} strokeWidth={3} />
+        <Minus size={iconSize} strokeWidth={3} />
       </button>
 
       <span
         style={{
-          padding: isSmall ? '0 8px' : '0 12px',
-          fontWeight: 900,
+          fontWeight: 800,
           fontSize: isSmall ? '0.88rem' : '0.98rem',
-          color: 'var(--brand-maroon)',
-          minWidth: isSmall ? '24px' : '30px',
+          color: 'var(--text-dark)',
+          minWidth: isSmall ? '20px' : '26px',
           textAlign: 'center',
         }}
       >
@@ -68,19 +74,12 @@ export const QuantityStepper = ({
       </span>
 
       <button
+        type="button"
         onClick={handleIncrement}
-        style={{
-          padding: isSmall ? '4px 8px' : '6px 12px',
-          color: 'var(--text-white)',
-          backgroundColor: 'var(--brand-red)',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          transition: 'background-color 0.15s ease',
-        }}
+        style={{ ...buttonStyle, color: 'var(--text-white)', backgroundColor: 'var(--brand-red)' }}
         aria-label="Increase quantity"
       >
-        <Plus size={isSmall ? 13 : 16} strokeWidth={3} />
+        <Plus size={iconSize} strokeWidth={3} />
       </button>
     </div>
   );
