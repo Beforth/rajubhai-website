@@ -1,0 +1,20 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import Header from "../../components/Header.astro";
+import Footer from "../../components/Footer.astro";
+import OrderApp from "../../order-app/OrderApp.jsx";
+
+export function getStaticPaths() {
+  // Every fixed app route gets its own static page; /order-status/:id and unknown
+  // paths are served by the host fallback (public/_redirects) or the dev rewrite.
+  const slugs = [undefined, "menu", "cart", "checkout", "login", "orders", "profile"];
+  return slugs.map((slug) => ({ params: { slug } }));
+}
+---
+<Layout title="Order Online | Rajubhai Dabeliwale">
+  <Header />
+  <main>
+    <OrderApp client:only="react" />
+  </main>
+  <Footer />
+</Layout>

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
 import { Navbar } from './components/layout/Navbar';
 import { Footer } from './components/layout/Footer';
 import { CartDrawer } from './components/cart/CartDrawer';
@@ -31,6 +31,7 @@ export function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/orders" element={<OrdersProfile />} />
           <Route path="/profile" element={<OrdersProfile />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </main>
 
