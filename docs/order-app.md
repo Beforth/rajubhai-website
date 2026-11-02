@@ -159,3 +159,7 @@ Replacing the mock data in `src/order-app/services/api.js` with real POS endpoin
 ## Theme
 
 The app uses the website's design tokens, nothing new: `src/order-app/styles/theme.css` maps `--brand-*`, `--bg-*`, `--text-*` and the shadows onto the site's ten colours (`design.md`), with Inter as the only font. Cards are `--paper` on a `--paper-2` page, buttons are the site's uppercase pill (red, maroon on hover), and shadows are warm brown, never black. Add new colours there, not as hex values in components.
+
+## Lazy loading
+
+Dishes on the order page render in batches of 9 (`BATCH_SIZE` in `pages/OrderHome.jsx`); the next batch loads when the list nears the bottom (IntersectionObserver, 600px ahead). A new category or search starts again from the first batch. Item, cart and category images use `loading="lazy"` and `decoding="async"`.

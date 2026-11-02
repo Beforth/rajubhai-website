@@ -38,7 +38,7 @@ export const CategorySidebar = ({ categories = [], counts = {}, totalCount = 0, 
           aria-current={active ? 'true' : undefined}
           className={`cat-pill${active ? ' is-active' : ''}`}
         >
-          <img src={cat.image} alt="" className="cat-thumb" loading="lazy" />
+          <img src={cat.image} alt="" className="cat-thumb" loading="lazy" decoding="async" />
           <span>
             <span className="cat-name">{cat.name}</span>
             <span className="cat-count">{counts[cat.id] ?? 0} items</span>

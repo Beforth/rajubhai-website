@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { Search, X, Tag } from 'lucide-react';
 import { getMenu, getCategories } from '../services/api';
@@ -10,6 +10,9 @@ import { CartPanel } from '../components/cart/CartPanel';
 import { Loader } from '../components/common/Loader';
 import { EmptyState } from '../components/common/EmptyState';
 
+// Dishes are rendered in batches; the next batch loads as the list nears the bottom.
+const BATCH_SIZE = 9;
+
 const offerLabel = (c) => (c.discountPercent ? `${c.discountPercent}% off` : `₹${c.discountFlat} off`);
 
 export const OrderHome = () => {
@@ -19,6 +22,8 @@ export const OrderHome = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [loading, setLoading] = useState(true);
   const [selectedItemForModal, setSelectedItemForModal] = useState(null);
+  const [shownCount, setShownCount] = useState(BATCH_SIZE);
+  const sentinelRef = useRef(null);
 
   useEffect(() => {
     Promise.all([getCategories(), getMenu()])
@@ -59,6 +64,26 @@ export const OrderHome = () => {
     }
     return activeCategory === 'all' || item.categoryId === activeCategory;
   });
+
+  const hasMore = shownCount < visibleItems.length;
+
+  // A new category or search starts again from the first batch.
+  useEffect(() => {
+    setShownCount(BATCH_SIZE);
+  }, [activeCategory, query]);
+
+  // Fires again after every batch, so a tall screen keeps filling until the list is long enough to scroll.
+  useEffect(() => {
+    if (!hasMore || !sentinelRef.current) return undefined;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) setShownCount((n) => n + BATCH_SIZE);
+      },
+      { rootMargin: '600px 0px' }
+    );
+    observer.observe(sentinelRef.current);
+    return () => observer.disconnect();
+  }, [hasMore, shownCount]);
 
   return (
     <div className="page-shell" style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
@@ -123,11 +148,12 @@ export const OrderHome = () => {
               />
             ) : (
               <div className="order-items">
-                {visibleItems.map((item) => (
+                {visibleItems.slice(0, shownCount).map((item) => (
                   <MenuItemCard key={item.id} item={item} onSelectCustomization={setSelectedItemForModal} />
                 ))}
               </div>
             )}
+            {hasMore && <div ref={sentinelRef} aria-hidden="true" style={{ height: 1 }} />}
           </section>
 
           <CartPanel />

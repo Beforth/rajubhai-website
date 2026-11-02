@@ -54,6 +54,7 @@ export const MenuItemCard = ({ item, onSelectCustomization }) => {
           src={item.image}
           alt={item.name}
           loading="lazy"
+          decoding="async"
           style={{ width: '100%', height: '100%', objectFit: 'cover' }}
           className="food-card-img"
         />

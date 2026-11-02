@@ -19,6 +19,8 @@ export const CartItem = ({ item }) => {
       <img
         src={item.image}
         alt={item.name}
+        loading="lazy"
+        decoding="async"
         style={{
           width: 72,
           height: 72,
