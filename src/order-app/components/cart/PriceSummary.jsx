@@ -4,7 +4,7 @@ import { useCart } from '../../context/CartContext';
 import { applyCoupon } from '../../services/api';
 import { useToast } from '../../context/ToastContext';
 
-export const PriceSummary = ({ showCouponSection = true }) => {
+export const PriceSummary = ({ showCouponSection = true, compact = false }) => {
   const { subtotal, gst, packaging, deliveryFee, discount, grandTotal, appliedCoupon, setAppliedCoupon, orderType } = useCart();
   const { addToast } = useToast();
   const [couponInput, setCouponInput] = useState('');
@@ -46,13 +46,17 @@ export const PriceSummary = ({ showCouponSection = true }) => {
 
   return (
     <div
-      style={{
-        backgroundColor: 'var(--bg-card)',
-        borderRadius: 'var(--radius-lg)',
-        padding: '24px',
-        border: '1.5px solid var(--border-subtle)',
-        boxShadow: 'var(--shadow-sm)',
-      }}
+      style={
+        compact
+          ? {}
+          : {
+              backgroundColor: 'var(--bg-card)',
+              borderRadius: 'var(--radius-lg)',
+              padding: '24px',
+              border: '1.5px solid var(--border-subtle)',
+              boxShadow: 'var(--shadow-sm)',
+            }
+      }
     >
       <div
         style={{
@@ -128,6 +132,7 @@ export const PriceSummary = ({ showCouponSection = true }) => {
                     background: 'transparent',
                     outline: 'none',
                     width: '100%',
+                    minWidth: 0,
                     padding: '10px 0',
                     fontSize: '0.88rem',
                     textTransform: 'uppercase',
@@ -140,14 +145,15 @@ export const PriceSummary = ({ showCouponSection = true }) => {
                 type="submit"
                 disabled={loadingCoupon || !couponInput.trim()}
                 style={{
-                  backgroundColor: 'var(--brand-maroon)',
-                  color: 'var(--text-white)',
+                  flexShrink: 0,
+                  backgroundColor: couponInput.trim() ? 'var(--brand-maroon)' : 'var(--brand-peach)',
+                  color: couponInput.trim() ? 'var(--text-white)' : 'var(--brand-maroon)',
                   padding: '10px 20px',
                   borderRadius: 'var(--radius-full)',
                   fontWeight: 800,
                   fontSize: '0.86rem',
-                  opacity: !couponInput.trim() ? 0.6 : 1,
-                  transition: 'opacity 0.2s',
+                  cursor: couponInput.trim() ? 'pointer' : 'not-allowed',
+                  transition: 'background-color 0.2s, color 0.2s',
                 }}
               >
                 {loadingCoupon ? 'Checking...' : 'Apply'}
