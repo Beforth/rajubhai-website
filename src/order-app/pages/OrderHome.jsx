@@ -1,8 +1,7 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { Search, X, Tag } from 'lucide-react';
+import { Search, X } from 'lucide-react';
 import { getMenu, getCategories } from '../services/api';
-import coupons from '../data/coupons.json';
 import { CategorySidebar } from '../components/menu/CategorySidebar';
 import { MenuItemCard } from '../components/menu/MenuItemCard';
 import { ItemDetailsModal } from '../components/menu/ItemDetailsModal';
@@ -12,8 +11,6 @@ import { EmptyState } from '../components/common/EmptyState';
 
 // Dishes are rendered in batches; the next batch loads as the list nears the bottom.
 const BATCH_SIZE = 9;
-
-const offerLabel = (c) => (c.discountPercent ? `${c.discountPercent}% off` : `₹${c.discountFlat} off`);
 
 export const OrderHome = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -109,15 +106,6 @@ export const OrderHome = () => {
             </button>
           )}
         </div>
-      </div>
-
-      <div className="order-offers hide-scrollbar" aria-label="Offers">
-        <Tag size={15} color="var(--brand-red)" />
-        {coupons.map((c) => (
-          <span key={c.code} className="order-offer" title={c.description}>
-            <b>{c.code}</b> {offerLabel(c)}
-          </span>
-        ))}
       </div>
 
       {loading ? (
