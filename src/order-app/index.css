@@ -1,0 +1,163 @@
+@import './styles/theme.css';
+
+/* 
+  EQUAL & PROPER MARGINS ON ALL FOUR SIDES (Requirement 1):
+  Every page content is wrapped inside .page-shell with 
+  clean top, bottom, left, and right spacing on mobile & desktop!
+*/
+.page-shell {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 32px 20px;
+  min-height: calc(100vh - 440px);
+}
+
+@media (min-width: 640px) {
+  .page-shell {
+    padding: 36px 28px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .page-shell {
+    padding: 44px 40px;
+  }
+}
+
+@media (min-width: 1280px) {
+  .page-shell {
+    padding: 48px 48px;
+  }
+}
+
+/* Veg Stamp Symbol */
+.veg-stamp {
+  width: 16px;
+  height: 16px;
+  border: 1.5px solid #2e7d32;
+  border-radius: 3px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #FFFFFF;
+  padding: 1.5px;
+}
+.veg-stamp-dot {
+  width: 7px;
+  height: 7px;
+  background-color: #2e7d32;
+  border-radius: 50%;
+}
+
+/* Primary Button with Consistent Red/Maroon Branding */
+.btn-brand-primary {
+  background-color: var(--brand-red);
+  color: #FFFFFF;
+  font-weight: 700;
+  border-radius: var(--radius-full);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 24px;
+  font-size: 0.95rem;
+  transition: all 0.18s ease;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+.btn-brand-primary:hover {
+  background-color: var(--primary-hover);
+  transform: translateY(-1px);
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+}
+
+.btn-brand-outline {
+  border: 1.5px solid var(--brand-maroon);
+  color: var(--brand-maroon);
+  background-color: transparent;
+  font-weight: 700;
+  border-radius: var(--radius-full);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 11px 22px;
+  font-size: 0.95rem;
+  transition: all 0.18s ease;
+}
+.btn-brand-outline:hover {
+  background-color: var(--bg-soft);
+  border-color: var(--brand-red);
+  color: var(--brand-red);
+  transform: translateY(-1px);
+}
+
+.btn-brand-yellow {
+  background-color: var(--brand-yellow);
+  color: var(--brand-maroon);
+  font-weight: 800;
+  border-radius: var(--radius-full);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 20px;
+  transition: all 0.18s ease;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+.btn-brand-yellow:hover {
+  background-color: #ffca28;
+  transform: translateY(-1px);
+}
+
+/* Card hover animation with warm brand glow */
+.food-card-interactive {
+  background-color: #FFFFFF;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-subtle);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.2s ease;
+}
+.food-card-interactive:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
+  border-color: rgba(229, 26, 27, 0.3);
+}
+
+.food-card-interactive:hover .food-card-img {
+  transform: scale(1.05);
+}
+
+.food-card-img {
+  transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Category Card Styling */
+.category-card-interactive {
+  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+  border: 1.5px solid var(--border-subtle);
+}
+.category-card-interactive:hover {
+  transform: translateY(-3px);
+  border-color: var(--brand-red);
+  box-shadow: var(--shadow-md);
+}
+
+/* Bill receipt styling */
+.receipt-paper {
+  background: #FFFFFF;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  position: relative;
+}
+
+/* Hide scrollbar */
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}

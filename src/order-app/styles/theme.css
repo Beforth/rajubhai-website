@@ -1,0 +1,133 @@
+/* Annapurna's Rajubhai Dabeliwale - Authentic Brand Palette derived from color pallete.pdf */
+:root {
+  /* THE PDF COLOR PALETTE (Exact Brand Shades) */
+  --brand-red: #E51A1B;       /* Iconic Red from the Logo & palette stripe 1 */
+  --brand-yellow: #FFD54F;    /* Rich Golden Yellow from palette stripe 2 */
+  --brand-peach: #FFD8B4;     /* Warm Creamy Peach from palette stripe 3 */
+  --brand-orange: #F57C00;    /* Vibrant Spiced Orange from palette stripe 4 */
+  --brand-maroon: #853A30;    /* Deep Red-Brown / Maroon / Footer & Heading Shade from stripe 5 */
+
+  /* Semantic UI Tokens */
+  --primary: var(--brand-red);
+  --primary-hover: #C91415;
+  --secondary: var(--brand-orange);
+  --accent-yellow: var(--brand-yellow);
+  --accent-maroon: var(--brand-maroon);
+  --accent-peach: var(--brand-peach);
+
+  /* Backgrounds & Surfaces */
+  --bg-page: #FFFBF7;         /* Delicate warm ivory background with ample breathing room */
+  --bg-surface: #FFFFFF;
+  --bg-soft: #FFF4E8;         /* Peach-tinted soft card background */
+  --bg-card: #FFFFFF;
+  --bg-maroon-dark: #6D2E26;   /* Deep rich footer & premium elements */
+
+  /* Text Colors */
+  --text-dark: #271714;       /* Deep rich dark for ultra-crisp reading */
+  --text-muted: #6B5652;      /* Warm muted text */
+  --text-light: #9B8783;
+  --text-white: #FFFFFF;
+
+  /* Clean, crisp non-glowing borders & shadows */
+  --border-subtle: #EEDFD5;
+  --border-brand: rgba(133, 58, 48, 0.16);
+  --border-focus: var(--brand-red);
+
+  --shadow-sm: 0 1px 4px rgba(0, 0, 0, 0.04);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.08);
+  --shadow-modal: 0 16px 40px rgba(0, 0, 0, 0.18);
+
+  /* Radii */
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+  --radius-xl: 28px;
+  --radius-full: 9999px;
+
+  /* Fonts */
+  --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-serif: 'Poppins', var(--font-sans);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--bg-page);
+  color: var(--text-dark);
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-serif);
+  color: var(--brand-maroon);
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  background: none;
+  font-family: inherit;
+}
+
+input, select, textarea {
+  font-family: inherit;
+  color: var(--text-dark);
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-page);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--brand-peach);
+  border-radius: var(--radius-full);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--brand-orange);
+}
+
+/* Crisp non-glowing animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes popIn {
+  0% { transform: scale(0.96); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes slideInRight {
+  from { transform: translateX(100%); }
+  to { transform: translateX(0); }
+}
+
+.animate-pop {
+  animation: popIn 0.22s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-fade {
+  animation: fadeIn 0.18s ease-out forwards;
+}

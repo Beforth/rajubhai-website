@@ -1,0 +1,22 @@
+[
+  {
+    "code": "RAJUBHAI1987",
+    "discountPercent": 20,
+    "maxDiscount": 80,
+    "minOrder": 199,
+    "description": "20% OFF up to ₹80 on orders above ₹199 (Celebrating since 1987!)"
+  },
+  {
+    "code": "TASTETHEREAL",
+    "discountPercent": 15,
+    "maxDiscount": 50,
+    "minOrder": 149,
+    "description": "15% OFF up to ₹50 on your order"
+  },
+  {
+    "code": "FREESHIP",
+    "discountFlat": 35,
+    "minOrder": 249,
+    "description": "Free Delivery on orders above ₹249"
+  }
+]

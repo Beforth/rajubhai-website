@@ -1,0 +1,18 @@
+{
+  "restaurantName": "Annapurna's Rajubhai Dabeliwale",
+  "tagline": "Taste The Real",
+  "since": 1987,
+  "fssai": "20718031000492",
+  "contactPhone": "+91 98765 43210",
+  "contactEmail": "orders@rajubhaidabeli.com",
+  "address": "Shop No. 4, Mandvi Tower Road, Old Food Market, Bhuj, Gujarat - 370001",
+  "openingTime": "11:00",
+  "closingTime": "23:00",
+  "isOpen": true,
+  "operatingHoursDisplay": "11:00 AM - 11:00 PM (Everyday)",
+  "averageDeliveryMinutes": 25,
+  "gstPercent": 5,
+  "packagingFee": 15,
+  "defaultDeliveryFee": 35,
+  "freeDeliveryThreshold": 350
+}
