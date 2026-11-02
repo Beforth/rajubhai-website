@@ -26,13 +26,13 @@ export const CartPanel = () => {
         </div>
       ) : (
         <>
-          <div className="order-cart-items">
+          <div className="order-cart-scroll">
             {cartItems.map((item) => (
               <CartItem key={item.cartKey} item={item} />
             ))}
-          </div>
-          <div className="order-cart-bill">
-            <PriceSummary showCouponSection={true} compact />
+            <div className="order-cart-bill">
+              <PriceSummary showCouponSection={true} compact />
+            </div>
           </div>
           <div className="order-cart-foot">
             <div>
