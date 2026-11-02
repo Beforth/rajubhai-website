@@ -168,6 +168,8 @@
 .cat-pill:hover { border-color: var(--brand-red); }
 .cat-pill.is-active { background: var(--brand-red); border-color: var(--brand-red); color: var(--text-white); }
 .cat-thumb { width: 42px; height: 42px; border-radius: 50%; object-fit: cover; flex-shrink: 0; }
+.cat-thumb-icon { display: flex; align-items: center; justify-content: center; background: var(--bg-soft); color: var(--brand-maroon); }
+.cat-pill.is-active .cat-thumb-icon { background: rgba(251, 246, 239, 0.22); color: var(--text-white); }
 .cat-name { display: block; font-weight: 800; font-size: 0.9rem; line-height: 1.25; }
 .cat-count { display: block; font-size: 0.74rem; opacity: 0.75; }
 

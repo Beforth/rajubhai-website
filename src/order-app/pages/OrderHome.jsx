@@ -31,7 +31,8 @@ export const OrderHome = () => {
   }, []);
 
   const requested = searchParams.get('category');
-  const activeCategory = categories.some((c) => c.id === requested) ? requested : categories[0]?.id;
+  const activeCategory =
+    requested === 'all' || categories.some((c) => c.id === requested) ? requested : categories[0]?.id;
   const activeCategoryData = categories.find((c) => c.id === activeCategory);
 
   const counts = useMemo(() => {
@@ -56,7 +57,7 @@ export const OrderHome = () => {
         (item.tagline && item.tagline.toLowerCase().includes(query))
       );
     }
-    return item.categoryId === activeCategory;
+    return activeCategory === 'all' || item.categoryId === activeCategory;
   });
 
   return (
@@ -101,13 +102,14 @@ export const OrderHome = () => {
           <CategorySidebar
             categories={categories}
             counts={counts}
+            totalCount={menuItems.length}
             activeCategory={query ? null : activeCategory}
             onSelectCategory={selectCategory}
           />
 
           <section aria-live="polite">
             <h2 style={{ fontSize: '1.3rem', marginBottom: 14 }}>
-              {query ? `Results for “${searchQuery.trim()}”` : activeCategoryData?.name}
+              {query ? `Results for “${searchQuery.trim()}”` : activeCategory === 'all' ? 'All Categories' : activeCategoryData?.name}
               <span style={{ color: 'var(--text-light)', fontWeight: 600, fontSize: '0.9rem', marginLeft: 10 }}>
                 {visibleItems.length} items
               </span>
