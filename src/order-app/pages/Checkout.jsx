@@ -317,9 +317,10 @@ export const Checkout = () => {
                       width: '100%',
                       padding: '12px',
                       borderRadius: 'var(--radius-md)',
-                      border: '1px solid var(--border-subtle)',
+                      border: '1.5px solid var(--border-subtle)',
                       fontSize: '0.9rem',
                       outline: 'none',
+                      resize: 'vertical',
                       boxSizing: 'border-box',
                     }}
                   />

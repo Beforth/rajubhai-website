@@ -91,6 +91,7 @@
 :where(.order-app) input, :where(.order-app) select, :where(.order-app) textarea {
   font-family: inherit;
   color: var(--text-dark);
+  background-color: var(--bg-card); /* browsers default to white */
 }
 
 /* Custom Scrollbar */
