@@ -60,7 +60,7 @@ export const Navbar = () => {
               Since 1987
             </span>
             <span style={{ opacity: 0.95 }}>
-              Live Tawa Kitchen Open • {restaurantData.operatingHoursDisplay}
+              Kitchen Open • {restaurantData.operatingHoursDisplay}
             </span>
           </div>
 
