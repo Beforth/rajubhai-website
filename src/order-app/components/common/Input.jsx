@@ -20,7 +20,7 @@ export const Input = ({
           style={{
             fontSize: '0.88rem',
             fontWeight: 600,
-            color: 'var(--brown)',
+            color: 'var(--text-dark)',
           }}
         >
           {label}
@@ -33,14 +33,14 @@ export const Input = ({
           display: 'flex',
           alignItems: 'center',
           backgroundColor: 'var(--bg-card)',
-          border: error ? '1.5px solid var(--red)' : '1.5px solid var(--border-light)',
+          border: error ? '1.5px solid var(--brand-red)' : '1.5px solid var(--border-subtle)',
           borderRadius: 'var(--radius-md)',
           transition: 'border-color 0.2s ease, box-shadow 0.2s ease',
           padding: '0 12px',
         }}
       >
         {icon && (
-          <span style={{ color: 'var(--orange)', display: 'flex', marginRight: '8px' }}>
+          <span style={{ color: 'var(--brand-orange)', display: 'flex', marginRight: '8px' }}>
             {icon}
           </span>
         )}
@@ -67,7 +67,7 @@ export const Input = ({
       </div>
 
       {error && (
-        <span style={{ fontSize: '0.8rem', color: 'var(--red)', fontWeight: 500 }}>
+        <span style={{ fontSize: '0.8rem', color: 'var(--brand-red)', fontWeight: 500 }}>
           {error}
         </span>
       )}
