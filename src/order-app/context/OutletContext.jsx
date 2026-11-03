@@ -92,10 +92,19 @@ export const OutletProvider = ({ children }) => {
     setOutletIdState(id || '');
   }, []);
 
+  // Re-read the outlet's info (open/closed, closed message) without the page-level loading state.
+  const refreshInfo = useCallback(() => {
+    if (!outletId) return Promise.resolve();
+    return shopApi
+      .getInfo(outletId)
+      .then((data) => setInfo(data))
+      .catch(() => {});
+  }, [outletId]);
+
   const outlet = useMemo(() => outlets.find((o) => o.id === outletId) || null, [outlets, outletId]);
   const value = useMemo(
-    () => ({ outlets, outlet, outletId, info, setOutletId, loading, error }),
-    [outlets, outlet, outletId, info, setOutletId, loading, error]
+    () => ({ outlets, outlet, outletId, info, setOutletId, refreshInfo, loading, error }),
+    [outlets, outlet, outletId, info, setOutletId, refreshInfo, loading, error]
   );
   return <OutletContext.Provider value={value}>{children}</OutletContext.Provider>;
 };

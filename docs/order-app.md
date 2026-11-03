@@ -150,7 +150,7 @@ The local server will start at `http://localhost:5173`.
 
 ## Next step
 
-The menu, categories and restaurant info now come from the POS shop API. The order, coupon and OTP functions in `src/order-app/services/api.js` are still mock data; replacing them is a later task.
+Menu, outlets, quotes, orders and order tracking all use the POS shop API. `src/order-app/services/api.js` still holds mock coupon, OTP and old order functions that are no longer used by checkout or tracking (the login page and its demo OTP still use the OTP ones).
 
 ## Shop API and outlets
 
@@ -169,3 +169,16 @@ The app uses the website's design tokens, nothing new: `src/order-app/styles/the
 ## Lazy loading
 
 Dishes on the order page render in batches of 9 (`BATCH_SIZE` in `pages/OrderHome.jsx`); the next batch loads when the list nears the bottom (IntersectionObserver, 600px ahead). A new category or search starts again from the first batch. Item, cart and category images use `loading="lazy"` and `decoding="async"`.
+
+## Checkout, quotes and orders
+
+- **The server prices everything.** `CartContext` keeps lines only (`id`, `variationId`, `addonIds`, `quantity`, `instructions`, `outletId`), never prices. Whenever the lines or the delivery address change it calls `shopApi.quote` (debounced 400 ms; an older answer never overwrites a newer one; an empty cart skips the call) and exposes `quote`, `quoteLoading`, `quoteError`, `lineQuotes` (per-line price and error by cart key) and `checkout` (`canCheckout`, `reason`). Every amount on screen (drawer, panel, cart page, checkout, mobile bar, navbar) is a server decimal string shown through `services/money.js`; there is no local tax, packaging, delivery or discount arithmetic. While the quote is loading, totals show "…".
+- **Why Checkout can be disabled:** quote still loading, a line with an error (unavailable item or an add-on rule such as "Choose at least 1 from X"; shown under the line), the minimum order (`reason`), or a closed outlet (`info.accepting_orders` false, shows `info.closed_message`).
+- **Checkout (`/checkout`)** is guest only and delivery only (Takeaway and Dine-In stay off; sign-in is not part of it). Fields: name (1-120), mobile (10 digits after removing spaces and `+91`), address (required, max 500), landmark (max 200), notes (max 500). One `idempotency_key` is generated per attempt and kept until the order succeeds, so a retry after a timeout cannot create a second order; it is replaced when the cart lines change or after a 422. The button is disabled while a request is in flight. On 201/200 the order is saved to `orderStore`, the cart is cleared and the confirmation (with the real `reference`) links to `/order-status/{public_id}`.
+- **Errors:** 409 shows the outlet's closed message and refreshes the outlet info; 422 marks the listed lines and refreshes the quote; 400 shows the field errors under the matching inputs; 429 asks to wait a minute; a network failure or timeout keeps the cart and allows a retry.
+- **`services/orderStore.js`** keeps `{publicId, reference, placedAt}` for the last 20 orders in `localStorage` key `rajubhai.orders` (every access in try/catch). `/orders` lists them for guests too (it fetches the 10 most recent in parallel; an order that fails to load shows as "unavailable" with a remove button).
+- **Tracking (`/order-status/:publicId`)** reads `GET /shop/orders/{public_id}/`: every 5 s while `received`, every 15 s while accepted/preparing/ready/out_for_delivery, and stops on delivered/rejected/cancelled. Status mapping: `received` -> Placed step plus an "Auto-accepts in mm:ss" countdown from `auto_accept_at`; `accepted`, `preparing`, `ready`, `out_for_delivery`, `delivered` -> the stepper step of the same name; `rejected` -> a rejected state with `reject_reason`; `cancelled` -> "We could not accept this order". An unknown id shows "Order not found". The mapping lives in `services/orderStatus.js`.
+
+### Not built yet
+
+Phase 3 kitchen stages beyond the status mapping above (the POS must move orders through preparing/ready/out for delivery), customer sign-in and saved addresses on the server, online payment (orders are pay on delivery), and coupons/promo codes (the promo box is hidden).

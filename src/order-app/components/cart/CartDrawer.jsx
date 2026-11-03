@@ -1,14 +1,16 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ShoppingBag, ArrowRight, X, ShieldCheck, Sparkles } from 'lucide-react';
+import { ShoppingBag, ArrowRight, Sparkles } from 'lucide-react';
 import { useCart } from '../../context/CartContext';
 import { Drawer } from '../common/Drawer';
 import { CartItem } from './CartItem';
 import { PriceSummary } from './PriceSummary';
+import { CheckoutNotice } from './CheckoutNotice';
+import { formatMoney } from '../../services/money';
 import { EmptyState } from '../common/EmptyState';
 
 export const CartDrawer = () => {
-  const { isCartDrawerOpen, setIsCartDrawerOpen, cartItems, grandTotal, itemCount } = useCart();
+  const { isCartDrawerOpen, setIsCartDrawerOpen, cartItems, grandTotal, itemCount, checkout } = useCart();
   const navigate = useNavigate();
 
   const handleProceedCheckout = () => {
@@ -113,12 +115,13 @@ export const CartDrawer = () => {
                   Total To Pay
                 </span>
                 <div style={{ fontSize: '1.4rem', fontWeight: 900, color: 'var(--brand-red)', letterSpacing: '-0.5px' }}>
-                  ₹{grandTotal}
+                  {grandTotal ? formatMoney(grandTotal) : '…'}
                 </div>
               </div>
 
               <button
                 onClick={handleProceedCheckout}
+                disabled={!checkout.canCheckout}
                 className="btn-brand-primary"
                 style={{
                   padding: '13px 26px',
@@ -131,10 +134,7 @@ export const CartDrawer = () => {
               </button>
             </div>
 
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, fontSize: '0.76rem', color: 'var(--text-muted)' }}>
-              <ShieldCheck size={14} color="#2e7d32" />
-              <span>Direct kitchen token dispatch to Rajubhai POS</span>
-            </div>
+            <CheckoutNotice />
           </div>
         </div>
       )}

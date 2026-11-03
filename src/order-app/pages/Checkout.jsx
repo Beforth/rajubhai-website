@@ -1,67 +1,108 @@
-import React, { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import React, { useState, useEffect, useRef } from 'react';
+import { useNavigate, Link, Navigate } from 'react-router-dom';
 import confetti from 'canvas-confetti';
-import {
-  Bike,
-  Store,
-  UtensilsCrossed,
-  CreditCard,
-  QrCode,
-  Banknote,
-  ArrowRight,
-  ArrowLeft,
-  ShieldCheck,
-  CheckCircle,
-  ChevronDown,
-  ChevronUp,
-  MapPin,
-  Clock,
-} from 'lucide-react';
+import { ArrowRight, ArrowLeft, ShieldCheck, CheckCircle, ChevronDown, ChevronUp, MapPin, Clock, Banknote } from 'lucide-react';
 import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
-import { placeOrder } from '../services/api';
+import { useOutlet } from '../context/OutletContext';
+import { shopApi } from '../services/shopApi';
+import { orderStore } from '../services/orderStore';
+import { formatMoney } from '../services/money';
 import { PriceSummary } from '../components/cart/PriceSummary';
+import { CheckoutNotice } from '../components/cart/CheckoutNotice';
 import { Input } from '../components/common/Input';
 import { Modal } from '../components/common/Modal';
-import restaurantData from '../data/restaurant.json';
+
+// One key per order attempt: a retry after a timeout reuses it, so the server can never
+// create a second order for the same attempt. Server limit: 1-64 characters.
+const newIdempotencyKey = () => {
+  try {
+    if (typeof crypto !== 'undefined' && crypto.randomUUID) return crypto.randomUUID();
+    const bytes = new Uint8Array(16);
+    crypto.getRandomValues(bytes);
+    return Array.from(bytes, (b) => b.toString(16).padStart(2, '0')).join('');
+  } catch {
+    return Array.from({ length: 32 }, () => Math.floor(Math.random() * 16).toString(16)).join('');
+  }
+};
+
+// 10 digits after stripping spaces/dashes and a +91 prefix (same rule as the server).
+const cleanPhone = (value) => {
+  const digits = String(value || '').replace(/[\s\-()]/g, '');
+  return digits.startsWith('+91') ? digits.slice(3) : digits;
+};
+
+const FIELD_KEYS = { name: 'name', phone: 'phone', address: 'address', landmark: 'landmark', instructions: 'instructions' };
+
+const stepBadge = {
+  width: 22,
+  height: 22,
+  borderRadius: '50%',
+  backgroundColor: 'var(--brand-red)',
+  color: 'var(--text-white)',
+  display: 'inline-flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  fontSize: '0.74rem',
+  fontWeight: 900,
+};
+const stepTitle = {
+  fontSize: '0.92rem',
+  fontWeight: 800,
+  color: 'var(--brand-maroon)',
+  marginBottom: '2px',
+  display: 'flex',
+  alignItems: 'center',
+  gap: 8,
+};
 
 export const Checkout = () => {
-  const { cartItems, orderType, setOrderType, subtotal, gst, packaging, deliveryFee, discount, grandTotal, clearCart } = useCart();
+  const { cartItems, requestItems, itemsSig, lineQuotes, checkout, grandTotal, itemCount, clearCart, setQuoteAddress, refreshQuote } =
+    useCart();
   const { user, isAuthenticated, addSavedAddress } = useAuth();
   const { addToast } = useToast();
+  const { info, outletId, refreshInfo } = useOutlet();
   const navigate = useNavigate();
 
-  // Form states
+  // Guest form
   const [customerName, setCustomerName] = useState(user?.name || '');
   const [customerPhone, setCustomerPhone] = useState(user?.phone || '');
   const [streetAddress, setStreetAddress] = useState(user?.addresses?.[0]?.line1 || '');
   const [landmark, setLandmark] = useState(user?.addresses?.[0]?.landmark || '');
-  const [tableNumber, setTableNumber] = useState('');
   const [specialNotes, setSpecialNotes] = useState('');
-  const [paymentMethod, setPaymentMethod] = useState('upi');
-  const [loadingOrder, setLoadingOrder] = useState(false);
   const [errors, setErrors] = useState({});
+  const [formError, setFormError] = useState('');
+  const [submitting, setSubmitting] = useState(false);
+  const [orderLineErrors, setOrderLineErrors] = useState({}); // cartKey -> message from a 422
   const [mobileSummaryOpen, setMobileSummaryOpen] = useState(false);
 
-  // Order Success & Generated Bill State
+  // Order confirmation (real reference from the server)
   const [confirmedOrder, setConfirmedOrder] = useState(null);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
 
+  const keyRef = useRef(null);
+  const inFlight = useRef(false);
+
+  // New attempt whenever the cart lines change.
+  useEffect(() => {
+    keyRef.current = null;
+    setOrderLineErrors({});
+  }, [itemsSig]);
+
+  // The server quote follows the address, and the open/closed state is re-read on arrival.
+  useEffect(() => {
+    setQuoteAddress({ line: streetAddress, landmark });
+  }, [streetAddress, landmark, setQuoteAddress]);
+  useEffect(() => {
+    refreshInfo();
+  }, [refreshInfo]);
+
   if (cartItems.length === 0 && !confirmedOrder) {
-    navigate('/');
-    return null;
+    return <Navigate to="/" replace />;
   }
 
-  const totalQuantity = cartItems.reduce((acc, ci) => acc + ci.quantity, 0);
-
-  const quickInstructions = [
-    'Extra spicy chutney',
-    'Mild / Less spice',
-    'No onion & garlic',
-    'Pack chutneys separately',
-    'Toast pav extra crisp',
-  ];
+  const quickInstructions = ['Extra spicy chutney', 'Mild / Less spice', 'No onion & garlic', 'Pack chutneys separately', 'Toast pav extra crisp'];
 
   const handleAddQuickNote = (note) => {
     if (specialNotes.includes(note)) return;
@@ -70,71 +111,73 @@ export const Checkout = () => {
 
   const validate = () => {
     const errs = {};
-    if (!customerName.trim()) errs.name = 'Please provide your full name';
-    const cleanPhone = customerPhone.replace(/\D/g, '');
-    if (!cleanPhone || cleanPhone.length < 10) {
-      errs.phone = 'Valid 10-digit mobile number required';
-    }
-
-    if (orderType === 'delivery') {
-      if (!streetAddress.trim()) errs.address = 'Delivery address is required';
-    } else if (orderType === 'dinein') {
-      if (!tableNumber.trim()) errs.tableNumber = 'Please specify table number';
-    }
-
+    const name = customerName.trim();
+    if (!name) errs.name = 'Please provide your full name';
+    else if (name.length > 120) errs.name = 'Name can be at most 120 characters';
+    if (!/^[0-9]{10}$/.test(cleanPhone(customerPhone))) errs.phone = 'Valid 10-digit mobile number required';
+    const line = streetAddress.trim();
+    if (!line) errs.address = 'Delivery address is required';
+    else if (line.length > 500) errs.address = 'Address can be at most 500 characters';
+    if (landmark.trim().length > 200) errs.landmark = 'Landmark can be at most 200 characters';
+    if (specialNotes.trim().length > 500) errs.instructions = 'Notes can be at most 500 characters';
     setErrors(errs);
     return Object.keys(errs).length === 0;
   };
 
+  const handleOrderError = (err, submittedKeys) => {
+    const status = err?.status;
+    if (status === 409) {
+      setFormError(err.message);
+      refreshInfo();
+    } else if (status === 422) {
+      // The cart changed under us (item gone, rule broken, minimum): a retry needs a new attempt.
+      keyRef.current = null;
+      const marks = {};
+      (Array.isArray(err.errors?.items) ? err.errors.items : []).forEach((e) => {
+        const key = submittedKeys[e.index];
+        if (key) marks[key] = e.message;
+      });
+      setOrderLineErrors(marks);
+      setFormError(`${err.message}. Update your cart from the menu, or try again.`);
+      refreshQuote();
+    } else if (status === 400) {
+      const fieldErrors = {};
+      Object.entries(err.errors && typeof err.errors === 'object' ? err.errors : {}).forEach(([k, v]) => {
+        if (FIELD_KEYS[k]) fieldErrors[FIELD_KEYS[k]] = Array.isArray(v) ? v.join(' ') : String(v);
+      });
+      if (Object.keys(fieldErrors).length) setErrors((prev) => ({ ...prev, ...fieldErrors }));
+      else setFormError(err.message);
+    } else if (status === 429) {
+      setFormError('Too many attempts, please wait a minute and try again.');
+    } else {
+      // Network failure, timeout or an unexpected reply: the cart and the attempt key are kept.
+      setFormError(err?.message || 'Could not place the order. Please try again.');
+    }
+  };
+
   const handlePlaceOrder = async (e) => {
     e.preventDefault();
+    if (inFlight.current || !checkout.canCheckout) return;
+    setFormError('');
     if (!validate()) {
       addToast('Please complete the required details', 'error');
       return;
     }
 
-    setLoadingOrder(true);
+    inFlight.current = true;
+    setSubmitting(true);
+    const submittedKeys = cartItems.map((ci) => ci.cartKey);
+    if (!keyRef.current) keyRef.current = newIdempotencyKey();
     try {
-      const orderPayload = {
-        items: cartItems.map((ci) => ({
-          id: ci.id,
-          name: ci.name,
-          unitPrice: ci.unitPrice,
-          quantity: ci.quantity,
-          itemTotal: ci.itemTotal,
-          selectedSize: ci.selectedSize,
-          selectedAddons: ci.selectedAddons,
-          instructions: ci.instructions,
-        })),
-        customer: {
-          name: customerName,
-          phone: customerPhone,
-          address: orderType === 'delivery' ? { street: streetAddress, landmark } : null,
-          tableNumber: orderType === 'dinein' ? tableNumber : null,
-          specialNotes,
-        },
-        orderType,
-        deliveryTiming: 'Immediate ASAP',
-        payment: {
-          method: paymentMethod,
-          status: paymentMethod === 'cod' ? 'PENDING' : 'PAID',
-          transactionId:
-            paymentMethod === 'cod'
-              ? null
-              : `TXN-${paymentMethod.toUpperCase()}-${Math.floor(100000 + Math.random() * 900000)}`,
-        },
-        totals: {
-          subtotal,
-          gst,
-          packaging,
-          deliveryFee,
-          discount,
-          grandTotal,
-        },
-      };
+      const placed = await shopApi.placeOrder(outletId, {
+        idempotency_key: keyRef.current,
+        customer: { name: customerName.trim(), phone: cleanPhone(customerPhone) },
+        address: { line: streetAddress.trim(), landmark: landmark.trim() },
+        instructions: specialNotes.trim(),
+        items: requestItems,
+      });
 
-      const placed = await placeOrder(orderPayload);
-
+      orderStore.add(placed.public_id, placed.reference);
       try {
         confetti({
           particleCount: 90,
@@ -142,27 +185,32 @@ export const Checkout = () => {
           origin: { y: 0.6 },
           colors: ['#FF0917', '#FFDF54', '#F67D00', '#904137'],
         });
-      } catch {}
-
-      if (isAuthenticated && orderType === 'delivery' && streetAddress) {
-        addSavedAddress({ line1: streetAddress, landmark });
+      } catch {
+        /* decoration only */
       }
+      if (isAuthenticated && streetAddress) addSavedAddress({ line1: streetAddress, landmark });
 
       setConfirmedOrder(placed);
       clearCart();
       setShowSuccessModal(true);
-      addToast('Order confirmed by kitchen POS!', 'success');
     } catch (err) {
-      console.error(err);
-      addToast('Failed to place order. Please try again.', 'error');
+      handleOrderError(err, submittedKeys);
     } finally {
-      setLoadingOrder(false);
+      inFlight.current = false;
+      setSubmitting(false);
     }
   };
 
   const handleNavigateTracking = () => {
     setShowSuccessModal(false);
-    navigate(`/order-status/${confirmedOrder.orderId}`, { state: { order: confirmedOrder } });
+    navigate(`/order-status/${confirmedOrder.public_id}`);
+  };
+
+  const placeDisabled = submitting || !checkout.canCheckout;
+
+  const lineInfo = (ci) => {
+    const q = lineQuotes[ci.cartKey];
+    return { total: q && q.qty === ci.quantity && !q.error ? q.line_total : null, error: orderLineErrors[ci.cartKey] || q?.error || '' };
   };
 
   return (
@@ -204,7 +252,7 @@ export const Checkout = () => {
             Order Details & Checkout
           </h1>
           <p style={{ color: 'var(--text-muted)', fontSize: '0.88rem', margin: 0 }}>
-            Pick fulfillment mode, enter contact details, and complete your order.
+            Delivery only. Enter your contact details and place your order.
           </p>
         </div>
 
@@ -230,7 +278,8 @@ export const Checkout = () => {
             }}
           >
             <span>
-              Order Summary: {totalQuantity} items • <strong style={{ color: 'var(--brand-red)' }}>₹{grandTotal}</strong>
+              Order Summary: {itemCount} items •{' '}
+              <strong style={{ color: 'var(--brand-red)' }}>{grandTotal ? formatMoney(grandTotal) : '…'}</strong>
             </span>
             <span style={{ display: 'flex', alignItems: 'center', gap: 4, color: 'var(--brand-red)', fontSize: '0.8rem' }}>
               {mobileSummaryOpen ? 'Hide' : 'View'}
@@ -252,133 +301,42 @@ export const Checkout = () => {
                 fontSize: '0.84rem',
               }}
             >
-              {cartItems.map((ci) => (
-                <div key={ci.cartKey} style={{ display: 'flex', justifyContent: 'space-between' }}>
-                  <span>
-                    {ci.quantity} × {ci.name} {ci.selectedSize ? `(${ci.selectedSize.name})` : ''}
-                  </span>
-                  <strong>₹{ci.itemTotal}</strong>
-                </div>
-              ))}
-              <div style={{ borderTop: '1px solid var(--border-subtle)', paddingTop: 8, marginTop: 4, display: 'flex', justifyContent: 'space-between', fontWeight: 800 }}>
+              {cartItems.map((ci) => {
+                const li = lineInfo(ci);
+                return (
+                  <div key={ci.cartKey} style={{ display: 'flex', justifyContent: 'space-between' }}>
+                    <span>
+                      {ci.quantity} × {ci.name} {ci.selectedSize ? `(${ci.selectedSize.name})` : ''}
+                    </span>
+                    <strong>{li.total ? formatMoney(li.total) : '…'}</strong>
+                  </div>
+                );
+              })}
+              <div
+                style={{
+                  borderTop: '1px solid var(--border-subtle)',
+                  paddingTop: 8,
+                  marginTop: 4,
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  fontWeight: 800,
+                }}
+              >
                 <span>Grand Total:</span>
-                <span style={{ color: 'var(--brand-red)' }}>₹{grandTotal}</span>
+                <span style={{ color: 'var(--brand-red)' }}>{grandTotal ? formatMoney(grandTotal) : '…'}</span>
               </div>
             </div>
           )}
         </div>
 
-        <form onSubmit={handlePlaceOrder}>
+        <form onSubmit={handlePlaceOrder} noValidate>
           <div className="checkout-grid">
             {/* Left Column: Form Steps */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: '18px' }}>
-              {/* Step 1: Order Mode */}
-              <div className="checkout-card">
-                <div
-                  style={{
-                    fontSize: '0.92rem',
-                    fontWeight: 800,
-                    color: 'var(--brand-maroon)',
-                    marginBottom: '12px',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: 8,
-                  }}
-                >
-                  <span
-                    style={{
-                      width: 22,
-                      height: 22,
-                      borderRadius: '50%',
-                      backgroundColor: 'var(--brand-red)',
-                      color: 'var(--text-white)',
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      fontSize: '0.74rem',
-                      fontWeight: 900,
-                    }}
-                  >
-                    1
-                  </span>
-                  <span>How would you like your order?</span>
-                </div>
-
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '10px' }}>
-                  {[
-                    { id: 'delivery', label: 'Delivery', icon: Bike, time: '30-40 min' },
-                    { id: 'pickup', label: 'Takeaway', icon: Store, time: '15 min' },
-                    { id: 'dinein', label: 'Dine-In', icon: UtensilsCrossed, time: 'Table' },
-                  ].map((mode) => {
-                    const isSelected = orderType === mode.id;
-                    const Icon = mode.icon;
-                    return (
-                      <div
-                        key={mode.id}
-                        onClick={() => setOrderType(mode.id)}
-                        style={{
-                          padding: '12px 8px',
-                          borderRadius: 'var(--radius-md)',
-                          cursor: 'pointer',
-                          display: 'flex',
-                          flexDirection: 'column',
-                          alignItems: 'center',
-                          gap: 4,
-                          textAlign: 'center',
-                          backgroundColor: isSelected ? 'rgba(255, 9, 23, 0.05)' : 'var(--bg-card)',
-                          border: isSelected ? '2px solid var(--brand-red)' : '1px solid var(--border-subtle)',
-                          color: isSelected ? 'var(--brand-red)' : 'var(--brand-maroon)',
-                          fontWeight: 800,
-                          fontSize: '0.84rem',
-                          transition: 'all 0.15s ease',
-                        }}
-                      >
-                        <Icon size={20} color={isSelected ? 'var(--brand-red)' : 'var(--brand-orange)'} />
-                        <span>{mode.label}</span>
-                        <span
-                          style={{
-                            fontSize: '0.7rem',
-                            fontWeight: 600,
-                            color: isSelected ? 'var(--brand-red)' : 'var(--text-muted)',
-                          }}
-                        >
-                          {mode.time}
-                        </span>
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-
-              {/* Step 2: Contact & Address */}
+              {/* Step 1: Contact & Address (Takeaway and Dine-In are off: delivery only) */}
               <div className="checkout-card" style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
-                <div
-                  style={{
-                    fontSize: '0.92rem',
-                    fontWeight: 800,
-                    color: 'var(--brand-maroon)',
-                    marginBottom: '2px',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: 8,
-                  }}
-                >
-                  <span
-                    style={{
-                      width: 22,
-                      height: 22,
-                      borderRadius: '50%',
-                      backgroundColor: 'var(--brand-red)',
-                      color: 'var(--text-white)',
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      fontSize: '0.74rem',
-                      fontWeight: 900,
-                    }}
-                  >
-                    2
-                  </span>
+                <div style={stepTitle}>
+                  <span style={stepBadge}>1</span>
                   <span>Contact & Delivery Details</span>
                 </div>
 
@@ -389,6 +347,7 @@ export const Checkout = () => {
                     autoComplete="name"
                     label="Your Name *"
                     placeholder="e.g. Ramesh Patel"
+                    maxLength={120}
                     value={customerName}
                     onChange={(e) => setCustomerName(e.target.value)}
                     error={errors.name}
@@ -400,89 +359,48 @@ export const Checkout = () => {
                     label="Phone Number *"
                     placeholder="10-digit mobile number"
                     type="tel"
-                    maxLength={10}
+                    maxLength={16}
                     value={customerPhone}
-                    onChange={(e) => setCustomerPhone(e.target.value.replace(/\D/g, ''))}
+                    onChange={(e) => setCustomerPhone(e.target.value.replace(/[^\d+\s]/g, ''))}
                     error={errors.phone}
                     icon={<span style={{ fontSize: '0.84rem', fontWeight: 800, color: 'var(--text-muted)' }}>+91</span>}
                   />
                 </div>
 
-                {orderType === 'delivery' && (
-                  <>
-                    <Input
-                      id="delivery-address"
-                      name="street-address"
-                      autoComplete="street-address"
-                      label="Delivery Address *"
-                      placeholder="House/Flat No, Apartment, Street name, Area"
-                      value={streetAddress}
-                      onChange={(e) => setStreetAddress(e.target.value)}
-                      error={errors.address}
-                      icon={<MapPin size={16} />}
-                    />
-                    <Input
-                      id="delivery-landmark"
-                      name="landmark"
-                      label="Nearby Landmark (Optional)"
-                      placeholder="e.g. Near Mahatma Nagar Ground / Signal"
-                      value={landmark}
-                      onChange={(e) => setLandmark(e.target.value)}
-                    />
-                  </>
-                )}
-
-                {orderType === 'dinein' && (
-                  <Input
-                    id="table-number"
-                    name="tableNumber"
-                    label="Table Number *"
-                    placeholder="e.g. Table 4"
-                    value={tableNumber}
-                    onChange={(e) => setTableNumber(e.target.value)}
-                    error={errors.tableNumber}
-                    icon={<UtensilsCrossed size={16} />}
-                  />
-                )}
-
-                {orderType === 'pickup' && (
-                  <div
-                    style={{
-                      backgroundColor: 'var(--bg-soft)',
-                      padding: '10px 14px',
-                      borderRadius: 'var(--radius-md)',
-                      fontSize: '0.84rem',
-                      color: 'var(--brand-maroon)',
-                      border: '1px solid var(--border-subtle)',
-                      display: 'flex',
-                      alignItems: 'flex-start',
-                      gap: 8,
-                    }}
-                  >
-                    <Store size={16} color="var(--brand-red)" style={{ marginTop: 2, flexShrink: 0 }} />
-                    <div>
-                      <strong>Pickup Counter:</strong> Shop No 01, Signal, near Shete Hospital, Mahatma Nagar, Nashik.
-                      <div style={{ fontSize: '0.76rem', color: 'var(--text-muted)', marginTop: 2 }}>
-                        Freshly toasted on iron tava; ready in ~15 minutes.
-                      </div>
-                    </div>
-                  </div>
-                )}
+                <Input
+                  id="delivery-address"
+                  name="street-address"
+                  autoComplete="street-address"
+                  label="Delivery Address *"
+                  placeholder="House/Flat No, Apartment, Street name, Area"
+                  maxLength={500}
+                  value={streetAddress}
+                  onChange={(e) => setStreetAddress(e.target.value)}
+                  error={errors.address}
+                  icon={<MapPin size={16} />}
+                />
+                <Input
+                  id="delivery-landmark"
+                  name="landmark"
+                  label="Nearby Landmark (Optional)"
+                  placeholder="e.g. Near Mahatma Nagar Ground / Signal"
+                  maxLength={200}
+                  value={landmark}
+                  onChange={(e) => setLandmark(e.target.value)}
+                  error={errors.landmark}
+                />
 
                 <div>
                   <label
-                    style={{
-                      fontSize: '0.82rem',
-                      fontWeight: 700,
-                      color: 'var(--brand-maroon)',
-                      marginBottom: '5px',
-                      display: 'block',
-                    }}
+                    htmlFor="order-notes"
+                    style={{ fontSize: '0.82rem', fontWeight: 700, color: 'var(--brand-maroon)', marginBottom: '5px', display: 'block' }}
                   >
                     Cooking or Delivery Notes (Optional)
                   </label>
                   <textarea
+                    id="order-notes"
                     rows={2}
+                    maxLength={500}
                     value={specialNotes}
                     onChange={(e) => setSpecialNotes(e.target.value)}
                     placeholder="e.g. Extra spicy chutney, pack sev separately, call on arrival..."
@@ -490,7 +408,7 @@ export const Checkout = () => {
                       width: '100%',
                       padding: '9px 12px',
                       borderRadius: 'var(--radius-md)',
-                      border: '1.5px solid var(--border-subtle)',
+                      border: errors.instructions ? '1.5px solid var(--brand-red)' : '1.5px solid var(--border-subtle)',
                       fontSize: '0.86rem',
                       outline: 'none',
                       boxSizing: 'border-box',
@@ -500,6 +418,9 @@ export const Checkout = () => {
                       resize: 'vertical',
                     }}
                   />
+                  {errors.instructions && (
+                    <span style={{ fontSize: '0.78rem', color: 'var(--brand-red)', fontWeight: 600 }}>{errors.instructions}</span>
+                  )}
 
                   {/* Quick Note Suggestions */}
                   <div style={{ display: 'flex', flexWrap: 'wrap', gap: '5px', marginTop: '6px' }}>
@@ -527,120 +448,36 @@ export const Checkout = () => {
                 </div>
               </div>
 
-              {/* Step 3: Payment Method */}
+              {/* Step 2: Payment (online payment is not built yet) */}
               <div className="checkout-card">
-                <div
-                  style={{
-                    fontSize: '0.92rem',
-                    fontWeight: 800,
-                    color: 'var(--brand-maroon)',
-                    marginBottom: '12px',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: 8,
-                  }}
-                >
-                  <span
-                    style={{
-                      width: 22,
-                      height: 22,
-                      borderRadius: '50%',
-                      backgroundColor: 'var(--brand-red)',
-                      color: 'var(--text-white)',
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      fontSize: '0.74rem',
-                      fontWeight: 900,
-                    }}
-                  >
-                    3
-                  </span>
-                  <span>Payment Method</span>
+                <div style={{ ...stepTitle, marginBottom: 10 }}>
+                  <span style={stepBadge}>2</span>
+                  <span>Payment</span>
                 </div>
-
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                  {[
-                    {
-                      id: 'upi',
-                      label: 'UPI (Google Pay, PhonePe, Paytm, BHIM)',
-                      desc: 'Instant QR & UPI Intent (0% Fee)',
-                      icon: QrCode,
-                      recommended: true,
-                    },
-                    {
-                      id: 'card',
-                      label: 'Credit / Debit Card / NetBanking',
-                      desc: 'Visa, MasterCard, RuPay',
-                      icon: CreditCard,
-                    },
-                    {
-                      id: 'cod',
-                      label: orderType === 'delivery' ? 'Cash on Delivery (COD)' : 'Pay at Counter / Table',
-                      desc: 'Cash or scan QR upon arrival',
-                      icon: Banknote,
-                    },
-                  ].map((pm) => {
-                    const isSelected = paymentMethod === pm.id;
-                    const Icon = pm.icon;
-                    return (
-                      <label
-                        key={pm.id}
-                        onClick={() => setPaymentMethod(pm.id)}
-                        style={{
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'space-between',
-                          padding: '12px 14px',
-                          borderRadius: 'var(--radius-md)',
-                          backgroundColor: isSelected ? 'rgba(255, 9, 23, 0.04)' : 'var(--bg-card)',
-                          border: isSelected ? '2px solid var(--brand-red)' : '1px solid var(--border-subtle)',
-                          cursor: 'pointer',
-                          transition: 'all 0.15s ease',
-                        }}
-                      >
-                        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                          <input
-                            type="radio"
-                            name="payment"
-                            checked={isSelected}
-                            onChange={() => setPaymentMethod(pm.id)}
-                            style={{ accentColor: 'var(--brand-red)' }}
-                          />
-                          <Icon size={18} color={isSelected ? 'var(--brand-red)' : 'var(--brand-orange)'} />
-                          <div>
-                            <strong style={{ fontSize: '0.88rem', color: 'var(--brand-maroon)', display: 'block' }}>
-                              {pm.label}
-                            </strong>
-                            <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
-                              {pm.desc}
-                            </span>
-                          </div>
-                        </div>
-
-                        {pm.recommended && (
-                          <span
-                            style={{
-                              fontSize: '0.7rem',
-                              backgroundColor: 'var(--brand-yellow)',
-                              color: 'var(--brand-maroon)',
-                              fontWeight: 900,
-                              padding: '2px 7px',
-                              borderRadius: 'var(--radius-full)',
-                            }}
-                          >
-                            Popular
-                          </span>
-                        )}
-                      </label>
-                    );
-                  })}
+                <div style={{ display: 'flex', alignItems: 'center', gap: 10, fontSize: '0.88rem', color: 'var(--brand-maroon)' }}>
+                  <Banknote size={18} color="var(--brand-orange)" />
+                  <span>
+                    <strong>Pay on delivery.</strong> Online payment is not available yet.
+                  </span>
                 </div>
               </div>
             </div>
 
             {/* Right Column: Order Review & Bill Summary (Desktop & Mobile) */}
             <div className="checkout-summary-col">
+              {info && (
+                <div className="checkout-card" style={{ padding: '14px 18px', fontSize: '0.84rem', color: 'var(--brand-maroon)' }}>
+                  <strong>{info.name}</strong>
+                  {info.address && <div style={{ color: 'var(--text-muted)', fontSize: '0.78rem' }}>{info.address}</div>}
+                  {info.preparation_minutes > 0 && (
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginTop: 6, color: 'var(--text-muted)', fontSize: '0.78rem' }}>
+                      <Clock size={13} color="var(--brand-orange)" />
+                      <span>Preparation time about {info.preparation_minutes} min</span>
+                    </div>
+                  )}
+                </div>
+              )}
+
               {/* Order Items Review Box */}
               <div className="checkout-card" style={{ padding: '16px 18px' }}>
                 <div
@@ -653,84 +490,102 @@ export const Checkout = () => {
                     marginBottom: '10px',
                   }}
                 >
-                  <span style={{ fontSize: '0.9rem', fontWeight: 800, color: 'var(--brand-maroon)' }}>
-                    Your Dishes ({totalQuantity})
-                  </span>
+                  <span style={{ fontSize: '0.9rem', fontWeight: 800, color: 'var(--brand-maroon)' }}>Your Dishes ({itemCount})</span>
                   <Link to="/" style={{ fontSize: '0.76rem', color: 'var(--brand-red)', fontWeight: 700 }}>
                     + Edit Dishes
                   </Link>
                 </div>
 
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', maxHeight: '220px', overflowY: 'auto' }}>
-                  {cartItems.map((ci) => (
-                    <div
-                      key={ci.cartKey}
-                      style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'space-between',
-                        gap: 8,
-                        fontSize: '0.84rem',
-                      }}
-                    >
-                      <div style={{ flex: 1, minWidth: 0 }}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
-                          <span className="veg-stamp" style={{ width: 11, height: 11 }}>
-                            <span className="veg-stamp-dot" style={{ width: 5, height: 5 }} />
-                          </span>
-                          <strong
-                            style={{
-                              color: 'var(--text-dark)',
-                              whiteSpace: 'nowrap',
-                              overflow: 'hidden',
-                              textOverflow: 'ellipsis',
-                            }}
-                          >
-                            {ci.quantity} × {ci.name}
-                          </strong>
-                        </div>
-                        {ci.selectedSize && (
-                          <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)', marginLeft: 16 }}>
-                            {ci.selectedSize.name}
+                  {cartItems.map((ci) => {
+                    const li = lineInfo(ci);
+                    return (
+                      <div key={ci.cartKey} style={{ fontSize: '0.84rem' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8 }}>
+                          <div style={{ flex: 1, minWidth: 0 }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
+                              <span className="veg-stamp" style={{ width: 11, height: 11 }}>
+                                <span className="veg-stamp-dot" style={{ width: 5, height: 5 }} />
+                              </span>
+                              <strong
+                                style={{ color: 'var(--text-dark)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}
+                              >
+                                {ci.quantity} × {ci.name}
+                              </strong>
+                            </div>
+                            {ci.selectedSize && (
+                              <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)', marginLeft: 16 }}>{ci.selectedSize.name}</div>
+                            )}
+                            {ci.selectedAddons && ci.selectedAddons.length > 0 && (
+                              <div style={{ fontSize: '0.72rem', color: 'var(--brand-orange)', marginLeft: 16 }}>
+                                +{ci.selectedAddons.map((a) => a.name).join(', ')}
+                              </div>
+                            )}
                           </div>
-                        )}
-                        {ci.selectedAddons && ci.selectedAddons.length > 0 && (
-                          <div style={{ fontSize: '0.72rem', color: 'var(--brand-orange)', marginLeft: 16 }}>
-                            +{ci.selectedAddons.map((a) => a.name).join(', ')}
+                          <span style={{ fontWeight: 800, color: 'var(--brand-maroon)', flexShrink: 0 }}>
+                            {li.total ? formatMoney(li.total) : li.error ? '' : '…'}
+                          </span>
+                        </div>
+                        {li.error && (
+                          <div role="alert" style={{ color: 'var(--brand-red)', fontSize: '0.76rem', fontWeight: 700, marginLeft: 16 }}>
+                            {li.error}
                           </div>
                         )}
                       </div>
-                      <span style={{ fontWeight: 800, color: 'var(--brand-maroon)', flexShrink: 0 }}>
-                        ₹{ci.itemTotal}
-                      </span>
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
               </div>
 
-              {/* Price Breakdown */}
+              {/* Price Breakdown: the server quote */}
               <PriceSummary />
 
               {/* Confirm & Place Order CTA */}
-              <button
-                type="submit"
-                disabled={loadingOrder}
-                className="btn-brand-primary"
-                style={{
-                  width: '100%',
-                  padding: '14px 20px',
-                  fontSize: '1rem',
-                  fontWeight: 900,
-                  cursor: loadingOrder ? 'not-allowed' : 'pointer',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  gap: 8,
-                }}
-              >
-                <span>{loadingOrder ? 'Confirming with Kitchen...' : `Place Order • ₹${grandTotal}`}</span>
-                {!loadingOrder && <ArrowRight size={18} />}
-              </button>
+              <div>
+                <button
+                  type="submit"
+                  disabled={placeDisabled}
+                  className="btn-brand-primary"
+                  style={{
+                    width: '100%',
+                    padding: '14px 20px',
+                    fontSize: '1rem',
+                    fontWeight: 900,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: 8,
+                  }}
+                >
+                  <span>{submitting ? 'Placing your order...' : grandTotal ? `Place Order • ${formatMoney(grandTotal)}` : 'Place Order'}</span>
+                  {!submitting && <ArrowRight size={18} />}
+                </button>
+                <CheckoutNotice />
+                {formError && (
+                  <div
+                    role="alert"
+                    style={{
+                      marginTop: 10,
+                      padding: '10px 12px',
+                      borderRadius: 'var(--radius-md)',
+                      backgroundColor: 'var(--bg-soft)',
+                      border: '1px solid var(--brand-red)',
+                      color: 'var(--brand-red)',
+                      fontSize: '0.84rem',
+                      fontWeight: 700,
+                    }}
+                  >
+                    {formError}
+                    {Object.keys(orderLineErrors).length > 0 && (
+                      <div style={{ marginTop: 6 }}>
+                        <Link to="/" style={{ textDecoration: 'underline', color: 'var(--brand-maroon)' }}>
+                          Back to the menu
+                        </Link>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
 
               {/* Assurance Marks */}
               <div
@@ -744,7 +599,7 @@ export const Checkout = () => {
                 }}
               >
                 <ShieldCheck size={15} color="var(--brand-red)" />
-                <span>100% Pure Veg • Prepared Fresh • Rajubhai Live POS</span>
+                <span>100% Pure Veg • Prepared Fresh</span>
               </div>
             </div>
           </div>
@@ -752,33 +607,32 @@ export const Checkout = () => {
           {/* Sticky Mobile Bottom Bar */}
           <div className="checkout-mobile-action-bar">
             <div>
-              <span style={{ fontSize: '0.7rem', textTransform: 'uppercase', letterSpacing: '0.4px', color: 'var(--text-light)', fontWeight: 700, display: 'block' }}>
+              <span
+                style={{
+                  fontSize: '0.7rem',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.4px',
+                  color: 'var(--text-light)',
+                  fontWeight: 700,
+                  display: 'block',
+                }}
+              >
                 Total to Pay
               </span>
-              <strong style={{ fontSize: '1.25rem', color: 'var(--brand-red)' }}>₹{grandTotal}</strong>
+              <strong style={{ fontSize: '1.25rem', color: 'var(--brand-red)' }}>{grandTotal ? formatMoney(grandTotal) : '…'}</strong>
             </div>
 
-            <button
-              type="submit"
-              disabled={loadingOrder}
-              className="btn-brand-primary"
-              style={{ padding: '10px 22px', fontSize: '0.88rem' }}
-            >
-              <span>{loadingOrder ? 'Placing...' : 'Place Order'}</span>
+            <button type="submit" disabled={placeDisabled} className="btn-brand-primary" style={{ padding: '10px 22px', fontSize: '0.88rem' }}>
+              <span>{submitting ? 'Placing...' : 'Place Order'}</span>
               <ArrowRight size={16} />
             </button>
           </div>
         </form>
       </div>
 
-      {/* Order Success & Generated Order Bill Modal */}
+      {/* Order confirmation: the real reference from the server */}
       {showSuccessModal && confirmedOrder && (
-        <Modal
-          isOpen={showSuccessModal}
-          onClose={handleNavigateTracking}
-          title="Order Confirmed!"
-          maxWidth="560px"
-        >
+        <Modal isOpen={showSuccessModal} onClose={handleNavigateTracking} title="Order Placed!" maxWidth="520px">
           <div style={{ display: 'flex', flexDirection: 'column', gap: '18px', textAlign: 'center' }}>
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
               <div
@@ -798,72 +652,30 @@ export const Checkout = () => {
                 <CheckCircle size={36} color="var(--brand-red)" strokeWidth={2.5} />
               </div>
 
-              <h2 style={{ fontSize: '1.45rem', color: 'var(--brand-maroon)', margin: '0 0 4px 0', fontWeight: 900 }}>
-                Order Received!
-              </h2>
+              <h2 style={{ fontSize: '1.45rem', color: 'var(--brand-maroon)', margin: '0 0 4px 0', fontWeight: 900 }}>Order Received!</h2>
               <p style={{ fontSize: '0.95rem', color: 'var(--brand-red)', fontWeight: 800, margin: 0 }}>
-                Kitchen is preparing your fresh order
+                Waiting for the restaurant to accept
               </p>
               <p style={{ fontSize: '0.84rem', color: 'var(--text-muted)', marginTop: 4 }}>
-                Token ID: <strong style={{ color: 'var(--brand-maroon)' }}>#{confirmedOrder.orderId}</strong>
+                Order reference: <strong style={{ color: 'var(--brand-maroon)' }}>{confirmedOrder.reference}</strong>
               </p>
             </div>
 
-            {/* Generated Bill */}
             <div
-              className="receipt-paper"
               style={{
-                textAlign: 'left',
-                padding: '16px 18px',
+                padding: '14px 18px',
                 borderRadius: 'var(--radius-md)',
                 border: '1.5px dashed var(--brand-red)',
                 backgroundColor: 'var(--bg-soft)',
-                fontSize: '0.86rem',
+                display: 'flex',
+                justifyContent: 'space-between',
+                fontWeight: 900,
+                fontSize: '1rem',
+                color: 'var(--brand-red)',
               }}
             >
-              <div
-                style={{
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  borderBottom: '1px solid var(--border-subtle)',
-                  paddingBottom: 8,
-                  marginBottom: 10,
-                }}
-              >
-                <div>
-                  <strong style={{ color: 'var(--brand-maroon)' }}>Rajubhai Dabeliwale</strong>
-                  <div style={{ fontSize: '0.74rem', color: 'var(--text-muted)' }}>FSSAI: {restaurantData.fssai}</div>
-                </div>
-                <div style={{ textAlign: 'right', fontSize: '0.78rem', color: 'var(--text-muted)' }}>
-                  {confirmedOrder.orderType?.toUpperCase()}
-                </div>
-              </div>
-
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 6, marginBottom: 10 }}>
-                {confirmedOrder.items.map((it, idx) => (
-                  <div key={idx} style={{ display: 'flex', justifyContent: 'space-between' }}>
-                    <span>
-                      {it.quantity} × {it.name}
-                    </span>
-                    <strong>₹{it.itemTotal}</strong>
-                  </div>
-                ))}
-              </div>
-
-              <div
-                style={{
-                  borderTop: '1px solid var(--border-subtle)',
-                  paddingTop: 8,
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  fontWeight: 900,
-                  fontSize: '1rem',
-                  color: 'var(--brand-red)',
-                }}
-              >
-                <span>Total Paid / Payable:</span>
-                <span>₹{confirmedOrder.totals.grandTotal}</span>
-              </div>
+              <span>Total payable:</span>
+              <span>{formatMoney(confirmedOrder.grand_total)}</span>
             </div>
 
             <button

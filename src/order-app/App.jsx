@@ -28,7 +28,7 @@ export function App() {
           <Route path="/menu" element={<MenuRedirect />} />
           <Route path="/cart" element={<CartPage />} />
           <Route path="/checkout" element={<Checkout />} />
-          <Route path="/order-status/:orderId" element={<OrderTracking />} />
+          <Route path="/order-status/:publicId" element={<OrderTracking />} />
           <Route path="/login" element={<Login />} />
           <Route path="/orders" element={<OrdersProfile />} />
           <Route path="/profile" element={<OrdersProfile />} />

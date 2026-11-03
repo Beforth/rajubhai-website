@@ -1,34 +1,31 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
-import restaurantData from '../data/restaurant.json';
+import React, { createContext, useContext, useState, useEffect, useMemo, useRef, useCallback } from 'react';
 import { useOutlet } from './OutletContext';
+import { shopApi } from '../services/shopApi';
 
 const CartContext = createContext();
 
 const CART_STORAGE_KEY = 'rajubhai_user_cart';
+const QUOTE_DEBOUNCE_MS = 400;
 
 export const CartProvider = ({ children }) => {
-  const { outletId } = useOutlet();
+  const { outletId, info } = useOutlet();
   const [cartItems, setCartItems] = useState(() => {
     try {
       const saved = localStorage.getItem(CART_STORAGE_KEY);
       if (!saved) return [];
       const parsed = JSON.parse(saved);
-      // Cleanse and sanitize any legacy invalid items with NaN or missing values
       if (Array.isArray(parsed)) {
-        return parsed
-          // Lines saved before carts were per outlet have no outletId and can no longer be ordered.
-          .filter((item) => item && typeof item === 'object' && item.outletId)
-          .map((item) => {
-            const qty = Number(item.quantity) || 1;
-            const price = Number(item.unitPrice) || Number(item.price) || Number(item.basePrice) || 45;
-            const total = Number(item.itemTotal) || qty * price;
-            return {
-              ...item,
-              quantity: Math.max(1, qty),
-              unitPrice: price,
-              itemTotal: total,
-            };
-          });
+        return (
+          parsed
+            // Lines saved before carts were per outlet have no outletId and can no longer be ordered.
+            .filter((item) => item && typeof item === 'object' && item.outletId)
+            .map((item) => {
+              // Prices are never kept in the cart: the server quote prices every line.
+              // eslint-disable-next-line no-unused-vars
+              const { unitPrice, itemTotal, basePrice, ...line } = item;
+              return { ...line, quantity: Math.max(1, Number(item.quantity) || 1) };
+            })
+        );
       }
       return [];
     } catch {
@@ -43,8 +40,6 @@ export const CartProvider = ({ children }) => {
     setCartItems((prev) => (prev.some((i) => i.outletId !== outletId) ? prev.filter((i) => i.outletId === outletId) : prev));
   }, [outletId]);
 
-  const [appliedCoupon, setAppliedCoupon] = useState(null);
-  const [orderType, setOrderType] = useState('delivery'); // 'delivery' | 'pickup' | 'dinein'
   const [isCartDrawerOpen, setDrawerOpen] = useState(false);
 
   // Where the in-page cart panel is visible (wide screens on the order page) it stands in
@@ -80,147 +75,165 @@ export const CartProvider = ({ children }) => {
   };
 
   /**
-   * Add item to cart with size, addons, quantity and notes
-   * Guaranteed NaN-safe numeric parsing
+   * Add item to cart with size, addons, quantity and notes. No prices are stored or added up
+   * here: the quote endpoint prices the cart.
    */
   const addToCart = (item, quantity = 1, selectedSize = null, selectedAddons = [], instructions = '') => {
     if (!item || !outletId) return;
 
     const defaultSize = selectedSize || (item.sizes && item.sizes.length > 0 ? item.sizes[0] : null);
     const cartKey = generateCartKey(item, defaultSize, selectedAddons);
-
     const safeQty = Math.max(1, Number(quantity) || 1);
-    const rawBasePrice = Number(item.price) || Number(item.basePrice) || Number(item.unitPrice) || 45;
-    const sizeExtra = Number(defaultSize?.price) || 0;
-    const addonsExtra = (selectedAddons || []).reduce((sum, a) => sum + (Number(a.price) || 0), 0);
-    const singleUnitPrice = Math.max(0, rawBasePrice + sizeExtra + addonsExtra);
 
     setCartItems((prev) => {
       const existingIndex = prev.findIndex((ci) => ci.cartKey === cartKey);
       if (existingIndex > -1) {
         const copy = [...prev];
-        const newQty = (copy[existingIndex].quantity || 0) + safeQty;
-        copy[existingIndex] = {
-          ...copy[existingIndex],
-          quantity: newQty,
-          unitPrice: singleUnitPrice,
-          itemTotal: newQty * singleUnitPrice,
-        };
+        copy[existingIndex] = { ...copy[existingIndex], quantity: (copy[existingIndex].quantity || 0) + safeQty };
         return copy;
-      } else {
-        const newItem = {
+      }
+      return [
+        ...prev,
+        {
           cartKey,
           id: item.id || `item-${Date.now()}`,
           name: item.name || 'Special Dish',
           image: item.image || 'https://images.unsplash.com/photo-1626777552726-4a6b54c97e46?auto=format&fit=crop&w=600&q=80',
-          basePrice: rawBasePrice,
-          unitPrice: singleUnitPrice,
           quantity: safeQty,
-          itemTotal: safeQty * singleUnitPrice,
           outletId,
           variationId: defaultSize?.id ?? null,
           addonIds: (selectedAddons || []).map((a) => a.id),
           selectedSize: defaultSize,
           selectedAddons: selectedAddons || [],
           instructions: instructions || '',
-        };
-        return [...prev, newItem];
-      }
+        },
+      ];
     });
   };
 
-  /**
-   * Update quantity of a cart item
-   */
+  const removeFromCart = (cartKey) => {
+    setCartItems((prev) => prev.filter((item) => item.cartKey !== cartKey));
+  };
+
   const updateQuantity = (cartKey, newQty) => {
     const parsedQty = Number(newQty) || 0;
     if (parsedQty <= 0) {
       removeFromCart(cartKey);
       return;
     }
-    setCartItems((prev) =>
-      prev.map((item) => {
-        if (item.cartKey === cartKey) {
-          const uPrice = Number(item.unitPrice) || 0;
-          return {
-            ...item,
-            quantity: parsedQty,
-            itemTotal: parsedQty * uPrice,
-          };
-        }
-        return item;
-      })
-    );
+    setCartItems((prev) => prev.map((item) => (item.cartKey === cartKey ? { ...item, quantity: parsedQty } : item)));
   };
 
-  /**
-   * Remove item from cart
-   */
-  const removeFromCart = (cartKey) => {
-    setCartItems((prev) => prev.filter((item) => item.cartKey !== cartKey));
-  };
+  // ---- Server quote -------------------------------------------------------------------
+  // The cart never adds anything up. Every money value shown comes from POST .../quote/,
+  // re-requested (debounced) whenever the lines or the delivery address change.
+  const [quoteAddress, setQuoteAddress] = useState(null); // { line, landmark } once known
+  const [quoteState, setQuoteState] = useState({ sig: '', data: null, keys: [], error: null });
+  const [retryNonce, setRetryNonce] = useState(0);
+  const seqRef = useRef(0);
 
-  /**
-   * Clear all items
-   */
   const clearCart = () => {
     setCartItems([]);
-    setAppliedCoupon(null);
+    setQuoteAddress(null);
   };
 
-  // Robust NaN-Safe Calculations
-  const itemCount = cartItems.reduce((acc, item) => acc + (Number(item.quantity) || 0), 0);
-  const subtotal = Math.round(
-    cartItems.reduce((acc, item) => {
-      const lineTotal = Number(item.itemTotal) || (Number(item.quantity) || 1) * (Number(item.unitPrice) || 0);
-      return acc + (isNaN(lineTotal) ? 0 : lineTotal);
-    }, 0)
+  // The request lines, same order as the cart. Ids are opaque encrypted strings.
+  const requestItems = useMemo(
+    () =>
+      cartItems.map((ci) => ({
+        item_id: ci.id,
+        variation_id: ci.variationId || '',
+        addons: (ci.addonIds || []).map((id) => ({ id, qty: 1 })),
+        qty: ci.quantity,
+        note: (ci.instructions || '').slice(0, 200),
+      })),
+    [cartItems]
   );
+  const address = useMemo(
+    () => ({
+      line: (quoteAddress?.line || '').trim().slice(0, 500),
+      landmark: (quoteAddress?.landmark || '').trim().slice(0, 200),
+    }),
+    [quoteAddress]
+  );
+  const itemsSig = useMemo(() => JSON.stringify(requestItems), [requestItems]);
+  const sig = `${outletId}|${itemsSig}|${address.line}|${address.landmark}`;
 
-  // GST 5% on food items
-  const gstRate = Number(restaurantData.gstPercent) || 5;
-  const gst = Math.round((subtotal * gstRate) / 100);
+  useEffect(() => {
+    if (!outletId || requestItems.length === 0) return undefined;
+    const seq = ++seqRef.current;
+    const ctrl = new AbortController();
+    const keys = cartItems.map((ci) => ci.cartKey);
+    const timer = setTimeout(async () => {
+      try {
+        const data = await shopApi.quote(outletId, requestItems, address, { signal: ctrl.signal });
+        if (seq !== seqRef.current) return; // a newer request exists: ignore this answer
+        setQuoteState({ sig, data, keys, error: null });
+      } catch (e) {
+        if (e?.name === 'AbortError' || seq !== seqRef.current) return;
+        setQuoteState({ sig, data: null, keys, error: e });
+      }
+    }, QUOTE_DEBOUNCE_MS);
+    return () => {
+      clearTimeout(timer);
+      ctrl.abort();
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [sig, retryNonce]);
 
-  // Packaging fee (only for delivery & pickup, free for dinein)
-  const pkgFee = Number(restaurantData.packagingFee) || 15;
-  const packaging = orderType === 'dinein' || itemCount === 0 ? 0 : pkgFee;
+  const refreshQuote = useCallback(() => setRetryNonce((n) => n + 1), []);
 
-  // Delivery fee (free above threshold, 0 for pickup & dinein)
-  const dlvThreshold = Number(restaurantData.freeDeliveryThreshold) || 350;
-  const defaultDlv = Number(restaurantData.defaultDeliveryFee) || 35;
-  let deliveryFee = 0;
-  if (orderType === 'delivery' && itemCount > 0) {
-    if (subtotal >= dlvThreshold) {
-      deliveryFee = 0;
-    } else {
-      deliveryFee = defaultDlv;
+  const hasLines = cartItems.length > 0;
+  const quoteFresh = hasLines && quoteState.sig === sig;
+  const quote = quoteFresh ? quoteState.data : null;
+  const quoteError = quoteFresh ? quoteState.error : null;
+  const quoteLoading = hasLines && !quoteFresh;
+
+  // cartKey -> the server's answer for that line ({unit_price, line_total, error, qty}).
+  // The quote's lines come back in request order, so they are matched by index.
+  const lineQuotes = useMemo(() => {
+    const map = {};
+    (quoteState.data?.lines || []).forEach((line, i) => {
+      if (quoteState.keys[i]) map[quoteState.keys[i]] = line;
+    });
+    return map;
+  }, [quoteState]);
+
+  const itemCount = cartItems.reduce((acc, item) => acc + (Number(item.quantity) || 0), 0);
+  const grandTotal = quote ? quote.grand_total : null;
+
+  // Whether the customer may go on to checkout, and why not. `pending` = still calculating.
+  const checkout = useMemo(() => {
+    if (!hasLines) return { canCheckout: false, pending: false, reason: '' };
+    if (info && info.accepting_orders === false) {
+      return { canCheckout: false, pending: false, reason: info.closed_message || 'We are closed right now.' };
     }
-  }
-
-  // Coupon discount
-  let discount = 0;
-  if (appliedCoupon && subtotal >= (Number(appliedCoupon.minOrder) || 0)) {
-    discount = Math.min(subtotal, Number(appliedCoupon.discountAmount) || 0);
-  }
-
-  const calculatedTotal = subtotal + gst + packaging + deliveryFee - discount;
-  const grandTotal = Math.max(0, isNaN(calculatedTotal) ? 0 : calculatedTotal);
+    if (quoteError) return { canCheckout: false, pending: false, reason: quoteError.message };
+    if (!quote) return { canCheckout: false, pending: true, reason: '' };
+    if (quote.lines.some((l) => l.error)) {
+      return { canCheckout: false, pending: false, reason: 'Some items need attention. Fix the items marked above.' };
+    }
+    if (!quote.eligible) {
+      return { canCheckout: false, pending: false, reason: quote.reason || 'This order cannot be placed right now.' };
+    }
+    return { canCheckout: true, pending: false, reason: '' };
+  }, [hasLines, info, quote, quoteError]);
 
   return (
     <CartContext.Provider
       value={{
         cartItems,
         itemCount,
-        subtotal: isNaN(subtotal) ? 0 : subtotal,
-        gst: isNaN(gst) ? 0 : gst,
-        packaging: isNaN(packaging) ? 0 : packaging,
-        deliveryFee: isNaN(deliveryFee) ? 0 : deliveryFee,
-        discount: isNaN(discount) ? 0 : discount,
         grandTotal,
-        appliedCoupon,
-        setAppliedCoupon,
-        orderType,
-        setOrderType,
+        quote,
+        quoteLoading,
+        quoteError,
+        refreshQuote,
+        lineQuotes,
+        requestItems,
+        itemsSig,
+        checkout,
+        setQuoteAddress,
         isCartDrawerOpen,
         setIsCartDrawerOpen,
         addToCart,

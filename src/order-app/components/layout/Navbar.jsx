@@ -4,6 +4,7 @@ import { ShoppingBag, User, Phone, Menu as MenuIcon, X, ArrowLeft } from 'lucide
 import { useCart } from '../../context/CartContext';
 import { useAuth } from '../../context/AuthContext';
 import { useOutlet } from '../../context/OutletContext';
+import { formatMoney } from '../../services/money';
 
 export const Navbar = () => {
   const { itemCount, grandTotal, setIsCartDrawerOpen } = useCart();
@@ -282,7 +283,7 @@ export const Navbar = () => {
             )}
             {itemCount > 0 && (
               <span className="cart-total-pill-text" style={{ fontSize: '0.8rem', fontWeight: 800, opacity: 0.95 }}>
-                • ₹{grandTotal}
+                {grandTotal ? `• ${formatMoney(grandTotal)}` : ''}
               </span>
             )}
           </button>

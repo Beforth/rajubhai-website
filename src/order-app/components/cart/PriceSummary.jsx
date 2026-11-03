@@ -1,16 +1,16 @@
 import React from 'react';
 import { useCart } from '../../context/CartContext';
+import { formatMoney } from '../../services/money';
 
+const row = { display: 'flex', justifyContent: 'space-between', color: 'var(--text-muted)' };
+
+// Every figure is the server's quote; nothing is calculated here. While the quote is loading
+// the rows show "…" so a wrong number is never displayed.
 export const PriceSummary = ({ compact = false }) => {
-  const { subtotal, gst, packaging, deliveryFee, discount, grandTotal, orderType } = useCart();
-
-  // Safe numerical display helpers
-  const safeSubtotal = Number(subtotal) || 0;
-  const safeGst = Number(gst) || 0;
-  const safePackaging = Number(packaging) || 0;
-  const safeDelivery = Number(deliveryFee) || 0;
-  const safeDiscount = Number(discount) || 0;
-  const safeGrandTotal = Number(grandTotal) || 0;
+  const { quote, quoteLoading, quoteError, refreshQuote } = useCart();
+  const pending = quoteLoading || (!quote && !quoteError);
+  const value = (v) => (pending ? <span aria-label="Calculating">…</span> : formatMoney(v));
+  const hasAmount = (v) => v !== undefined && v !== null && Number(v) !== 0;
 
   return (
     <div
@@ -39,66 +39,77 @@ export const PriceSummary = ({ compact = false }) => {
         Bill Details & Charges
       </div>
 
-      {/* Itemized charges with guaranteed safe numbers */}
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', fontSize: '0.88rem' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', color: 'var(--text-dark)' }}>
-          <span>Item Total</span>
-          <span style={{ fontWeight: 800 }}>₹{safeSubtotal}</span>
+      {quoteError ? (
+        <div style={{ fontSize: '0.86rem', color: 'var(--brand-red)' }}>
+          <div>{quoteError.message}</div>
+          <button
+            type="button"
+            onClick={refreshQuote}
+            style={{ marginTop: 8, fontWeight: 800, color: 'var(--brand-maroon)', textDecoration: 'underline' }}
+          >
+            Try again
+          </button>
         </div>
-
-        {safeDiscount > 0 && (
-          <div style={{ display: 'flex', justifyContent: 'space-between', color: '#2e7d32' }}>
-            <span>Discount Applied</span>
-            <span style={{ fontWeight: 800 }}>- ₹{safeDiscount}</span>
+      ) : (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', fontSize: '0.88rem' }}>
+          <div style={{ ...row, color: 'var(--text-dark)' }}>
+            <span>Item Total</span>
+            <span style={{ fontWeight: 800 }}>{value(quote?.subtotal)}</span>
           </div>
-        )}
 
-        <div style={{ display: 'flex', justifyContent: 'space-between', color: 'var(--text-muted)' }}>
-          <span>Taxes (5% GST)</span>
-          <span>₹{safeGst}</span>
-        </div>
-
-        {safePackaging > 0 && (
-          <div style={{ display: 'flex', justifyContent: 'space-between', color: 'var(--text-muted)' }}>
-            <span>Packaging & Bag</span>
-            <span>₹{safePackaging}</span>
-          </div>
-        )}
-
-        <div style={{ display: 'flex', justifyContent: 'space-between', color: 'var(--text-muted)' }}>
-          <span>
-            {orderType === 'delivery'
-              ? 'Delivery Partner Fee'
-              : orderType === 'pickup'
-              ? 'Store Takeaway'
-              : 'Dine-In Table Service'}
-          </span>
-          <span>{safeDelivery === 0 ? <strong style={{ color: '#2e7d32' }}>FREE</strong> : `₹${safeDelivery}`}</span>
-        </div>
-
-        <div
-          style={{
-            borderTop: '1.5px solid var(--border-subtle)',
-            paddingTop: '14px',
-            marginTop: '4px',
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'baseline',
-          }}
-        >
-          <div>
-            <div style={{ fontSize: '0.98rem', fontWeight: 900, color: 'var(--brand-maroon)' }}>
-              Total Amount To Pay
+          {(pending || hasAmount(quote?.container_charge)) && (
+            <div style={row}>
+              <span>Packaging & Container</span>
+              <span>{value(quote?.container_charge)}</span>
             </div>
-            <div style={{ fontSize: '0.74rem', color: 'var(--text-muted)' }}>
-              Inclusive of all taxes & charges
-            </div>
+          )}
+
+          <div style={row}>
+            <span>Delivery Fee</span>
+            <span>
+              {pending ? (
+                '…'
+              ) : hasAmount(quote.delivery_charge) ? (
+                formatMoney(quote.delivery_charge)
+              ) : (
+                <strong style={{ color: 'var(--brand-orange)' }}>FREE</strong>
+              )}
+            </span>
           </div>
-          <span style={{ fontSize: '1.35rem', fontWeight: 900, color: 'var(--brand-red)', letterSpacing: '-0.4px' }}>
-            ₹{safeGrandTotal}
-          </span>
+
+          {!pending &&
+            (quote.tax_breakdown || []).map((t, i) => (
+              <div key={`${t.label}-${t.mode}-${i}`} style={row}>
+                <span>
+                  {t.label}
+                  {t.mode === 'backward' ? ' (included)' : ''}
+                </span>
+                <span>{formatMoney(t.amount)}</span>
+              </div>
+            ))}
+
+          <div
+            style={{
+              borderTop: '1.5px solid var(--border-subtle)',
+              paddingTop: '14px',
+              marginTop: '4px',
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'baseline',
+            }}
+          >
+            <div>
+              <div style={{ fontSize: '0.98rem', fontWeight: 900, color: 'var(--brand-maroon)' }}>Total Amount To Pay</div>
+              <div style={{ fontSize: '0.74rem', color: 'var(--text-muted)' }}>
+                {pending ? 'Calculating…' : 'Inclusive of all taxes & charges'}
+              </div>
+            </div>
+            <span style={{ fontSize: '1.35rem', fontWeight: 900, color: 'var(--brand-red)', letterSpacing: '-0.4px' }}>
+              {value(quote?.grand_total)}
+            </span>
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 };

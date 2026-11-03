@@ -73,6 +73,16 @@
   box-shadow: 0 6px 18px rgba(144, 65, 55, 0.35);
 }
 
+.btn-brand-primary:disabled,
+.btn-brand-primary:disabled:hover {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+  background-color: var(--brand-red);
+  border-color: var(--brand-red);
+}
+
 .btn-brand-outline {
   border-color: var(--text-dark);
   color: var(--text-dark);
