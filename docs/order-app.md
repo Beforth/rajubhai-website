@@ -150,7 +150,13 @@ The local server will start at `http://localhost:5173`.
 
 ## Next step
 
-Replacing the mock data in `src/order-app/services/api.js` with real POS endpoints is a separate spec.
+The menu, categories and restaurant info now come from the POS shop API. The order, coupon and OTP functions in `src/order-app/services/api.js` are still mock data; replacing them is a later task.
+
+## Shop API and outlets
+
+- `services/shopApi.js` calls the public `/api/v1/shop/*` endpoints and returns the envelope's `data` (or throws `ShopApiError`). `services/menuMapper.js` turns the menu payload into the shape the cards, modal and cart use (variation price is a full price; the mapper stores the cheapest as the item price and the difference per size).
+- `PUBLIC_API_BASE_URL` (env) is the API origin. Leave it empty in dev: the Astro dev server proxies `/api` and `/media` to `http://127.0.0.1:8000` (override with `API_PROXY_TARGET`). In production set it to the backend origin, or serve `/api` and `/media` on the same origin.
+- Outlet choice (`context/OutletContext.jsx`): `?outlet=` query, then `localStorage` `rajubhai.outlet`, then the only enabled outlet, otherwise the `OutletPicker`. The cart is per outlet (each line has `outletId`, `variationId`, `addonIds`); switching with items in the cart asks before clearing it.
 
 ## Order page layout
 

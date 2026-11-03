@@ -3,6 +3,7 @@ import App from './App';
 import './index.css';
 import { ToastProvider } from './context/ToastContext';
 import { AuthProvider } from './context/AuthContext';
+import { OutletProvider } from './context/OutletContext';
 import { CartProvider } from './context/CartContext';
 
 export default function OrderApp() {
@@ -11,9 +12,11 @@ export default function OrderApp() {
       <BrowserRouter basename="/order">
         <ToastProvider>
           <AuthProvider>
-            <CartProvider>
-              <App />
-            </CartProvider>
+            <OutletProvider>
+              <CartProvider>
+                <App />
+              </CartProvider>
+            </OutletProvider>
           </AuthProvider>
         </ToastProvider>
       </BrowserRouter>

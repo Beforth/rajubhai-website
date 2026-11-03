@@ -106,10 +106,10 @@ export const ItemDetailsModal = ({ item, isOpen, onClose }) => {
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
               {item.sizes.map((s) => {
-                const isSelected = selectedSize?.name === s.name;
+                const isSelected = selectedSize?.id === s.id;
                 return (
                   <label
-                    key={s.name}
+                    key={s.id}
                     onClick={() => setSelectedSize(s)}
                     style={{
                       display: 'flex',

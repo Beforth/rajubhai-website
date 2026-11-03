@@ -1,11 +1,13 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import restaurantData from '../data/restaurant.json';
+import { useOutlet } from './OutletContext';
 
 const CartContext = createContext();
 
 const CART_STORAGE_KEY = 'rajubhai_user_cart';
 
 export const CartProvider = ({ children }) => {
+  const { outletId } = useOutlet();
   const [cartItems, setCartItems] = useState(() => {
     try {
       const saved = localStorage.getItem(CART_STORAGE_KEY);
@@ -14,7 +16,8 @@ export const CartProvider = ({ children }) => {
       // Cleanse and sanitize any legacy invalid items with NaN or missing values
       if (Array.isArray(parsed)) {
         return parsed
-          .filter((item) => item && typeof item === 'object')
+          // Lines saved before carts were per outlet have no outletId and can no longer be ordered.
+          .filter((item) => item && typeof item === 'object' && item.outletId)
           .map((item) => {
             const qty = Number(item.quantity) || 1;
             const price = Number(item.unitPrice) || Number(item.price) || Number(item.basePrice) || 45;
@@ -32,6 +35,13 @@ export const CartProvider = ({ children }) => {
       return [];
     }
   });
+
+  // The cart belongs to one outlet: once the outlet is known, lines from any other outlet go
+  // (e.g. a ?outlet= link). Deliberate switches ask first, see hooks/useSwitchOutlet.js.
+  useEffect(() => {
+    if (!outletId) return;
+    setCartItems((prev) => (prev.some((i) => i.outletId !== outletId) ? prev.filter((i) => i.outletId === outletId) : prev));
+  }, [outletId]);
 
   const [appliedCoupon, setAppliedCoupon] = useState(null);
   const [orderType, setOrderType] = useState('delivery'); // 'delivery' | 'pickup' | 'dinein'
@@ -61,7 +71,7 @@ export const CartProvider = ({ children }) => {
    * Unique item key depends on item ID + selected variant size + selected add-ons
    */
   const generateCartKey = (item, selectedSize, selectedAddons = []) => {
-    const sizeName = selectedSize?.name || 'standard';
+    const sizeName = selectedSize?.id || selectedSize?.name || 'standard';
     const addonsKey = (selectedAddons || [])
       .map((a) => a.id)
       .sort()
@@ -74,7 +84,7 @@ export const CartProvider = ({ children }) => {
    * Guaranteed NaN-safe numeric parsing
    */
   const addToCart = (item, quantity = 1, selectedSize = null, selectedAddons = [], instructions = '') => {
-    if (!item) return;
+    if (!item || !outletId) return;
 
     const defaultSize = selectedSize || (item.sizes && item.sizes.length > 0 ? item.sizes[0] : null);
     const cartKey = generateCartKey(item, defaultSize, selectedAddons);
@@ -107,6 +117,9 @@ export const CartProvider = ({ children }) => {
           unitPrice: singleUnitPrice,
           quantity: safeQty,
           itemTotal: safeQty * singleUnitPrice,
+          outletId,
+          variationId: defaultSize?.id ?? null,
+          addonIds: (selectedAddons || []).map((a) => a.id),
           selectedSize: defaultSize,
           selectedAddons: selectedAddons || [],
           instructions: instructions || '',
