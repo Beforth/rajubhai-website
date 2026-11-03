@@ -31,7 +31,7 @@ export const CartPanel = () => {
               <CartItem key={item.cartKey} item={item} />
             ))}
             <div className="order-cart-bill">
-              <PriceSummary showCouponSection={true} compact />
+              <PriceSummary compact />
             </div>
           </div>
           <div className="order-cart-foot">

@@ -413,8 +413,9 @@ const canonicalURL = "https://rajubhaidabeliwale.com/";
       position:absolute; top:100%; left:0; right:0; background:var(--paper); border-bottom:1px solid var(--line);
       flex-direction:column; align-items:flex-start; gap:0; padding:8px 32px 22px;
       transform:translateY(-140%); opacity:0; transition:all .3s ease; pointer-events:none;
+      display:none;
     }
-    .nav-links.open{transform:translateY(0); opacity:1; pointer-events:auto;}
+    .nav-links.open{transform:translateY(0); opacity:1; pointer-events:auto; display:flex;}
     .nav-links a{width:100%; padding:15px 0; border-bottom:1px solid var(--line);}
     .hamburger{display:flex;}
     .section{padding:92px 0;}

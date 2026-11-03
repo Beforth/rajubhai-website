@@ -9,8 +9,8 @@ import { CartPanel } from '../components/cart/CartPanel';
 import { Loader } from '../components/common/Loader';
 import { EmptyState } from '../components/common/EmptyState';
 
-// Dishes are rendered in batches; the next batch loads as the list nears the bottom.
-const BATCH_SIZE = 9;
+// Dishes are rendered in batches; smooth infinite scroll as list nears bottom.
+const BATCH_SIZE = 16;
 
 export const OrderHome = () => {
   const [searchParams, setSearchParams] = useSearchParams();

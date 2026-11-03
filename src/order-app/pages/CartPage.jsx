@@ -157,7 +157,7 @@ export const CartPage = () => {
 
         {/* Right Column: Price Summary & Checkout Action */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', position: 'sticky', top: 96 }}>
-          <PriceSummary showCouponSection={true} />
+          <PriceSummary />
 
           <button
             onClick={() => navigate('/checkout')}

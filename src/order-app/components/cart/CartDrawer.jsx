@@ -88,7 +88,7 @@ export const CartDrawer = () => {
               ))}
             </div>
 
-            <PriceSummary showCouponSection={true} />
+            <PriceSummary />
           </div>
 
           {/* Sticky Footer Checkout Bar */}
