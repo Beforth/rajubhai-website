@@ -10,7 +10,6 @@ export const StickyMobileCartBar = () => {
   if (
     itemCount === 0 ||
     location.pathname === '/checkout' ||
-    location.pathname === '/login' ||
     location.pathname === '/cart'
   ) {
     return null;

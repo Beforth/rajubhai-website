@@ -16,11 +16,10 @@ import { OrdersProfile } from './pages/OrdersProfile';
 const MenuRedirect = () => <Navigate to={{ pathname: '/', search: useLocation().search }} replace />;
 
 export function App() {
-  const { pathname } = useLocation();
   return (
     <div style={{ display: 'flex', flexDirection: 'column', backgroundColor: 'var(--bg-main)' }}>
       {/* Global Navigation */}
-      {pathname !== '/login' && <Navbar />}
+      <Navbar />
 
       {/* Main Content Area */}
       <main style={{ flex: 1 }}>

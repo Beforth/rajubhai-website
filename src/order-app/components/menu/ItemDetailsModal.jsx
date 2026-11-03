@@ -42,8 +42,6 @@ export const ItemDetailsModal = ({ item, isOpen, onClose }) => {
     addToCart(item, quantity, selectedSize, selectedAddons, instructions);
     addToast(`Added ${quantity}x ${item.name} to cart!`, 'success');
     onClose();
-    // Open cart drawer after customizing so customer sees item immediately
-    setIsCartDrawerOpen(true);
   };
 
   return (

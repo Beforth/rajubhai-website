@@ -30,8 +30,14 @@
 
   /* Lines and warm shadows */
   --border-subtle: rgba(43, 23, 18, 0.14);
+  --border-light: rgba(43, 23, 18, 0.18);
   --border-brand: rgba(43, 23, 18, 0.14);
   --border-focus: var(--brand-red);
+
+  --brown: #2B1712;
+  --red: #FF0917;
+  --orange: #F67D00;
+  --maroon: #904137;
 
   --shadow-sm: 0 2px 8px rgba(43, 23, 18, 0.06);
   --shadow-md: 0 8px 20px rgba(43, 23, 18, 0.1);
@@ -91,7 +97,6 @@
 :where(.order-app) input, :where(.order-app) select, :where(.order-app) textarea {
   font-family: inherit;
   color: var(--text-dark);
-  background-color: var(--bg-card); /* browsers default to white */
 }
 
 /* Custom Scrollbar */

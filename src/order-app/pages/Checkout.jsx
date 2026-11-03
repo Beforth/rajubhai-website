@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import confetti from 'canvas-confetti';
 import {
   Bike,
@@ -9,13 +9,13 @@ import {
   QrCode,
   Banknote,
   ArrowRight,
+  ArrowLeft,
   ShieldCheck,
   CheckCircle,
-  FileText,
-  Clock,
-  Sparkles,
-  Phone,
+  ChevronDown,
+  ChevronUp,
   MapPin,
+  Clock,
 } from 'lucide-react';
 import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
@@ -39,24 +39,40 @@ export const Checkout = () => {
   const [landmark, setLandmark] = useState(user?.addresses?.[0]?.landmark || '');
   const [tableNumber, setTableNumber] = useState('');
   const [specialNotes, setSpecialNotes] = useState('');
-  const [deliveryTiming, setDeliveryTiming] = useState('asap');
   const [paymentMethod, setPaymentMethod] = useState('upi');
   const [loadingOrder, setLoadingOrder] = useState(false);
   const [errors, setErrors] = useState({});
+  const [mobileSummaryOpen, setMobileSummaryOpen] = useState(false);
 
-  // Requirement 9: Order Success & Generated Bill State
+  // Order Success & Generated Bill State
   const [confirmedOrder, setConfirmedOrder] = useState(null);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
 
   if (cartItems.length === 0 && !confirmedOrder) {
-    navigate('/menu');
+    navigate('/');
     return null;
   }
+
+  const totalQuantity = cartItems.reduce((acc, ci) => acc + ci.quantity, 0);
+
+  const quickInstructions = [
+    'Extra spicy chutney',
+    'Mild / Less spice',
+    'No onion & garlic',
+    'Pack chutneys separately',
+    'Toast pav extra crisp',
+  ];
+
+  const handleAddQuickNote = (note) => {
+    if (specialNotes.includes(note)) return;
+    setSpecialNotes((prev) => (prev ? `${prev}, ${note}` : note));
+  };
 
   const validate = () => {
     const errs = {};
     if (!customerName.trim()) errs.name = 'Please provide your full name';
-    if (!customerPhone.trim() || customerPhone.length < 10) {
+    const cleanPhone = customerPhone.replace(/\D/g, '');
+    if (!cleanPhone || cleanPhone.length < 10) {
       errs.phone = 'Valid 10-digit mobile number required';
     }
 
@@ -98,7 +114,7 @@ export const Checkout = () => {
           specialNotes,
         },
         orderType,
-        deliveryTiming: deliveryTiming === 'asap' ? 'Immediate ASAP' : 'Scheduled',
+        deliveryTiming: 'Immediate ASAP',
         payment: {
           method: paymentMethod,
           status: paymentMethod === 'cod' ? 'PENDING' : 'PAID',
@@ -119,21 +135,19 @@ export const Checkout = () => {
 
       const placed = await placeOrder(orderPayload);
 
-      // Trigger celebratory confetti
       try {
         confetti({
-          particleCount: 100,
-          spread: 80,
+          particleCount: 90,
+          spread: 75,
           origin: { y: 0.6 },
           colors: ['#FF0917', '#FFDF54', '#F67D00', '#904137'],
         });
-      } catch (e) {}
+      } catch {}
 
       if (isAuthenticated && orderType === 'delivery' && streetAddress) {
         addSavedAddress({ line1: streetAddress, landmark });
       }
 
-      // Requirement 9: Store confirmed order, clear cart, and display Success Popup & Order Bill
       setConfirmedOrder(placed);
       clearCart();
       setShowSuccessModal(true);
@@ -152,46 +166,149 @@ export const Checkout = () => {
   };
 
   return (
-    <div className="page-shell">
-      <div style={{ maxWidth: '1280px', margin: '0 auto' }}>
-        <h1 style={{ fontSize: 'clamp(1.9rem, 3.5vw, 2.6rem)', color: 'var(--brand-maroon)', letterSpacing: '-0.8px', marginBottom: '6px' }}>
-          Checkout & Delivery
-        </h1>
-        <p style={{ color: 'var(--text-muted)', fontSize: '0.96rem', marginBottom: '32px' }}>
-          Select fulfillment mode, verify address, and choose payment. Kitchen begins live preparation immediately.
-        </p>
-
-        <form onSubmit={handlePlaceOrder}>
-          <div
+    <div className="page-shell checkout-page">
+      <div style={{ maxWidth: '1160px', margin: '0 auto' }}>
+        {/* Navigation Breadcrumb */}
+        <div style={{ marginBottom: '16px' }}>
+          <Link
+            to="/"
             style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))',
-              gap: '36px',
-              alignItems: 'flex-start',
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: 6,
+              fontSize: '0.84rem',
+              fontWeight: 700,
+              color: 'var(--brand-maroon)',
+              padding: '6px 14px',
+              borderRadius: 'var(--radius-full)',
+              backgroundColor: 'var(--bg-soft)',
+              border: '1px solid var(--border-subtle)',
+              transition: 'all 0.15s ease',
             }}
           >
-            {/* Left Column: Ordering Mode & Customer Info */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
-              {/* 1. Dining Mode */}
-              <div
-                style={{
-                  backgroundColor: 'var(--bg-card)',
-                  borderRadius: 'var(--radius-lg)',
-                  padding: '24px',
-                  border: '1.5px solid var(--border-subtle)',
-                  boxShadow: 'var(--shadow-sm)',
-                }}
-              >
-                <div style={{ fontSize: '0.96rem', fontWeight: 800, color: 'var(--brand-maroon)', marginBottom: '16px' }}>
-                  1. Order Fulfillment Mode
+            <ArrowLeft size={14} />
+            <span>Back to Menu (Add dishes)</span>
+          </Link>
+        </div>
+
+        {/* Header Title */}
+        <div style={{ marginBottom: '20px' }}>
+          <h1
+            style={{
+              fontSize: 'clamp(1.6rem, 2.8vw, 2.2rem)',
+              color: 'var(--brand-maroon)',
+              letterSpacing: '-0.5px',
+              margin: '0 0 4px 0',
+            }}
+          >
+            Order Details & Checkout
+          </h1>
+          <p style={{ color: 'var(--text-muted)', fontSize: '0.88rem', margin: 0 }}>
+            Pick fulfillment mode, enter contact details, and complete your order.
+          </p>
+        </div>
+
+        {/* Mobile Collapsible Order Summary */}
+        <div className="checkout-mobile-summary">
+          <button
+            type="button"
+            onClick={() => setMobileSummaryOpen(!mobileSummaryOpen)}
+            style={{
+              width: '100%',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              padding: '12px 16px',
+              backgroundColor: 'var(--bg-card)',
+              border: '1.5px solid var(--border-subtle)',
+              borderRadius: 'var(--radius-md)',
+              fontWeight: 750,
+              fontSize: '0.88rem',
+              color: 'var(--brand-maroon)',
+              cursor: 'pointer',
+              marginBottom: mobileSummaryOpen ? 10 : 16,
+            }}
+          >
+            <span>
+              Order Summary: {totalQuantity} items • <strong style={{ color: 'var(--brand-red)' }}>₹{grandTotal}</strong>
+            </span>
+            <span style={{ display: 'flex', alignItems: 'center', gap: 4, color: 'var(--brand-red)', fontSize: '0.8rem' }}>
+              {mobileSummaryOpen ? 'Hide' : 'View'}
+              {mobileSummaryOpen ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+            </span>
+          </button>
+
+          {mobileSummaryOpen && (
+            <div
+              style={{
+                backgroundColor: 'var(--bg-card)',
+                border: '1.5px solid var(--border-subtle)',
+                borderRadius: 'var(--radius-md)',
+                padding: '14px 16px',
+                marginBottom: '16px',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '8px',
+                fontSize: '0.84rem',
+              }}
+            >
+              {cartItems.map((ci) => (
+                <div key={ci.cartKey} style={{ display: 'flex', justifyContent: 'space-between' }}>
+                  <span>
+                    {ci.quantity} × {ci.name} {ci.selectedSize ? `(${ci.selectedSize.name})` : ''}
+                  </span>
+                  <strong>₹{ci.itemTotal}</strong>
+                </div>
+              ))}
+              <div style={{ borderTop: '1px solid var(--border-subtle)', paddingTop: 8, marginTop: 4, display: 'flex', justifyContent: 'space-between', fontWeight: 800 }}>
+                <span>Grand Total:</span>
+                <span style={{ color: 'var(--brand-red)' }}>₹{grandTotal}</span>
+              </div>
+            </div>
+          )}
+        </div>
+
+        <form onSubmit={handlePlaceOrder}>
+          <div className="checkout-grid">
+            {/* Left Column: Form Steps */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '18px' }}>
+              {/* Step 1: Order Mode */}
+              <div className="checkout-card">
+                <div
+                  style={{
+                    fontSize: '0.92rem',
+                    fontWeight: 800,
+                    color: 'var(--brand-maroon)',
+                    marginBottom: '12px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 8,
+                  }}
+                >
+                  <span
+                    style={{
+                      width: 22,
+                      height: 22,
+                      borderRadius: '50%',
+                      backgroundColor: 'var(--brand-red)',
+                      color: 'var(--text-white)',
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      fontSize: '0.74rem',
+                      fontWeight: 900,
+                    }}
+                  >
+                    1
+                  </span>
+                  <span>How would you like your order?</span>
                 </div>
 
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '12px' }}>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '10px' }}>
                   {[
-                    { id: 'delivery', label: 'Door Delivery', icon: Bike },
-                    // Takeaway and Dine-In are switched off for now; uncomment to bring them back.
-                    // { id: 'pickup', label: 'Takeaway Counter', icon: Store },
-                    // { id: 'dinein', label: 'Dine-In Table', icon: UtensilsCrossed },
+                    { id: 'delivery', label: 'Delivery', icon: Bike, time: '30-40 min' },
+                    { id: 'pickup', label: 'Takeaway', icon: Store, time: '15 min' },
+                    { id: 'dinein', label: 'Dine-In', icon: UtensilsCrossed, time: 'Table' },
                   ].map((mode) => {
                     const isSelected = orderType === mode.id;
                     const Icon = mode.icon;
@@ -200,78 +317,115 @@ export const Checkout = () => {
                         key={mode.id}
                         onClick={() => setOrderType(mode.id)}
                         style={{
-                          padding: '16px 12px',
+                          padding: '12px 8px',
                           borderRadius: 'var(--radius-md)',
                           cursor: 'pointer',
                           display: 'flex',
                           flexDirection: 'column',
                           alignItems: 'center',
-                          gap: 10,
+                          gap: 4,
                           textAlign: 'center',
-                          backgroundColor: isSelected ? 'var(--bg-soft)' : 'var(--bg-card)',
+                          backgroundColor: isSelected ? 'rgba(255, 9, 23, 0.05)' : 'var(--bg-card)',
                           border: isSelected ? '2px solid var(--brand-red)' : '1px solid var(--border-subtle)',
                           color: isSelected ? 'var(--brand-red)' : 'var(--brand-maroon)',
                           fontWeight: 800,
-                          fontSize: '0.88rem',
-                          transition: 'all 0.18s ease',
+                          fontSize: '0.84rem',
+                          transition: 'all 0.15s ease',
                         }}
                       >
-                        <Icon size={22} color={isSelected ? 'var(--brand-red)' : 'var(--brand-orange)'} />
+                        <Icon size={20} color={isSelected ? 'var(--brand-red)' : 'var(--brand-orange)'} />
                         <span>{mode.label}</span>
+                        <span
+                          style={{
+                            fontSize: '0.7rem',
+                            fontWeight: 600,
+                            color: isSelected ? 'var(--brand-red)' : 'var(--text-muted)',
+                          }}
+                        >
+                          {mode.time}
+                        </span>
                       </div>
                     );
                   })}
                 </div>
               </div>
 
-              {/* 2. Contact & Address */}
-              <div
-                style={{
-                  backgroundColor: 'var(--bg-card)',
-                  borderRadius: 'var(--radius-lg)',
-                  padding: '24px',
-                  border: '1.5px solid var(--border-subtle)',
-                  boxShadow: 'var(--shadow-sm)',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  gap: '18px',
-                }}
-              >
-                <div style={{ fontSize: '0.96rem', fontWeight: 800, color: 'var(--brand-maroon)', marginBottom: '2px' }}>
-                  2. Contact & Fulfillment Location
+              {/* Step 2: Contact & Address */}
+              <div className="checkout-card" style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+                <div
+                  style={{
+                    fontSize: '0.92rem',
+                    fontWeight: 800,
+                    color: 'var(--brand-maroon)',
+                    marginBottom: '2px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 8,
+                  }}
+                >
+                  <span
+                    style={{
+                      width: 22,
+                      height: 22,
+                      borderRadius: '50%',
+                      backgroundColor: 'var(--brand-red)',
+                      color: 'var(--text-white)',
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      fontSize: '0.74rem',
+                      fontWeight: 900,
+                    }}
+                  >
+                    2
+                  </span>
+                  <span>Contact & Delivery Details</span>
                 </div>
 
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '16px' }}>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '12px' }}>
                   <Input
-                    label="Customer Full Name *"
+                    id="customer-name"
+                    name="name"
+                    autoComplete="name"
+                    label="Your Name *"
                     placeholder="e.g. Ramesh Patel"
                     value={customerName}
                     onChange={(e) => setCustomerName(e.target.value)}
                     error={errors.name}
                   />
                   <Input
-                    label="Mobile Number *"
+                    id="customer-phone"
+                    name="tel"
+                    autoComplete="tel"
+                    label="Phone Number *"
                     placeholder="10-digit mobile number"
                     type="tel"
                     maxLength={10}
                     value={customerPhone}
                     onChange={(e) => setCustomerPhone(e.target.value.replace(/\D/g, ''))}
                     error={errors.phone}
+                    icon={<span style={{ fontSize: '0.84rem', fontWeight: 800, color: 'var(--text-muted)' }}>+91</span>}
                   />
                 </div>
 
                 {orderType === 'delivery' && (
                   <>
                     <Input
-                      label="Delivery Street Address *"
-                      placeholder="House/Flat No, Apartment, Street, Locality"
+                      id="delivery-address"
+                      name="street-address"
+                      autoComplete="street-address"
+                      label="Delivery Address *"
+                      placeholder="House/Flat No, Apartment, Street name, Area"
                       value={streetAddress}
                       onChange={(e) => setStreetAddress(e.target.value)}
                       error={errors.address}
+                      icon={<MapPin size={16} />}
                     />
                     <Input
+                      id="delivery-landmark"
+                      name="landmark"
                       label="Nearby Landmark (Optional)"
-                      placeholder="Near Mandvi Tower, Jubilee Ground, etc."
+                      placeholder="e.g. Near Mahatma Nagar Ground / Signal"
                       value={landmark}
                       onChange={(e) => setLandmark(e.target.value)}
                     />
@@ -280,11 +434,14 @@ export const Checkout = () => {
 
                 {orderType === 'dinein' && (
                   <Input
+                    id="table-number"
+                    name="tableNumber"
                     label="Table Number *"
                     placeholder="e.g. Table 4"
                     value={tableNumber}
                     onChange={(e) => setTableNumber(e.target.value)}
                     error={errors.tableNumber}
+                    icon={<UtensilsCrossed size={16} />}
                   />
                 )}
 
@@ -292,60 +449,137 @@ export const Checkout = () => {
                   <div
                     style={{
                       backgroundColor: 'var(--bg-soft)',
-                      padding: '14px 16px',
+                      padding: '10px 14px',
                       borderRadius: 'var(--radius-md)',
-                      fontSize: '0.88rem',
+                      fontSize: '0.84rem',
                       color: 'var(--brand-maroon)',
                       border: '1px solid var(--border-subtle)',
+                      display: 'flex',
+                      alignItems: 'flex-start',
+                      gap: 8,
                     }}
                   >
-                    <strong>Takeaway Counter:</strong> Annapurna's Rajubhai Dabeliwale, Mandvi Tower Road, Old Food Market, Bhuj.
-                    Freshly toasted and packed within 15-20 minutes.
+                    <Store size={16} color="var(--brand-red)" style={{ marginTop: 2, flexShrink: 0 }} />
+                    <div>
+                      <strong>Pickup Counter:</strong> Shop No 01, Signal, near Shete Hospital, Mahatma Nagar, Nashik.
+                      <div style={{ fontSize: '0.76rem', color: 'var(--text-muted)', marginTop: 2 }}>
+                        Freshly toasted on iron tava; ready in ~15 minutes.
+                      </div>
+                    </div>
                   </div>
                 )}
 
                 <div>
-                  <label style={{ fontSize: '0.86rem', fontWeight: 700, color: 'var(--brand-maroon)', marginBottom: '6px', display: 'block' }}>
-                    Kitchen or Delivery Instructions (Optional)
+                  <label
+                    style={{
+                      fontSize: '0.82rem',
+                      fontWeight: 700,
+                      color: 'var(--brand-maroon)',
+                      marginBottom: '5px',
+                      display: 'block',
+                    }}
+                  >
+                    Cooking or Delivery Notes (Optional)
                   </label>
                   <textarea
                     rows={2}
                     value={specialNotes}
                     onChange={(e) => setSpecialNotes(e.target.value)}
-                    placeholder="e.g. Keep extra spicy chutney, call upon arrival..."
+                    placeholder="e.g. Extra spicy chutney, pack sev separately, call on arrival..."
                     style={{
                       width: '100%',
-                      padding: '12px',
+                      padding: '9px 12px',
                       borderRadius: 'var(--radius-md)',
                       border: '1.5px solid var(--border-subtle)',
-                      fontSize: '0.9rem',
+                      fontSize: '0.86rem',
                       outline: 'none',
-                      resize: 'vertical',
                       boxSizing: 'border-box',
+                      backgroundColor: 'var(--bg-card)',
+                      color: 'var(--text-dark)',
+                      fontFamily: 'inherit',
+                      resize: 'vertical',
                     }}
                   />
+
+                  {/* Quick Note Suggestions */}
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '5px', marginTop: '6px' }}>
+                    {quickInstructions.map((note) => (
+                      <button
+                        key={note}
+                        type="button"
+                        onClick={() => handleAddQuickNote(note)}
+                        style={{
+                          fontSize: '0.72rem',
+                          fontWeight: 600,
+                          color: 'var(--brand-maroon)',
+                          backgroundColor: 'var(--bg-soft)',
+                          border: '1px solid var(--border-subtle)',
+                          borderRadius: 'var(--radius-full)',
+                          padding: '3px 8px',
+                          cursor: 'pointer',
+                          transition: 'all 0.15s ease',
+                        }}
+                      >
+                        + {note}
+                      </button>
+                    ))}
+                  </div>
                 </div>
               </div>
 
-              {/* 3. Payment Method */}
-              <div
-                style={{
-                  backgroundColor: 'var(--bg-card)',
-                  borderRadius: 'var(--radius-lg)',
-                  padding: '24px',
-                  border: '1.5px solid var(--border-subtle)',
-                  boxShadow: 'var(--shadow-sm)',
-                }}
-              >
-                <div style={{ fontSize: '0.96rem', fontWeight: 800, color: 'var(--brand-maroon)', marginBottom: '16px' }}>
-                  3. Payment Method
+              {/* Step 3: Payment Method */}
+              <div className="checkout-card">
+                <div
+                  style={{
+                    fontSize: '0.92rem',
+                    fontWeight: 800,
+                    color: 'var(--brand-maroon)',
+                    marginBottom: '12px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 8,
+                  }}
+                >
+                  <span
+                    style={{
+                      width: 22,
+                      height: 22,
+                      borderRadius: '50%',
+                      backgroundColor: 'var(--brand-red)',
+                      color: 'var(--text-white)',
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      fontSize: '0.74rem',
+                      fontWeight: 900,
+                    }}
+                  >
+                    3
+                  </span>
+                  <span>Payment Method</span>
                 </div>
 
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                   {[
-                    { id: 'upi', label: 'UPI (GPay, PhonePe, Paytm, BHIM)', desc: 'Instant QR & UPI Intent (0% Surcharge)', icon: QrCode },
-                    { id: 'card', label: 'Credit / Debit Card / NetBanking', desc: 'Visa, MasterCard, RuPay', icon: CreditCard },
-                    { id: 'cod', label: orderType === 'delivery' ? 'Cash on Delivery (COD)' : 'Pay at Counter / Table', desc: 'Cash or QR scan upon arrival', icon: Banknote },
+                    {
+                      id: 'upi',
+                      label: 'UPI (Google Pay, PhonePe, Paytm, BHIM)',
+                      desc: 'Instant QR & UPI Intent (0% Fee)',
+                      icon: QrCode,
+                      recommended: true,
+                    },
+                    {
+                      id: 'card',
+                      label: 'Credit / Debit Card / NetBanking',
+                      desc: 'Visa, MasterCard, RuPay',
+                      icon: CreditCard,
+                    },
+                    {
+                      id: 'cod',
+                      label: orderType === 'delivery' ? 'Cash on Delivery (COD)' : 'Pay at Counter / Table',
+                      desc: 'Cash or scan QR upon arrival',
+                      icon: Banknote,
+                    },
                   ].map((pm) => {
                     const isSelected = paymentMethod === pm.id;
                     const Icon = pm.icon;
@@ -357,15 +591,15 @@ export const Checkout = () => {
                           display: 'flex',
                           alignItems: 'center',
                           justifyContent: 'space-between',
-                          padding: '16px',
+                          padding: '12px 14px',
                           borderRadius: 'var(--radius-md)',
-                          backgroundColor: isSelected ? 'var(--bg-soft)' : 'var(--bg-card)',
+                          backgroundColor: isSelected ? 'rgba(255, 9, 23, 0.04)' : 'var(--bg-card)',
                           border: isSelected ? '2px solid var(--brand-red)' : '1px solid var(--border-subtle)',
                           cursor: 'pointer',
                           transition: 'all 0.15s ease',
                         }}
                       >
-                        <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
                           <input
                             type="radio"
                             name="payment"
@@ -373,29 +607,29 @@ export const Checkout = () => {
                             onChange={() => setPaymentMethod(pm.id)}
                             style={{ accentColor: 'var(--brand-red)' }}
                           />
-                          <Icon size={22} color={isSelected ? 'var(--brand-red)' : 'var(--brand-orange)'} />
+                          <Icon size={18} color={isSelected ? 'var(--brand-red)' : 'var(--brand-orange)'} />
                           <div>
-                            <strong style={{ fontSize: '0.95rem', color: 'var(--brand-maroon)', display: 'block' }}>
+                            <strong style={{ fontSize: '0.88rem', color: 'var(--brand-maroon)', display: 'block' }}>
                               {pm.label}
                             </strong>
-                            <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>
+                            <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
                               {pm.desc}
                             </span>
                           </div>
                         </div>
 
-                        {isSelected && (
+                        {pm.recommended && (
                           <span
                             style={{
-                              fontSize: '0.75rem',
+                              fontSize: '0.7rem',
                               backgroundColor: 'var(--brand-yellow)',
                               color: 'var(--brand-maroon)',
                               fontWeight: 900,
-                              padding: '3px 10px',
+                              padding: '2px 7px',
                               borderRadius: 'var(--radius-full)',
                             }}
                           >
-                            Selected
+                            Popular
                           </span>
                         )}
                       </label>
@@ -405,59 +639,152 @@ export const Checkout = () => {
               </div>
             </div>
 
-            {/* Right Column: Order Bill Breakdown & Confirm Button */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', position: 'sticky', top: 96 }}>
-              <PriceSummary showCouponSection={false} />
+            {/* Right Column: Order Review & Bill Summary (Desktop & Mobile) */}
+            <div className="checkout-summary-col">
+              {/* Order Items Review Box */}
+              <div className="checkout-card" style={{ padding: '16px 18px' }}>
+                <div
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    borderBottom: '1px solid var(--border-subtle)',
+                    paddingBottom: '8px',
+                    marginBottom: '10px',
+                  }}
+                >
+                  <span style={{ fontSize: '0.9rem', fontWeight: 800, color: 'var(--brand-maroon)' }}>
+                    Your Dishes ({totalQuantity})
+                  </span>
+                  <Link to="/" style={{ fontSize: '0.76rem', color: 'var(--brand-red)', fontWeight: 700 }}>
+                    + Edit Dishes
+                  </Link>
+                </div>
 
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', maxHeight: '220px', overflowY: 'auto' }}>
+                  {cartItems.map((ci) => (
+                    <div
+                      key={ci.cartKey}
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        gap: 8,
+                        fontSize: '0.84rem',
+                      }}
+                    >
+                      <div style={{ flex: 1, minWidth: 0 }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
+                          <span className="veg-stamp" style={{ width: 11, height: 11 }}>
+                            <span className="veg-stamp-dot" style={{ width: 5, height: 5 }} />
+                          </span>
+                          <strong
+                            style={{
+                              color: 'var(--text-dark)',
+                              whiteSpace: 'nowrap',
+                              overflow: 'hidden',
+                              textOverflow: 'ellipsis',
+                            }}
+                          >
+                            {ci.quantity} × {ci.name}
+                          </strong>
+                        </div>
+                        {ci.selectedSize && (
+                          <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)', marginLeft: 16 }}>
+                            {ci.selectedSize.name}
+                          </div>
+                        )}
+                        {ci.selectedAddons && ci.selectedAddons.length > 0 && (
+                          <div style={{ fontSize: '0.72rem', color: 'var(--brand-orange)', marginLeft: 16 }}>
+                            +{ci.selectedAddons.map((a) => a.name).join(', ')}
+                          </div>
+                        )}
+                      </div>
+                      <span style={{ fontWeight: 800, color: 'var(--brand-maroon)', flexShrink: 0 }}>
+                        ₹{ci.itemTotal}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Price Breakdown */}
+              <PriceSummary />
+
+              {/* Confirm & Place Order CTA */}
               <button
                 type="submit"
                 disabled={loadingOrder}
                 className="btn-brand-primary"
                 style={{
                   width: '100%',
-                  padding: '16px 28px',
-                  fontSize: '1.1rem',
+                  padding: '14px 20px',
+                  fontSize: '1rem',
                   fontWeight: 900,
                   cursor: loadingOrder ? 'not-allowed' : 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: 8,
                 }}
               >
-                <span>Confirm & Place Order • ₹{grandTotal}</span>
-                <ArrowRight size={20} />
+                <span>{loadingOrder ? 'Confirming with Kitchen...' : `Place Order • ₹${grandTotal}`}</span>
+                {!loadingOrder && <ArrowRight size={18} />}
               </button>
 
+              {/* Assurance Marks */}
               <div
                 style={{
                   display: 'flex',
                   alignItems: 'center',
-                  gap: 10,
-                  fontSize: '0.82rem',
-                  color: 'var(--brand-maroon)',
+                  gap: 6,
+                  fontSize: '0.78rem',
+                  color: 'var(--text-muted)',
                   justifyContent: 'center',
                 }}
               >
-                <ShieldCheck size={18} color="var(--brand-red)" />
-                <span>Connected to Rajubhai Live POS Kitchen • 100% Pure Veg</span>
+                <ShieldCheck size={15} color="var(--brand-red)" />
+                <span>100% Pure Veg • Prepared Fresh • Rajubhai Live POS</span>
               </div>
             </div>
+          </div>
+
+          {/* Sticky Mobile Bottom Bar */}
+          <div className="checkout-mobile-action-bar">
+            <div>
+              <span style={{ fontSize: '0.7rem', textTransform: 'uppercase', letterSpacing: '0.4px', color: 'var(--text-light)', fontWeight: 700, display: 'block' }}>
+                Total to Pay
+              </span>
+              <strong style={{ fontSize: '1.25rem', color: 'var(--brand-red)' }}>₹{grandTotal}</strong>
+            </div>
+
+            <button
+              type="submit"
+              disabled={loadingOrder}
+              className="btn-brand-primary"
+              style={{ padding: '10px 22px', fontSize: '0.88rem' }}
+            >
+              <span>{loadingOrder ? 'Placing...' : 'Place Order'}</span>
+              <ArrowRight size={16} />
+            </button>
           </div>
         </form>
       </div>
 
-      {/* Requirement 9: Order Success & Generated Order Bill Modal */}
+      {/* Order Success & Generated Order Bill Modal */}
       {showSuccessModal && confirmedOrder && (
         <Modal
           isOpen={showSuccessModal}
           onClose={handleNavigateTracking}
-          title="Order Confirmation & Bill Receipt"
-          maxWidth="620px"
+          title="Order Confirmed!"
+          maxWidth="560px"
         >
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', textAlign: 'center' }}>
-            {/* Success Celebration Badge */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '18px', textAlign: 'center' }}>
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
               <div
                 style={{
-                  width: 68,
-                  height: 68,
+                  width: 60,
+                  height: 60,
                   borderRadius: '50%',
                   backgroundColor: 'var(--brand-yellow)',
                   color: 'var(--brand-maroon)',
@@ -465,191 +792,148 @@ export const Checkout = () => {
                   alignItems: 'center',
                   justifyContent: 'center',
                   boxShadow: '0 4px 16px rgba(255, 223, 84, 0.4)',
-                  marginBottom: 12,
+                  marginBottom: 10,
                 }}
               >
-                <CheckCircle size={40} color="var(--brand-red)" strokeWidth={2.5} />
+                <CheckCircle size={36} color="var(--brand-red)" strokeWidth={2.5} />
               </div>
 
-              <h2 style={{ fontSize: '1.6rem', color: 'var(--brand-maroon)', margin: '0 0 6px 0', fontWeight: 900 }}>
-                Congratulations!
+              <h2 style={{ fontSize: '1.45rem', color: 'var(--brand-maroon)', margin: '0 0 4px 0', fontWeight: 900 }}>
+                Order Received!
               </h2>
-              <p style={{ fontSize: '1.05rem', color: 'var(--brand-red)', fontWeight: 800, margin: 0 }}>
-                Your order has been placed successfully!
+              <p style={{ fontSize: '0.95rem', color: 'var(--brand-red)', fontWeight: 800, margin: 0 }}>
+                Kitchen is preparing your fresh order
               </p>
-              <p style={{ fontSize: '0.86rem', color: 'var(--text-muted)', marginTop: 4 }}>
-                Kitchen Token ID: <strong style={{ color: 'var(--brand-maroon)' }}>#{confirmedOrder.orderId}</strong>
+              <p style={{ fontSize: '0.84rem', color: 'var(--text-muted)', marginTop: 4 }}>
+                Token ID: <strong style={{ color: 'var(--brand-maroon)' }}>#{confirmedOrder.orderId}</strong>
               </p>
             </div>
 
-            {/* Generated Order Bill (Item names, quantities, prices, total amount) */}
+            {/* Generated Bill */}
             <div
               className="receipt-paper"
               style={{
                 textAlign: 'left',
-                padding: '20px',
+                padding: '16px 18px',
                 borderRadius: 'var(--radius-md)',
                 border: '1.5px dashed var(--brand-red)',
                 backgroundColor: 'var(--bg-soft)',
+                fontSize: '0.86rem',
               }}
             >
               <div
                 style={{
                   display: 'flex',
                   justifyContent: 'space-between',
-                  alignItems: 'baseline',
                   borderBottom: '1px solid var(--border-subtle)',
-                  paddingBottom: 10,
-                  marginBottom: 14,
+                  paddingBottom: 8,
+                  marginBottom: 10,
                 }}
               >
                 <div>
-                  <strong style={{ fontSize: '1.05rem', color: 'var(--brand-maroon)', display: 'block' }}>
-                    Annapurna's Rajubhai Dabeliwale
-                  </strong>
-                  <span style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>
-                    GST: 24AAAFR1987D1Z • FSSAI: {restaurantData.fssai}
-                  </span>
+                  <strong style={{ color: 'var(--brand-maroon)' }}>Rajubhai Dabeliwale</strong>
+                  <div style={{ fontSize: '0.74rem', color: 'var(--text-muted)' }}>FSSAI: {restaurantData.fssai}</div>
                 </div>
-                <div style={{ textAlign: 'right' }}>
-                  <span style={{ fontSize: '0.76rem', color: 'var(--text-muted)', display: 'block' }}>
-                    Date & Time
-                  </span>
-                  <strong style={{ fontSize: '0.84rem', color: 'var(--brand-maroon)' }}>
-                    {new Date(confirmedOrder.timestamps.placedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                  </strong>
+                <div style={{ textAlign: 'right', fontSize: '0.78rem', color: 'var(--text-muted)' }}>
+                  {confirmedOrder.orderType?.toUpperCase()}
                 </div>
               </div>
 
-              {/* Items Table */}
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginBottom: 14 }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.8rem', fontWeight: 800, color: 'var(--brand-maroon)', borderBottom: '1px solid var(--border-subtle)', paddingBottom: 4 }}>
-                  <span style={{ flex: 2 }}>ITEM</span>
-                  <span style={{ flex: 1, textAlign: 'center' }}>QTY</span>
-                  <span style={{ flex: 1, textAlign: 'right' }}>PRICE</span>
-                </div>
-
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 6, marginBottom: 10 }}>
                 {confirmedOrder.items.map((it, idx) => (
-                  <div key={idx} style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.88rem', color: 'var(--text-dark)' }}>
-                    <div style={{ flex: 2 }}>
-                      <strong>{it.name}</strong>
-                      {it.selectedSize && (
-                        <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
-                          Size: {it.selectedSize.name}
-                        </div>
-                      )}
-                      {it.selectedAddons && it.selectedAddons.length > 0 && (
-                        <div style={{ fontSize: '0.75rem', color: 'var(--brand-orange)' }}>
-                          + {it.selectedAddons.map((a) => a.name).join(', ')}
-                        </div>
-                      )}
-                    </div>
-                    <span style={{ flex: 1, textAlign: 'center', fontWeight: 700 }}>
-                      {it.quantity}
+                  <div key={idx} style={{ display: 'flex', justifyContent: 'space-between' }}>
+                    <span>
+                      {it.quantity} × {it.name}
                     </span>
-                    <span style={{ flex: 1, textAlign: 'right', fontWeight: 800, color: 'var(--brand-maroon)' }}>
-                      ₹{it.itemTotal}
-                    </span>
+                    <strong>₹{it.itemTotal}</strong>
                   </div>
                 ))}
               </div>
 
-              {/* Bill Totals Summary */}
               <div
                 style={{
                   borderTop: '1px solid var(--border-subtle)',
-                  paddingTop: 10,
+                  paddingTop: 8,
                   display: 'flex',
-                  flexDirection: 'column',
-                  gap: 6,
-                  fontSize: '0.85rem',
+                  justifyContent: 'space-between',
+                  fontWeight: 900,
+                  fontSize: '1rem',
+                  color: 'var(--brand-red)',
                 }}
               >
-                <div style={{ display: 'flex', justifyContent: 'space-between', color: 'var(--text-muted)' }}>
-                  <span>Item Subtotal:</span>
-                  <span>₹{confirmedOrder.totals.subtotal}</span>
-                </div>
-                {confirmedOrder.totals.discount > 0 && (
-                  <div style={{ display: 'flex', justifyContent: 'space-between', color: '#2e7d32' }}>
-                    <span>Promo Discount:</span>
-                    <span>-₹{confirmedOrder.totals.discount}</span>
-                  </div>
-                )}
-                <div style={{ display: 'flex', justifyContent: 'space-between', color: 'var(--text-muted)' }}>
-                  <span>5% GST:</span>
-                  <span>₹{confirmedOrder.totals.gst}</span>
-                </div>
-                {confirmedOrder.totals.packaging > 0 && (
-                  <div style={{ display: 'flex', justifyContent: 'space-between', color: 'var(--text-muted)' }}>
-                    <span>Packaging:</span>
-                    <span>₹{confirmedOrder.totals.packaging}</span>
-                  </div>
-                )}
-                <div style={{ display: 'flex', justifyContent: 'space-between', color: 'var(--text-muted)' }}>
-                  <span>Delivery Service:</span>
-                  <span>{confirmedOrder.totals.deliveryFee === 0 ? 'FREE' : `₹${confirmedOrder.totals.deliveryFee}`}</span>
-                </div>
-
-                <div
-                  style={{
-                    borderTop: '1.5px solid var(--brand-maroon)',
-                    paddingTop: 8,
-                    marginTop: 4,
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'baseline',
-                  }}
-                >
-                  <strong style={{ fontSize: '1.1rem', color: 'var(--brand-maroon)' }}>
-                    Total Amount Paid:
-                  </strong>
-                  <strong style={{ fontSize: '1.4rem', color: 'var(--brand-red)' }}>
-                    ₹{confirmedOrder.totals.grandTotal}
-                  </strong>
-                </div>
-              </div>
-
-              {/* Fulfillment & Delivery details if available */}
-              <div style={{ marginTop: 14, paddingTop: 10, borderTop: '1px dashed var(--border-subtle)', fontSize: '0.82rem', color: 'var(--text-muted)' }}>
-                {confirmedOrder.orderType === 'delivery' && confirmedOrder.customer?.address && (
-                  <div>
-                    <strong>Delivery To: </strong>
-                    {confirmedOrder.customer.name} • {confirmedOrder.customer.address.street}
-                    {confirmedOrder.customer.address.landmark ? ` (${confirmedOrder.customer.address.landmark})` : ''}
-                  </div>
-                )}
-                {confirmedOrder.orderType === 'dinein' && (
-                  <div>
-                    <strong>Dine-In Table: </strong>
-                    {confirmedOrder.customer.tableNumber}
-                  </div>
-                )}
-                {confirmedOrder.orderType === 'pickup' && (
-                  <div>
-                    <strong>Takeaway Location: </strong>
-                    {restaurantData.address}
-                  </div>
-                )}
-                <div style={{ marginTop: 4 }}>
-                  <strong>Payment: </strong>
-                  <span style={{ textTransform: 'uppercase' }}>{confirmedOrder.payment.method}</span> • {confirmedOrder.payment.status}
-                </div>
+                <span>Total Paid / Payable:</span>
+                <span>₹{confirmedOrder.totals.grandTotal}</span>
               </div>
             </div>
 
-            {/* Modal Actions */}
-            <div style={{ display: 'flex', gap: 12, justifyContent: 'center' }}>
-              <button
-                onClick={handleNavigateTracking}
-                className="btn-brand-primary"
-                style={{ width: '100%', padding: '14px 24px', fontSize: '1rem' }}
-              >
-                Track Live Order Status
-              </button>
-            </div>
+            <button
+              type="button"
+              className="btn-brand-primary"
+              onClick={handleNavigateTracking}
+              style={{ width: '100%', padding: '14px 20px', fontSize: '0.95rem' }}
+            >
+              <span>Track Live Order Status</span>
+              <ArrowRight size={18} />
+            </button>
           </div>
         </Modal>
       )}
+
+      <style>{`
+        .checkout-mobile-summary { display: block; }
+        .checkout-grid {
+          display: grid;
+          grid-template-columns: 1fr;
+          gap: 20px;
+        }
+        .checkout-card {
+          background-color: var(--bg-card);
+          border-radius: var(--radius-lg);
+          padding: 18px;
+          border: 1.5px solid var(--border-subtle);
+          box-shadow: var(--shadow-sm);
+        }
+        .checkout-summary-col {
+          display: flex;
+          flex-direction: column;
+          gap: 16px;
+        }
+        .checkout-mobile-action-bar {
+          display: flex;
+          position: fixed;
+          bottom: 0;
+          left: 0;
+          right: 0;
+          z-index: 850;
+          background: var(--bg-card);
+          border-top: 1.5px solid var(--border-subtle);
+          padding: 12px 20px;
+          align-items: center;
+          justify-content: space-between;
+          box-shadow: 0 -4px 18px rgba(43, 23, 18, 0.1);
+        }
+        .checkout-page {
+          padding-bottom: 90px;
+        }
+
+        @media (min-width: 960px) {
+          .checkout-mobile-summary { display: none !important; }
+          .checkout-mobile-action-bar { display: none !important; }
+          .checkout-page { padding-bottom: 32px !important; }
+          .checkout-grid {
+            grid-template-columns: minmax(0, 1fr) 360px !important;
+            gap: 28px !important;
+            align-items: flex-start !important;
+          }
+          .checkout-card {
+            padding: 22px !important;
+          }
+          .checkout-summary-col {
+            position: sticky !important;
+            top: 84px !important;
+          }
+        }
+      `}</style>
     </div>
   );
 };

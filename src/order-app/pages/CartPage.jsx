@@ -100,9 +100,8 @@ export const CartPage = () => {
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '10px' }}>
               {[
                 { id: 'delivery', label: 'Door Delivery' },
-                // Takeaway and Dine-In are switched off for now; uncomment to bring them back.
-                // { id: 'pickup', label: 'Takeaway' },
-                // { id: 'dinein', label: 'Dine-In Table' },
+                { id: 'pickup', label: 'Takeaway' },
+                { id: 'dinein', label: 'Dine-In Table' },
               ].map((type) => {
                 const isSelected = orderType === type.id;
                 return (
@@ -158,7 +157,7 @@ export const CartPage = () => {
 
         {/* Right Column: Price Summary & Checkout Action */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', position: 'sticky', top: 96 }}>
-          <PriceSummary showCouponSection={true} />
+          <PriceSummary />
 
           <button
             onClick={() => navigate('/checkout')}

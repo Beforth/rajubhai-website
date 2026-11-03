@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 export const Input = ({
   label,
@@ -10,7 +10,8 @@ export const Input = ({
   id,
   ...props
 }) => {
-  const inputId = id || (label ? label.toLowerCase().replace(/\s+/g, '-') : undefined);
+  const [isFocused, setIsFocused] = useState(false);
+  const inputId = id || (label ? label.toLowerCase().replace(/[^a-z0-9]/g, '-') : undefined);
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', width: '100%', ...containerStyle }}>
@@ -18,9 +19,10 @@ export const Input = ({
         <label
           htmlFor={inputId}
           style={{
-            fontSize: '0.88rem',
-            fontWeight: 600,
-            color: 'var(--text-dark)',
+            fontSize: '0.86rem',
+            fontWeight: 700,
+            color: 'var(--brand-maroon)',
+            letterSpacing: '0.2px',
           }}
         >
           {label}
@@ -33,14 +35,19 @@ export const Input = ({
           display: 'flex',
           alignItems: 'center',
           backgroundColor: 'var(--bg-card)',
-          border: error ? '1.5px solid var(--brand-red)' : '1.5px solid var(--border-subtle)',
+          border: error
+            ? '1.5px solid var(--brand-red)'
+            : isFocused
+            ? '1.5px solid var(--brand-red)'
+            : '1.5px solid var(--border-subtle)',
+          boxShadow: isFocused ? '0 0 0 3px rgba(255, 9, 23, 0.12)' : 'none',
           borderRadius: 'var(--radius-md)',
-          transition: 'border-color 0.2s ease, box-shadow 0.2s ease',
-          padding: '0 12px',
+          transition: 'border-color 0.18s ease, box-shadow 0.18s ease',
+          padding: '0 14px',
         }}
       >
         {icon && (
-          <span style={{ color: 'var(--brand-orange)', display: 'flex', marginRight: '8px' }}>
+          <span style={{ color: 'var(--brand-orange)', display: 'flex', marginRight: '10px' }}>
             {icon}
           </span>
         )}
@@ -52,10 +59,13 @@ export const Input = ({
             padding: '12px 0',
             border: 'none',
             outline: 'none',
-            fontSize: '0.95rem',
+            fontSize: '0.94rem',
             background: 'transparent',
             color: 'var(--text-dark)',
+            fontFamily: 'inherit',
           }}
+          onFocus={() => setIsFocused(true)}
+          onBlur={() => setIsFocused(false)}
           {...props}
         />
 
@@ -67,7 +77,7 @@ export const Input = ({
       </div>
 
       {error && (
-        <span style={{ fontSize: '0.8rem', color: 'var(--brand-red)', fontWeight: 500 }}>
+        <span style={{ fontSize: '0.78rem', color: 'var(--brand-red)', fontWeight: 600 }}>
           {error}
         </span>
       )}
