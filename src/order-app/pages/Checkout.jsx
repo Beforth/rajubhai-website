@@ -58,7 +58,7 @@ const stepTitle = {
 };
 
 export const Checkout = () => {
-  const { cartItems, requestItems, itemsSig, lineQuotes, checkout, grandTotal, itemCount, clearCart, setQuoteAddress, refreshQuote } =
+  const { cartItems, requestItems, itemsSig, lineQuotes, checkout, grandTotal, itemCount, clearCart, setCartLocked, setQuoteAddress, refreshQuote } =
     useCart();
   const { user, isAuthenticated, addSavedAddress } = useAuth();
   const { addToast } = useToast();
@@ -157,7 +157,12 @@ export const Checkout = () => {
 
   const handlePlaceOrder = async (e) => {
     e.preventDefault();
-    if (inFlight.current || !checkout.canCheckout) return;
+    if (inFlight.current) return;
+    if (!checkout.canCheckout) {
+      // W3: never ignore the press silently while the total is being recalculated.
+      if (checkout.pending) setFormError('Updating your total… please press Place Order again in a moment.');
+      return;
+    }
     setFormError('');
     if (!validate()) {
       addToast('Please complete the required details', 'error');
@@ -166,6 +171,7 @@ export const Checkout = () => {
 
     inFlight.current = true;
     setSubmitting(true);
+    setCartLocked(true);
     const submittedKeys = cartItems.map((ci) => ci.cartKey);
     if (!keyRef.current) keyRef.current = newIdempotencyKey();
     try {
@@ -198,6 +204,7 @@ export const Checkout = () => {
     } finally {
       inFlight.current = false;
       setSubmitting(false);
+      setCartLocked(false);
     }
   };
 

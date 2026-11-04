@@ -4,6 +4,13 @@ import { useCart } from '../../context/CartContext';
 // Why Checkout is disabled (closed outlet, minimum order, unavailable lines), straight from the server.
 export const CheckoutNotice = () => {
   const { checkout } = useCart();
+  if (checkout.pending) {
+    return (
+      <div role="status" aria-live="polite" style={{ marginTop: 10, fontSize: '0.84rem', fontWeight: 700, color: 'var(--text-muted)' }}>
+        Updating total…
+      </div>
+    );
+  }
   if (!checkout.reason) return null;
   return (
     <div

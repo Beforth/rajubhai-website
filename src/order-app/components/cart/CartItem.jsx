@@ -5,7 +5,7 @@ import { useCart } from '../../context/CartContext';
 import { formatMoney } from '../../services/money';
 
 export const CartItem = ({ item }) => {
-  const { updateQuantity, removeFromCart, lineQuotes } = useCart();
+  const { updateQuantity, removeFromCart, lineQuotes, cartLocked } = useCart();
   const q = lineQuotes[item.cartKey];
   // Only trust the server's line total while it was priced for this quantity.
   const priced = q && q.qty === item.quantity;
@@ -90,9 +90,11 @@ export const CartItem = ({ item }) => {
               value={item.quantity}
               onChange={(newQty) => updateQuantity(item.cartKey, newQty)}
               size="sm"
+              disabled={cartLocked}
             />
             <button
               onClick={() => removeFromCart(item.cartKey)}
+              disabled={cartLocked}
               style={{
                 color: 'var(--text-light)',
                 padding: '4px',
@@ -101,6 +103,8 @@ export const CartItem = ({ item }) => {
                 alignItems: 'center',
                 justifyContent: 'center',
                 transition: 'color 0.2s',
+                opacity: cartLocked ? 0.45 : 1,
+                cursor: cartLocked ? 'not-allowed' : 'pointer',
               }}
               title="Remove item"
             >

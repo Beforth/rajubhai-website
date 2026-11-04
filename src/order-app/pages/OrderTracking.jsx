@@ -4,7 +4,6 @@ import { CheckCircle, Clock, Phone, Printer, XCircle, AlertTriangle, SearchX } f
 import { shopApi } from '../services/shopApi';
 import { pollDelay, STEPPER_STEP } from '../services/orderStatus';
 import { formatMoney } from '../services/money';
-import { useOutlet } from '../context/OutletContext';
 import { OrderStatusStepper } from '../components/common/OrderStatusStepper';
 import { Loader } from '../components/common/Loader';
 
@@ -34,7 +33,6 @@ const HEADLINES = {
 
 export const OrderTracking = () => {
   const { publicId } = useParams();
-  const { info } = useOutlet();
   const [order, setOrder] = useState(null);
   const [loading, setLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
@@ -307,11 +305,11 @@ export const OrderTracking = () => {
         </div>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-          {info?.phone && (
+          {order.outlet?.phone && (
             <div style={card}>
               <div style={{ fontSize: '0.84rem', color: 'var(--text-muted)', marginBottom: '10px' }}>Need help with this order?</div>
               <a
-                href={`tel:${info.phone}`}
+                href={`tel:${order.outlet.phone}`}
                 style={{
                   display: 'inline-flex',
                   alignItems: 'center',
@@ -327,7 +325,7 @@ export const OrderTracking = () => {
               >
                 <Phone size={16} color="var(--brand-red)" />
                 <span>
-                  Call {info.name}: {info.phone}
+                  Call {order.outlet.name}: {order.outlet.phone}
                 </span>
               </a>
             </div>

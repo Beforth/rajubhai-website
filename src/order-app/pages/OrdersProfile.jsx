@@ -28,6 +28,7 @@ export const OrdersProfile = () => {
 
   const [orders, setOrders] = useState([]);
   const [loadingOrders, setLoadingOrders] = useState(false);
+  const [reloadNonce, setReloadNonce] = useState(0);
   const [activeTab, setActiveTab] = useState('orders');
   const [showAddressModal, setShowAddressModal] = useState(false);
   const [newAddressLine, setNewAddressLine] = useState('');
@@ -38,14 +39,22 @@ export const OrdersProfile = () => {
   useEffect(() => {
     let alive = true;
     const stored = orderStore.list();
-    setOrders(stored.map((o) => ({ ...o, order: null, unavailable: false })));
+    setOrders(stored.map((o) => ({ ...o, order: null, unavailable: false, loadFailed: false })));
     setLoadingOrders(stored.length > 0);
     Promise.allSettled(stored.slice(0, MAX_FETCH).map((o) => shopApi.getOrder(o.publicId))).then((results) => {
       if (!alive) return;
       setOrders(
         stored.map((o, i) => {
           const r = i < MAX_FETCH ? results[i] : null;
-          return { ...o, order: r && r.status === 'fulfilled' ? r.value : null, unavailable: r ? r.status === 'rejected' : false };
+          const failed = r && r.status === 'rejected';
+          // Only a 404 means the order is gone; any other failure (network, 429, 5xx) is temporary.
+          const gone = failed && r.reason && r.reason.status === 404;
+          return {
+            ...o,
+            order: r && r.status === 'fulfilled' ? r.value : null,
+            unavailable: Boolean(gone),
+            loadFailed: Boolean(failed && !gone),
+          };
         })
       );
       setLoadingOrders(false);
@@ -53,7 +62,7 @@ export const OrdersProfile = () => {
     return () => {
       alive = false;
     };
-  }, []);
+  }, [reloadNonce]);
 
   const handleRemove = (publicId) => {
     orderStore.remove(publicId);
@@ -238,7 +247,7 @@ export const OrdersProfile = () => {
                           textTransform: 'uppercase',
                         }}
                       >
-                        {ord.order ? STATUS_LABEL[ord.order.status] || ord.order.status : ord.unavailable ? 'Unavailable' : '...'}
+                        {ord.order ? STATUS_LABEL[ord.order.status] || ord.order.status : ord.unavailable ? 'Unavailable' : ord.loadFailed ? "Couldn't load" : '...'}
                       </span>
                       {ord.order && (
                         <strong style={{ fontSize: '1.2rem', color: 'var(--brand-red)' }}>{formatMoney(ord.order.grand_total)}</strong>
@@ -256,11 +265,24 @@ export const OrdersProfile = () => {
                     </div>
                   ) : ord.unavailable ? (
                     <div style={{ fontSize: '0.88rem', color: 'var(--text-muted)' }}>
-                      This order could not be loaded right now. It may no longer exist.
+                      This order no longer exists on the server.
+                    </div>
+                  ) : ord.loadFailed ? (
+                    <div style={{ fontSize: '0.88rem', color: 'var(--text-muted)' }}>
+                      Couldn't load this order right now. Please try again.
                     </div>
                   ) : null}
 
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: '12px', paddingTop: '6px' }}>
+                    {ord.loadFailed && (
+                      <button
+                        className="btn-brand-outline"
+                        style={{ padding: '8px 18px', fontSize: '0.88rem' }}
+                        onClick={() => setReloadNonce((n) => n + 1)}
+                      >
+                        <span>Retry</span>
+                      </button>
+                    )}
                     {ord.unavailable && (
                       <button
                         className="btn-brand-outline"

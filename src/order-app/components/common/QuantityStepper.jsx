@@ -7,9 +7,11 @@ export const QuantityStepper = ({
   min = 1,
   max = 99,
   size = 'md',
+  disabled = false,
 }) => {
   const handleDecrement = (e) => {
     e.stopPropagation();
+    if (disabled) return;
     if (value > min) {
       onChange(value - 1);
     } else {
@@ -19,6 +21,7 @@ export const QuantityStepper = ({
 
   const handleIncrement = (e) => {
     e.stopPropagation();
+    if (disabled) return;
     if (value < max) {
       onChange(value + 1);
     }
@@ -38,6 +41,8 @@ export const QuantityStepper = ({
     justifyContent: 'center',
     flexShrink: 0,
     transition: 'background-color 0.15s ease',
+    opacity: disabled ? 0.45 : 1,
+    cursor: disabled ? 'not-allowed' : 'pointer',
   };
 
   return (
@@ -55,6 +60,7 @@ export const QuantityStepper = ({
       <button
         type="button"
         onClick={handleDecrement}
+        disabled={disabled}
         style={{ ...buttonStyle, color: 'var(--brand-red)', backgroundColor: 'transparent' }}
         aria-label="Decrease quantity"
       >
@@ -76,6 +82,7 @@ export const QuantityStepper = ({
       <button
         type="button"
         onClick={handleIncrement}
+        disabled={disabled}
         style={{ ...buttonStyle, color: 'var(--text-white)', backgroundColor: 'var(--brand-red)' }}
         aria-label="Increase quantity"
       >

@@ -78,8 +78,17 @@ export const CartProvider = ({ children }) => {
    * Add item to cart with size, addons, quantity and notes. No prices are stored or added up
    * here: the quote endpoint prices the cart.
    */
+  // Checkout locks the cart while an order is on its way: an edit then would change what the
+  // idempotency key stands for. The ref makes the lock take effect at once (state is next render).
+  const lockRef = useRef(false);
+  const [cartLocked, setCartLockedState] = useState(false);
+  const setCartLocked = (locked) => {
+    lockRef.current = locked;
+    setCartLockedState(locked);
+  };
+
   const addToCart = (item, quantity = 1, selectedSize = null, selectedAddons = [], instructions = '') => {
-    if (!item || !outletId) return;
+    if (!item || !outletId || lockRef.current) return;
 
     const defaultSize = selectedSize || (item.sizes && item.sizes.length > 0 ? item.sizes[0] : null);
     const cartKey = generateCartKey(item, defaultSize, selectedAddons);
@@ -112,10 +121,12 @@ export const CartProvider = ({ children }) => {
   };
 
   const removeFromCart = (cartKey) => {
+    if (lockRef.current) return;
     setCartItems((prev) => prev.filter((item) => item.cartKey !== cartKey));
   };
 
   const updateQuantity = (cartKey, newQty) => {
+    if (lockRef.current) return;
     const parsedQty = Number(newQty) || 0;
     if (parsedQty <= 0) {
       removeFromCart(cartKey);
@@ -240,6 +251,8 @@ export const CartProvider = ({ children }) => {
         updateQuantity,
         removeFromCart,
         clearCart,
+        cartLocked,
+        setCartLocked,
         generateCartKey,
       }}
     >

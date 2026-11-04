@@ -182,3 +182,10 @@ Dishes on the order page render in batches of 9 (`BATCH_SIZE` in `pages/OrderHom
 ### Not built yet
 
 Phase 3 kitchen stages beyond the status mapping above (the POS must move orders through preparing/ready/out for delivery), customer sign-in and saved addresses on the server, online payment (orders are pay on delivery), and coupons/promo codes (the promo box is hidden).
+
+## Checkout safeguards
+
+- While an order is being sent the cart is locked (`cartLocked` in `CartContext`, set by `Checkout`): quantity, remove and add do nothing and the steppers are disabled, so the idempotency key always stands for exactly the cart that was submitted.
+- Pressing Place Order while the total is being recalculated shows "Updating your total…" instead of doing nothing.
+- The orders list offers **Remove** only when the server says the order no longer exists (404); any other load failure (network, 429, 5xx) shows "Couldn't load this order right now" with a Retry button, because the stored `public_id` is a guest's only way back to a live order.
+- The tracking page's "Call" link uses the order's own outlet (`order.outlet.name/phone` from the server), never the outlet currently selected in the app.
