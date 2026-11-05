@@ -4,56 +4,69 @@ import {
   User,
   Phone,
   MapPin,
-  Clock,
-  RotateCcw,
+  Trash2,
   LogOut,
   Plus,
   ShoppingBag,
-  CheckCircle,
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
-import { useCart } from '../context/CartContext';
 import { useToast } from '../context/ToastContext';
-import { getUserOrders } from '../services/api';
+import { shopApi } from '../services/shopApi';
+import { orderStore } from '../services/orderStore';
+import { STATUS_LABEL } from '../services/orderStatus';
+import { formatMoney } from '../services/money';
 import { Input } from '../components/common/Input';
 import { Modal } from '../components/common/Modal';
 import { EmptyState } from '../components/common/EmptyState';
 
+const MAX_FETCH = 10;
+
 export const OrdersProfile = () => {
   const { user, logout, addSavedAddress } = useAuth();
-  const { addToCart, setIsCartDrawerOpen } = useCart();
   const { addToast } = useToast();
   const navigate = useNavigate();
 
   const [orders, setOrders] = useState([]);
-  const [loadingOrders, setLoadingOrders] = useState(true);
+  const [loadingOrders, setLoadingOrders] = useState(false);
+  const [reloadNonce, setReloadNonce] = useState(0);
   const [activeTab, setActiveTab] = useState('orders');
   const [showAddressModal, setShowAddressModal] = useState(false);
   const [newAddressLine, setNewAddressLine] = useState('');
   const [newAddressLandmark, setNewAddressLandmark] = useState('');
   const [addressTag, setAddressTag] = useState('Home');
 
+  // Orders placed from this browser (guests included). The server is asked for each one.
   useEffect(() => {
-    async function fetchOrders() {
-      setLoadingOrders(true);
-      try {
-        const fetched = await getUserOrders(user?.phone);
-        setOrders(fetched);
-      } catch (e) {
-        console.error(e);
-      } finally {
-        setLoadingOrders(false);
-      }
-    }
-    fetchOrders();
-  }, [user]);
-
-  const handleReorder = (order) => {
-    order.items.forEach((item) => {
-      addToCart(item, item.quantity, item.selectedSize, item.selectedAddons, item.instructions);
+    let alive = true;
+    const stored = orderStore.list();
+    setOrders(stored.map((o) => ({ ...o, order: null, unavailable: false, loadFailed: false })));
+    setLoadingOrders(stored.length > 0);
+    Promise.allSettled(stored.slice(0, MAX_FETCH).map((o) => shopApi.getOrder(o.publicId))).then((results) => {
+      if (!alive) return;
+      setOrders(
+        stored.map((o, i) => {
+          const r = i < MAX_FETCH ? results[i] : null;
+          const failed = r && r.status === 'rejected';
+          // Only a 404 means the order is gone; any other failure (network, 429, 5xx) is temporary.
+          const gone = failed && r.reason && r.reason.status === 404;
+          return {
+            ...o,
+            order: r && r.status === 'fulfilled' ? r.value : null,
+            unavailable: Boolean(gone),
+            loadFailed: Boolean(failed && !gone),
+          };
+        })
+      );
+      setLoadingOrders(false);
     });
-    addToast('Items added to cart from past order!', 'success');
-    setIsCartDrawerOpen(true);
+    return () => {
+      alive = false;
+    };
+  }, [reloadNonce]);
+
+  const handleRemove = (publicId) => {
+    orderStore.remove(publicId);
+    setOrders((prev) => prev.filter((o) => o.publicId !== publicId));
   };
 
   const handleSaveAddress = (e) => {
@@ -175,19 +188,22 @@ export const OrdersProfile = () => {
       {/* Tab 1: Orders History */}
       {activeTab === 'orders' && (
         <div>
+          {loadingOrders && orders.length > 0 && (
+            <div style={{ color: 'var(--text-muted)', fontSize: '0.88rem', marginBottom: 12 }}>Checking your orders...</div>
+          )}
           {orders.length === 0 ? (
             <EmptyState
               icon={<ShoppingBag size={44} color="var(--brand-red)" />}
-              title="No Past Orders Yet"
-              description="Taste the legendary flavors of Annapurna's Rajubhai Dabeliwale today!"
+              title="No Orders Yet"
+              description="Orders you place from this browser will show up here."
               actionText="Order Fresh Food Now"
-              onAction={() => navigate('/menu')}
+              onAction={() => navigate('/')}
             />
           ) : (
             <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
               {orders.map((ord) => (
                 <div
-                  key={ord.orderId}
+                  key={ord.publicId}
                   style={{
                     backgroundColor: 'var(--bg-card)',
                     borderRadius: 'var(--radius-lg)',
@@ -211,19 +227,18 @@ export const OrdersProfile = () => {
                     }}
                   >
                     <div>
-                      <strong style={{ fontSize: '1.1rem', color: 'var(--brand-maroon)' }}>
-                        Order #{ord.orderId}
-                      </strong>
+                      <strong style={{ fontSize: '1.1rem', color: 'var(--brand-maroon)' }}>Order {ord.reference || ''}</strong>
                       <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>
-                        Placed on {new Date(ord.timestamps?.placedAt || Date.now()).toLocaleDateString()} at{' '}
-                        {new Date(ord.timestamps?.placedAt || Date.now()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                        Placed on {new Date(ord.placedAt).toLocaleDateString()} at{' '}
+                        {new Date(ord.placedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                       </div>
                     </div>
 
                     <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
                       <span
                         style={{
-                          backgroundColor: ord.status === 'Delivered' ? '#2e7d32' : 'var(--brand-orange)',
+                          backgroundColor:
+                            ord.order && ord.order.status === 'delivered' ? '#2e7d32' : ord.unavailable ? 'var(--text-muted)' : 'var(--brand-orange)',
                           color: 'var(--text-white)',
                           padding: '4px 12px',
                           borderRadius: 'var(--radius-full)',
@@ -232,46 +247,57 @@ export const OrdersProfile = () => {
                           textTransform: 'uppercase',
                         }}
                       >
-                        {ord.status}
+                        {ord.order ? STATUS_LABEL[ord.order.status] || ord.order.status : ord.unavailable ? 'Unavailable' : ord.loadFailed ? "Couldn't load" : '...'}
                       </span>
-                      <strong style={{ fontSize: '1.2rem', color: 'var(--brand-red)' }}>
-                        ₹{ord.totals?.grandTotal}
-                      </strong>
+                      {ord.order && (
+                        <strong style={{ fontSize: '1.2rem', color: 'var(--brand-red)' }}>{formatMoney(ord.order.grand_total)}</strong>
+                      )}
                     </div>
                   </div>
 
-                  {/* Items */}
-                  <div style={{ fontSize: '0.92rem', color: 'var(--brand-maroon)' }}>
-                    {ord.items?.map((it, idx) => (
-                      <div key={idx} style={{ display: 'inline-block', marginRight: '16px', marginBottom: '4px' }}>
-                        • {it.quantity}x {it.name}
-                      </div>
-                    ))}
-                  </div>
+                  {ord.order ? (
+                    <div style={{ fontSize: '0.92rem', color: 'var(--brand-maroon)' }}>
+                      {ord.order.items && ord.order.items.map((it, idx) => (
+                        <div key={idx} style={{ display: 'inline-block', marginRight: '16px', marginBottom: '4px' }}>
+                          • {it.qty}x {it.name}
+                        </div>
+                      ))}
+                    </div>
+                  ) : ord.unavailable ? (
+                    <div style={{ fontSize: '0.88rem', color: 'var(--text-muted)' }}>
+                      This order no longer exists on the server.
+                    </div>
+                  ) : ord.loadFailed ? (
+                    <div style={{ fontSize: '0.88rem', color: 'var(--text-muted)' }}>
+                      Couldn't load this order right now. Please try again.
+                    </div>
+                  ) : null}
 
-                  {/* Actions */}
-                  <div
-                    style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'flex-end',
-                      gap: '12px',
-                      paddingTop: '6px',
-                    }}
-                  >
-                    <Link to={`/order-status/${ord.orderId}`}>
-                      <button className="btn-brand-outline" style={{ padding: '8px 18px', fontSize: '0.88rem' }}>
-                        View Bill & Track
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: '12px', paddingTop: '6px' }}>
+                    {ord.loadFailed && (
+                      <button
+                        className="btn-brand-outline"
+                        style={{ padding: '8px 18px', fontSize: '0.88rem' }}
+                        onClick={() => setReloadNonce((n) => n + 1)}
+                      >
+                        <span>Retry</span>
+                      </button>
+                    )}
+                    {ord.unavailable && (
+                      <button
+                        className="btn-brand-outline"
+                        style={{ padding: '8px 18px', fontSize: '0.88rem' }}
+                        onClick={() => handleRemove(ord.publicId)}
+                      >
+                        <Trash2 size={14} />
+                        <span>Remove</span>
+                      </button>
+                    )}
+                    <Link to={`/order-status/${ord.publicId}`}>
+                      <button className="btn-brand-primary" style={{ padding: '8px 18px', fontSize: '0.88rem' }}>
+                        View & Track
                       </button>
                     </Link>
-                    <button
-                      className="btn-brand-primary"
-                      style={{ padding: '8px 18px', fontSize: '0.88rem' }}
-                      onClick={() => handleReorder(ord)}
-                    >
-                      <RotateCcw size={14} />
-                      <span>Reorder</span>
-                    </button>
                   </div>
                 </div>
               ))}

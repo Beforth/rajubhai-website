@@ -1,7 +1,11 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { Search, X } from 'lucide-react';
-import { getMenu, getCategories } from '../services/api';
+import { shopApi } from '../services/shopApi';
+import { toUiMenu } from '../services/menuMapper';
+import { useOutlet } from '../context/OutletContext';
+import { useSwitchOutlet } from '../hooks/useSwitchOutlet';
+import { OutletPicker } from '../components/outlet/OutletPicker';
 import { CategorySidebar } from '../components/menu/CategorySidebar';
 import { MenuItemCard } from '../components/menu/MenuItemCard';
 import { ItemDetailsModal } from '../components/menu/ItemDetailsModal';
@@ -18,19 +22,32 @@ export const OrderHome = () => {
   const [menuItems, setMenuItems] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [loading, setLoading] = useState(true);
+  const [menuError, setMenuError] = useState('');
+  const { outlets, outlet, outletId, info, loading: outletLoading, error: outletError } = useOutlet();
+  const switchOutlet = useSwitchOutlet();
   const [selectedItemForModal, setSelectedItemForModal] = useState(null);
   const [shownCount, setShownCount] = useState(BATCH_SIZE);
   const sentinelRef = useRef(null);
 
   useEffect(() => {
-    Promise.all([getCategories(), getMenu()])
-      .then(([cats, items]) => {
+    if (!outletId) return undefined;
+    let alive = true;
+    setLoading(true);
+    setMenuError('');
+    shopApi
+      .getMenu(outletId)
+      .then((data) => {
+        if (!alive) return;
+        const { categories: cats, items } = toUiMenu(data);
         setCategories(cats);
         setMenuItems(items);
       })
-      .catch((err) => console.error('Failed to load menu data', err))
-      .finally(() => setLoading(false));
-  }, []);
+      .catch((err) => alive && setMenuError(err.message || 'Could not load the menu.'))
+      .finally(() => alive && setLoading(false));
+    return () => {
+      alive = false;
+    };
+  }, [outletId]);
 
   const requested = searchParams.get('category');
   const activeCategory =
@@ -108,9 +125,53 @@ export const OrderHome = () => {
         </div>
       </div>
 
-      {loading ? (
+      {outletError && !outletId ? (
+        <EmptyState title="Menu unavailable" description={outletError.message} />
+      ) : !outletId && outletLoading ? (
+        <Loader text="Finding outlets..." />
+      ) : !outletId ? (
+        outlets.length ? (
+          <OutletPicker />
+        ) : (
+          <EmptyState title="No outlets open for online orders" description="Please check back soon." />
+        )
+      ) : loading || outletLoading ? (
         <Loader text="Loading fresh dishes..." />
+      ) : menuError ? (
+        <EmptyState title="Menu unavailable" description={menuError} />
       ) : (
+        <>
+        {outlet && (
+          <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 10, fontSize: '0.88rem', color: 'var(--text-muted)' }}>
+            <span>
+              Ordering from <strong style={{ color: 'var(--brand-maroon)' }}>{outlet.name}</strong>
+            </span>
+            {outlets.length > 1 && (
+              <button
+                type="button"
+                onClick={() => switchOutlet('')}
+                style={{ color: 'var(--brand-red)', fontWeight: 700, textDecoration: 'underline', background: 'none', border: 0, cursor: 'pointer' }}
+              >
+                Change outlet
+              </button>
+            )}
+          </div>
+        )}
+        {info && info.accepting_orders === false && (
+          <div
+            role="status"
+            style={{
+              backgroundColor: 'var(--bg-soft)',
+              border: '1.5px solid var(--brand-red)',
+              borderRadius: 'var(--radius-md)',
+              padding: '12px 16px',
+              color: 'var(--brand-maroon)',
+              fontWeight: 700,
+            }}
+          >
+            {info.closed_message || 'We are not taking online orders right now.'}
+          </div>
+        )}
         <div className="order-layout">
           <CategorySidebar
             categories={categories}
@@ -146,6 +207,7 @@ export const OrderHome = () => {
 
           <CartPanel />
         </div>
+        </>
       )}
 
       {selectedItemForModal && (

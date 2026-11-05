@@ -20,6 +20,18 @@ const orderFallback = {
 };
 
 // https://astro.build/config
+// Dev only: the order app calls /api/v1/shop/* and the backend builds image URLs from the request
+// host (/media/...), so both are forwarded to the POS backend. Override with API_PROXY_TARGET.
+const apiTarget = process.env.API_PROXY_TARGET || 'http://127.0.0.1:8000';
+
 export default defineConfig({
   integrations: [react(), orderFallback],
+  vite: {
+    server: {
+      proxy: {
+        '/api': { target: apiTarget, changeOrigin: false },
+        '/media': { target: apiTarget, changeOrigin: false },
+      },
+    },
+  },
 });

@@ -4,10 +4,12 @@ import { ArrowLeft, ArrowRight, ShoppingBag, Trash2, ShieldCheck, Sparkles } fro
 import { useCart } from '../context/CartContext';
 import { CartItem } from '../components/cart/CartItem';
 import { PriceSummary } from '../components/cart/PriceSummary';
+import { CheckoutNotice } from '../components/cart/CheckoutNotice';
+import { formatMoney } from '../services/money';
 import { EmptyState } from '../components/common/EmptyState';
 
 export const CartPage = () => {
-  const { cartItems, itemCount, clearCart, grandTotal, orderType, setOrderType } = useCart();
+  const { cartItems, itemCount, clearCart, grandTotal, checkout } = useCart();
   const navigate = useNavigate();
 
   if (cartItems.length === 0) {
@@ -50,7 +52,7 @@ export const CartPage = () => {
             Your Shopping Cart
           </h1>
           <p style={{ color: 'var(--text-muted)', fontSize: '0.92rem', marginTop: 4 }}>
-            Review items, customize portions, and choose fulfillment mode.
+            Review your items. Prices are confirmed by the restaurant.
           </p>
         </div>
 
@@ -84,48 +86,7 @@ export const CartPage = () => {
       >
         {/* Left Column: Dining Mode & Items */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
-          {/* Order Type Switcher */}
-          <div
-            style={{
-              backgroundColor: 'var(--bg-card)',
-              borderRadius: 'var(--radius-lg)',
-              padding: '20px',
-              border: '1.5px solid var(--border-subtle)',
-              boxShadow: 'var(--shadow-sm)',
-            }}
-          >
-            <div style={{ fontSize: '0.9rem', fontWeight: 800, color: 'var(--brand-maroon)', marginBottom: '12px' }}>
-              Select Ordering Mode
-            </div>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '10px' }}>
-              {[
-                { id: 'delivery', label: 'Door Delivery' },
-                { id: 'pickup', label: 'Takeaway' },
-                { id: 'dinein', label: 'Dine-In Table' },
-              ].map((type) => {
-                const isSelected = orderType === type.id;
-                return (
-                  <button
-                    key={type.id}
-                    onClick={() => setOrderType(type.id)}
-                    style={{
-                      padding: '12px 8px',
-                      borderRadius: 'var(--radius-md)',
-                      fontWeight: 800,
-                      fontSize: '0.88rem',
-                      textAlign: 'center',
-                      backgroundColor: isSelected ? 'var(--brand-red)' : 'var(--bg-soft)',
-                      color: isSelected ? 'var(--text-white)' : 'var(--brand-maroon)',
-                      border: isSelected ? '1.5px solid var(--brand-red)' : '1px solid var(--border-subtle)',
-                      transition: 'all 0.15s',
-                    }}
-                  >
-                    {type.label}
-                  </button>
-                );
-              })}
-            </div>
-          </div>
+          {/* Takeaway and Dine-In are off for now: website orders are delivery only. */}
 
           {/* Cart Items List */}
           <div
@@ -161,6 +122,7 @@ export const CartPage = () => {
 
           <button
             onClick={() => navigate('/checkout')}
+            disabled={!checkout.canCheckout}
             className="btn-brand-primary"
             style={{
               width: '100%',
@@ -169,9 +131,11 @@ export const CartPage = () => {
               fontWeight: 800,
             }}
           >
-            <span>Proceed to Checkout • ₹{grandTotal}</span>
+            <span>{grandTotal ? `Proceed to Checkout • ${formatMoney(grandTotal)}` : 'Proceed to Checkout'}</span>
             <ArrowRight size={20} />
           </button>
+
+          <CheckoutNotice />
 
           <div
             style={{

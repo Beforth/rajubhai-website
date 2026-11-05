@@ -2,6 +2,7 @@ import React from 'react';
 import { ShoppingBag, ArrowRight } from 'lucide-react';
 import { useCart } from '../../context/CartContext';
 import { useLocation } from 'react-router-dom';
+import { formatMoney } from '../../services/money';
 
 export const StickyMobileCartBar = () => {
   const { itemCount, grandTotal, setIsCartDrawerOpen } = useCart();
@@ -65,7 +66,7 @@ export const StickyMobileCartBar = () => {
               View Cart
             </div>
             <div style={{ fontWeight: 900, fontSize: '1.15rem' }}>
-              ₹{grandTotal}
+              {grandTotal ? formatMoney(grandTotal) : '…'}
             </div>
           </div>
         </div>

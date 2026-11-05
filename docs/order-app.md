@@ -150,7 +150,13 @@ The local server will start at `http://localhost:5173`.
 
 ## Next step
 
-Replacing the mock data in `src/order-app/services/api.js` with real POS endpoints is a separate spec.
+Menu, outlets, quotes, orders and order tracking all use the POS shop API. `src/order-app/services/api.js` still holds mock coupon, OTP and old order functions that are no longer used by checkout or tracking (the login page and its demo OTP still use the OTP ones).
+
+## Shop API and outlets
+
+- `services/shopApi.js` calls the public `/api/v1/shop/*` endpoints and returns the envelope's `data` (or throws `ShopApiError`). `services/menuMapper.js` turns the menu payload into the shape the cards, modal and cart use (variation price is a full price; the mapper stores the cheapest as the item price and the difference per size).
+- `PUBLIC_API_BASE_URL` (env) is the API origin. Leave it empty in dev: the Astro dev server proxies `/api` and `/media` to `http://127.0.0.1:8000` (override with `API_PROXY_TARGET`). In production set it to the backend origin, or serve `/api` and `/media` on the same origin.
+- Outlet choice (`context/OutletContext.jsx`): `?outlet=` query, then `localStorage` `rajubhai.outlet`, then the only enabled outlet, otherwise the `OutletPicker`. The cart is per outlet (each line has `outletId`, `variationId`, `addonIds`); switching with items in the cart asks before clearing it.
 
 ## Order page layout
 
@@ -163,3 +169,23 @@ The app uses the website's design tokens, nothing new: `src/order-app/styles/the
 ## Lazy loading
 
 Dishes on the order page render in batches of 9 (`BATCH_SIZE` in `pages/OrderHome.jsx`); the next batch loads when the list nears the bottom (IntersectionObserver, 600px ahead). A new category or search starts again from the first batch. Item, cart and category images use `loading="lazy"` and `decoding="async"`.
+
+## Checkout, quotes and orders
+
+- **The server prices everything.** `CartContext` keeps lines only (`id`, `variationId`, `addonIds`, `quantity`, `instructions`, `outletId`), never prices. Whenever the lines or the delivery address change it calls `shopApi.quote` (debounced 400 ms; an older answer never overwrites a newer one; an empty cart skips the call) and exposes `quote`, `quoteLoading`, `quoteError`, `lineQuotes` (per-line price and error by cart key) and `checkout` (`canCheckout`, `reason`). Every amount on screen (drawer, panel, cart page, checkout, mobile bar, navbar) is a server decimal string shown through `services/money.js`; there is no local tax, packaging, delivery or discount arithmetic. While the quote is loading, totals show "…".
+- **Why Checkout can be disabled:** quote still loading, a line with an error (unavailable item or an add-on rule such as "Choose at least 1 from X"; shown under the line), the minimum order (`reason`), or a closed outlet (`info.accepting_orders` false, shows `info.closed_message`).
+- **Checkout (`/checkout`)** is guest only and delivery only (Takeaway and Dine-In stay off; sign-in is not part of it). Fields: name (1-120), mobile (10 digits after removing spaces and `+91`), address (required, max 500), landmark (max 200), notes (max 500). One `idempotency_key` is generated per attempt and kept until the order succeeds, so a retry after a timeout cannot create a second order; it is replaced when the cart lines change or after a 422. The button is disabled while a request is in flight. On 201/200 the order is saved to `orderStore`, the cart is cleared and the confirmation (with the real `reference`) links to `/order-status/{public_id}`.
+- **Errors:** 409 shows the outlet's closed message and refreshes the outlet info; 422 marks the listed lines and refreshes the quote; 400 shows the field errors under the matching inputs; 429 asks to wait a minute; a network failure or timeout keeps the cart and allows a retry.
+- **`services/orderStore.js`** keeps `{publicId, reference, placedAt}` for the last 20 orders in `localStorage` key `rajubhai.orders` (every access in try/catch). `/orders` lists them for guests too (it fetches the 10 most recent in parallel; an order that fails to load shows as "unavailable" with a remove button).
+- **Tracking (`/order-status/:publicId`)** reads `GET /shop/orders/{public_id}/`: every 5 s while `received`, every 15 s while accepted/preparing/ready/out_for_delivery, and stops on delivered/rejected/cancelled. Status mapping: `received` -> Placed step plus an "Auto-accepts in mm:ss" countdown from `auto_accept_at`; `accepted`, `preparing`, `ready`, `out_for_delivery`, `delivered` -> the stepper step of the same name; `rejected` -> a rejected state with `reject_reason`; `cancelled` -> "We could not accept this order". An unknown id shows "Order not found". The mapping lives in `services/orderStatus.js`.
+
+### Not built yet
+
+Phase 3 kitchen stages beyond the status mapping above (the POS must move orders through preparing/ready/out for delivery), customer sign-in and saved addresses on the server, online payment (orders are pay on delivery), and coupons/promo codes (the promo box is hidden).
+
+## Checkout safeguards
+
+- While an order is being sent the cart is locked (`cartLocked` in `CartContext`, set by `Checkout`): quantity, remove and add do nothing and the steppers are disabled, so the idempotency key always stands for exactly the cart that was submitted.
+- Pressing Place Order while the total is being recalculated shows "Updating your total…" instead of doing nothing.
+- The orders list offers **Remove** only when the server says the order no longer exists (404); any other load failure (network, 429, 5xx) shows "Couldn't load this order right now" with a Retry button, because the stored `public_id` is a guest's only way back to a live order.
+- The tracking page's "Call" link uses the order's own outlet (`order.outlet.name/phone` from the server), never the outlet currently selected in the app.

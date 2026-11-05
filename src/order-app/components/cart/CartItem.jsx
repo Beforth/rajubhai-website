@@ -2,9 +2,14 @@ import React from 'react';
 import { Trash2 } from 'lucide-react';
 import { QuantityStepper } from '../common/QuantityStepper';
 import { useCart } from '../../context/CartContext';
+import { formatMoney } from '../../services/money';
 
 export const CartItem = ({ item }) => {
-  const { updateQuantity, removeFromCart } = useCart();
+  const { updateQuantity, removeFromCart, lineQuotes, cartLocked } = useCart();
+  const q = lineQuotes[item.cartKey];
+  // Only trust the server's line total while it was priced for this quantity.
+  const priced = q && q.qty === item.quantity;
+  const error = q?.error || '';
 
   return (
     <div
@@ -69,9 +74,15 @@ export const CartItem = ({ item }) => {
           )}
         </div>
 
+        {error && (
+          <div role="alert" style={{ color: 'var(--brand-red)', fontSize: '0.8rem', fontWeight: 700, marginBottom: 4 }}>
+            {error}
+          </div>
+        )}
+
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '4px' }}>
           <span style={{ fontWeight: 900, color: 'var(--brand-red)', fontSize: '1.05rem' }}>
-            ₹{item.itemTotal}
+            {priced && !q.error ? formatMoney(q.line_total) : error ? '' : '…'}
           </span>
 
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
@@ -79,9 +90,11 @@ export const CartItem = ({ item }) => {
               value={item.quantity}
               onChange={(newQty) => updateQuantity(item.cartKey, newQty)}
               size="sm"
+              disabled={cartLocked}
             />
             <button
               onClick={() => removeFromCart(item.cartKey)}
+              disabled={cartLocked}
               style={{
                 color: 'var(--text-light)',
                 padding: '4px',
@@ -90,6 +103,8 @@ export const CartItem = ({ item }) => {
                 alignItems: 'center',
                 justifyContent: 'center',
                 transition: 'color 0.2s',
+                opacity: cartLocked ? 0.45 : 1,
+                cursor: cartLocked ? 'not-allowed' : 'pointer',
               }}
               title="Remove item"
             >

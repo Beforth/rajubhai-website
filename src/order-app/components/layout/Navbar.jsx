@@ -3,13 +3,17 @@ import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { ShoppingBag, User, Phone, Menu as MenuIcon, X, ArrowLeft } from 'lucide-react';
 import { useCart } from '../../context/CartContext';
 import { useAuth } from '../../context/AuthContext';
-import restaurantData from '../../data/restaurant.json';
+import { useOutlet } from '../../context/OutletContext';
+import { formatMoney } from '../../services/money';
 
 export const Navbar = () => {
   const { itemCount, grandTotal, setIsCartDrawerOpen } = useCart();
   const { user, isAuthenticated } = useAuth();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const navigate = useNavigate();
+  const { info } = useOutlet();
+  const phone = info?.phone || '';
+  const hours = info?.hours || '';
 
   return (
     <header
@@ -97,8 +101,14 @@ export const Navbar = () => {
                 }}
               >
                 <span>Est. 1987 · Nashik</span>
-                <span style={{ color: 'var(--brand-red)' }}>•</span>
-                <span style={{ color: '#2e7d32' }}>Open till 11 PM</span>
+                {info && (
+                  <>
+                    <span style={{ color: 'var(--brand-red)' }}>•</span>
+                    <span style={{ color: info.accepting_orders ? '#2e7d32' : 'var(--brand-red)' }}>
+                      {info.accepting_orders ? hours || 'Open' : 'Closed'}
+                    </span>
+                  </>
+                )}
               </div>
             </div>
           </a>
@@ -172,8 +182,9 @@ export const Navbar = () => {
 
         {/* Right Action Buttons */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          {phone && (
           <a
-            href={`tel:${restaurantData.contactPhone}`}
+            href={`tel:${phone}`}
             className="call-kitchen-btn"
             style={{
               display: 'none',
@@ -189,8 +200,9 @@ export const Navbar = () => {
             title="Call Kitchen Directly"
           >
             <Phone size={14} color="var(--brand-red)" />
-            <span>{restaurantData.contactPhone}</span>
+            <span>{phone}</span>
           </a>
+          )}
 
           {isAuthenticated ? (
             <Link
@@ -271,7 +283,7 @@ export const Navbar = () => {
             )}
             {itemCount > 0 && (
               <span className="cart-total-pill-text" style={{ fontSize: '0.8rem', fontWeight: 800, opacity: 0.95 }}>
-                • ₹{grandTotal}
+                {grandTotal ? `• ${formatMoney(grandTotal)}` : ''}
               </span>
             )}
           </button>
@@ -358,14 +370,16 @@ export const Navbar = () => {
               gap: 4,
             }}
           >
-            <div>Kitchen Open: {restaurantData.operatingHoursDisplay}</div>
-            <a
-              href={`tel:${restaurantData.contactPhone}`}
-              style={{ color: 'var(--brand-red)', fontWeight: 700, display: 'flex', alignItems: 'center', gap: 6 }}
-            >
-              <Phone size={13} />
-              <span>Call: {restaurantData.contactPhone}</span>
-            </a>
+            {hours && <div>Kitchen Open: {hours}</div>}
+            {phone && (
+              <a
+                href={`tel:${phone}`}
+                style={{ color: 'var(--brand-red)', fontWeight: 700, display: 'flex', alignItems: 'center', gap: 6 }}
+              >
+                <Phone size={13} />
+                <span>Call: {phone}</span>
+              </a>
+            )}
           </div>
         </div>
       )}
