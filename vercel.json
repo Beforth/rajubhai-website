@@ -1,0 +1,5 @@
+{
+  "rewrites": [
+    { "source": "/order/order-status/:publicId", "destination": "/order/index.html" }
+  ]
+}
